@@ -6,21 +6,46 @@ import {
     Code,
     ThemeIcon,
     Accordion,
+    Modal,
+    Box,
 } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
+import Layout from "./Layout";
+import React from "react";
+import { useDisclosure } from "@mantine/hooks";
 
 interface SummaryProps {
-    questions?: [];
+    date?: Date;
+    questions?: any[];
+    children?: React.ReactNode;
 }
 
-const Summary: React.FC<SummaryProps> = ({ questions }: SummaryProps) => {
+const Summary: React.FC<SummaryProps> = ({
+    questions,
+    children,
+    date,
+}: SummaryProps) => {
+    const [opened, { open, close }] = useDisclosure(false);
     return (
         <>
-            <Container px={{ base: 0, lg: "xl" }} py="lg">
+            <Box onClick={open} w="100%">
+                {children}
+            </Box>
+
+            <Modal
+                opened={opened}
+                fullScreen
+                onClose={close}
+                title="Summary"
+                centered
+            >
                 <Flex direction="column" gap="lg">
                     <Accordion>
                         {questions?.map((question, index) => (
-                            <Accordion.Item key={index} value={`${index}`}>
+                            <Accordion.Item
+                                key={index + 1}
+                                value={`${index + 1}`}
+                            >
                                 <Accordion.Control
                                     icon={
                                         <ThemeIcon color="green">
@@ -28,7 +53,7 @@ const Summary: React.FC<SummaryProps> = ({ questions }: SummaryProps) => {
                                         </ThemeIcon>
                                     }
                                 >
-                                    Question 1
+                                    {`Question ${index + 1}`}
                                 </Accordion.Control>
                                 <Accordion.Panel>
                                     <Text>
@@ -46,12 +71,8 @@ const Summary: React.FC<SummaryProps> = ({ questions }: SummaryProps) => {
                             </Accordion.Item>
                         ))}
                     </Accordion>
-
-                    <Button radius="xl" fullWidth>
-                        Back to Home
-                    </Button>
                 </Flex>
-            </Container>
+            </Modal>
         </>
     );
 };

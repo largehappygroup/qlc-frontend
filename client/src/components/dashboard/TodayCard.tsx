@@ -1,4 +1,6 @@
 import { Badge, Card, Flex, Title, Text, Button } from "@mantine/core";
+import Summary from "../Summary";
+import Quiz from "../Quiz";
 
 interface TodayCardProps {
     date?: Date;
@@ -27,9 +29,25 @@ const TodayCard: React.FC<TodayCardProps> = ({
                     <Title>Today's Exercises</Title>
                     <Text>Topic(s): Arithmetic, Strings</Text>
                 </Flex>
-                <Button size="compact-md" w={{ base: "100%", lg: "auto" }}>
-                    {status == "Complete" ? "View" : "Start"}
-                </Button>
+                {status == "Complete" ? (
+                    <Summary questions={["", "", "", "", ""]}>
+                        <Button
+                            size="compact-md"
+                            w={{ base: "100%", lg: "auto" }}
+                        >
+                            View
+                        </Button>
+                    </Summary>
+                ) : (
+                    <Quiz>
+                        <Button
+                            size="compact-md"
+                            w={{ base: "100%", lg: "auto" }}
+                        >
+                            Start
+                        </Button>
+                    </Quiz>
+                )}
             </Flex>
         </Card>
     );

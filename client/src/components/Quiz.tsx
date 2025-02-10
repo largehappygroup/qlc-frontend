@@ -10,31 +10,50 @@ import {
     Text,
     Code,
     ThemeIcon,
+    Box,
+    Modal,
+    ScrollArea,
+    Popover,
+    Space,
 } from "@mantine/core";
-import MultipleChoiceQuestion from "../components/MultipleChoiceQuestion";
-import CodingQuestion from "../components/CodingQuestion";
+import MultipleChoiceQuestion from "./questions/MultipleChoiceQuestion";
+import CodingQuestion from "./questions/CodingQuestion";
 import { IconCheck } from "@tabler/icons-react";
+import Layout from "./Layout";
+import { useDisclosure } from "@mantine/hooks";
 
-const Quiz: React.FC = () => {
+interface QuizProps {
+    children?: React.ReactNode;
+}
+
+const Quiz: React.FC<QuizProps> = ({ children }: QuizProps) => {
+    const [opened, { open, close }] = useDisclosure(false);
+
     return (
         <>
-            <Container px={{ base: 0, lg: "xl" }} py="lg">
+            <Box w={{ base: "100%", lg: "auto" }} onClick={open}>
+                {children}
+            </Box>
+            <Modal
+                opened={opened}
+                onClose={close}
+                withCloseButton={false}
+                scrollAreaComponent={ScrollArea.Autosize}
+                centered
+                fullScreen
+            >
                 <Flex direction="column" gap="xl">
-                    <Flex
-                        flex="1"
-                        justify="space-between"
-                        gap="xl"
-                        align="center"
-                    >
+                    <Flex align="center" gap="md">
                         <Progress
-                            w="100%"
+                            flex="1"
                             radius="xl"
                             size="lg"
                             value={40}
                             striped
                             animated
                         />
-                        <CloseButton />
+
+                        <CloseButton onClick={close} />
                     </Flex>
                     <MultipleChoiceQuestion
                         question="What is the correct way to declare and initialize a variable in
@@ -67,7 +86,7 @@ const Quiz: React.FC = () => {
                         Submit
                     </Button>
                 </Flex>
-            </Container>
+            </Modal>
         </>
     );
 };
