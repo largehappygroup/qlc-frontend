@@ -8,9 +8,10 @@ import {
     Space,
     Divider,
     Table,
+    ActionIcon,
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
-import { IconCaretLeftFilled, IconCaretRightFilled } from "@tabler/icons-react";
+import { IconCaretLeftFilled, IconCaretRightFilled, IconEye } from "@tabler/icons-react";
 import Summary from "../Summary";
 
 const PastCard: React.FC = () => {
@@ -30,7 +31,9 @@ const PastCard: React.FC = () => {
             <Table.Td>{exercise.topics.join(", ")}</Table.Td>
             <Table.Td ta="end">
                 <Summary questions={["", "", "", "", ""]}>
-                    <Button radius="xl" size="compact-sm">View</Button>
+                    <ActionIcon size="lg">
+                        <IconEye />
+                    </ActionIcon>
                 </Summary>
             </Table.Td>
         </Table.Tr>
@@ -39,27 +42,24 @@ const PastCard: React.FC = () => {
     return (
         <Card shadow="sm" withBorder>
             <Flex justify="space-between">
+                <Button
+                    size="compact-sm"
+                    variant="subtle"
+                    leftSection={<IconCaretLeftFilled size={16} stroke={1.5} />}
+                >
+                    01/2025
+                </Button>
                 <Text>02/2025 Exercises</Text>
-                <Flex gap="md">
-                    <Button
-                        size="compact-sm"
-                        variant="subtle"
-                        leftSection={
-                            <IconCaretLeftFilled size={16} stroke={1.5} />
-                        }
-                    >
-                        01/2025
-                    </Button>
-                    <Button
-                        size="compact-sm"
-                        variant="subtle"
-                        rightSection={
-                            <IconCaretRightFilled size={16} stroke={1.5} />
-                        }
-                    >
-                        03/2025
-                    </Button>
-                </Flex>
+
+                <Button
+                    size="compact-sm"
+                    variant="subtle"
+                    rightSection={
+                        <IconCaretRightFilled size={16} stroke={1.5} />
+                    }
+                >
+                    03/2025
+                </Button>
             </Flex>
             <Space h="md" />
             <Table>

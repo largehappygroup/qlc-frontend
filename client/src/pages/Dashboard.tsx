@@ -27,7 +27,7 @@ const Home: React.FC = () => {
             <Layout>
                 <Grid gutter="md">
                     <Grid.Col>
-                        <Title>Hello, Helen!</Title>
+                        <Title order={3}>Hello, Helen!</Title>
                     </Grid.Col>
                     <Grid.Col span={{ base: 12, lg: 8 }}>
                         <TodayCard date={new Date()} status="Incomplete" />

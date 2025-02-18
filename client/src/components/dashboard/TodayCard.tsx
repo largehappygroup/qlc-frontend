@@ -1,6 +1,8 @@
 import { Badge, Card, Flex, Title, Text, Button } from "@mantine/core";
 import Summary from "../Summary";
 import Quiz from "../Quiz";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface TodayCardProps {
     date?: Date;
@@ -13,6 +15,7 @@ const TodayCard: React.FC<TodayCardProps> = ({
     status,
     topics,
 }: TodayCardProps) => {
+    
     return (
         <Card shadow="sm" withBorder>
             <Flex justify="space-between" gap="sm">
@@ -29,9 +32,11 @@ const TodayCard: React.FC<TodayCardProps> = ({
                     <Title>Today's Exercises</Title>
                     <Text>Topic(s): Arithmetic, Strings</Text>
                 </Flex>
+                
                 {status == "Complete" ? (
                     <Summary questions={["", "", "", "", ""]}>
                         <Button
+                            radius="xl"
                             size="compact-md"
                             w={{ base: "100%", lg: "auto" }}
                         >
@@ -41,6 +46,7 @@ const TodayCard: React.FC<TodayCardProps> = ({
                 ) : (
                     <Quiz>
                         <Button
+                            radius="xl"
                             size="compact-md"
                             w={{ base: "100%", lg: "auto" }}
                         >

@@ -21,6 +21,8 @@ import CodingQuestion from "./questions/CodingQuestion";
 import { IconCheck } from "@tabler/icons-react";
 import Layout from "./Layout";
 import { useDisclosure } from "@mantine/hooks";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface QuizProps {
     children?: React.ReactNode;
@@ -28,6 +30,22 @@ interface QuizProps {
 
 const Quiz: React.FC<QuizProps> = ({ children }: QuizProps) => {
     const [opened, { open, close }] = useDisclosure(false);
+    const [exercise, setExercise] = useState();
+        useEffect(() => {
+            const fetchData = async () => {
+                try {
+                    const response = await axios.get(
+                        `${
+                            import.meta.env.VITE_BACKEND_URL
+                        }/exercises/`
+                    );
+                    setExercise(response.data.data);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+            fetchData();
+        });
 
     return (
         <>
@@ -42,6 +60,7 @@ const Quiz: React.FC<QuizProps> = ({ children }: QuizProps) => {
                 centered
                 fullScreen
             >
+                {JSON.stringify(exercise)}
                 <Flex direction="column" gap="xl">
                     <Flex align="center" gap="md">
                         <Progress

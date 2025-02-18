@@ -15,9 +15,25 @@ const UserSchema = new Schema({
         type: String,
         required: true,
     },
+    vuNetId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     email: {
         type: String,
         required: true,
         unique: true,
     },
+    role: {
+        type: String,
+        required: true,
+        enum: ["admin", "faculty", "ta", "student"]
+    },
+    graduationYear: {
+        type: Number, // required only for students
+    },
+    majors: [{ type: String }], // required only for students
+    minors: [{ type: String }],
+    gender: { type: String },
 });

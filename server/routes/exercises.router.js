@@ -16,3 +16,5 @@ router.get("/", getAllExercises);
 router.get("/:id", getExercise);
 router.delete("/:id", deleteExercise);
 router.get("/download", downloadExercises);
+
+module.exports = router;

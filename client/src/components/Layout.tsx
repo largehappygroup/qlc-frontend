@@ -4,15 +4,24 @@ import {
     Burger,
     Button,
     Container,
+    Flex,
     Group,
     NavLink,
     Popover,
     Skeleton,
+    Space,
     Text,
     UnstyledButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconHome, IconHome2, IconUser } from "@tabler/icons-react";
+import {
+    IconHome,
+    IconHome2,
+    IconLogout,
+    IconStar,
+    IconTrendingUp,
+    IconUser,
+} from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface LayoutProps {
@@ -32,19 +41,19 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
             icon: <IconHome2 size={16} stroke={1.5} />,
         },
         {
-            label: "Quiz",
-            path: "/quiz",
-            icon: <IconHome size={16} stroke={1.5} />,
-        },
-        {
-            label: "Summary",
-            path: "/summary",
-            icon: <IconHome size={16} stroke={1.5} />,
-        },
-        {
             label: "Profile",
             path: "/profile",
             icon: <IconUser size={16} stroke={1.5} />,
+        },
+        {
+            label: "Skills",
+            path: "/skills",
+            icon: <IconTrendingUp size={16} stroke={1.5} />,
+        },
+        {
+            label: "Performance",
+            path: "/performance",
+            icon: <IconStar size={16} stroke={1.5} />,
         },
     ];
 
@@ -94,19 +103,41 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                             <NavLink
                                 label="Profile"
                                 onClick={() => navigate("/profile")}
+                                leftSection={
+                                    <IconUser size={16} stroke={1.5} />
+                                }
                             />
-                            <NavLink label="Log out" />
+                            <NavLink
+                                label="Log out"
+                                c="red"
+                                leftSection={
+                                    <IconLogout size={16} stroke={1.5} />
+                                }
+                            />
                         </Popover.Dropdown>
                     </Popover>
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar p="md">
+                <Flex direction="column" px="md" align="end">
+                    <Burger
+                        opened={mobileOpened}
+                        onClick={toggleMobile}
+                        hiddenFrom="sm"
+                        size="sm"
+                    />
+                    <Space h="md" hiddenFrom="sm" />
+                </Flex>
+
                 {pages.map((page) => (
                     <NavLink
                         onClick={() => navigate(page.path)}
+                        variant="filled"
+                        color="cyan.5"
                         label={page.label}
                         leftSection={page.icon}
                         active={location.pathname === page.path}
+                        className="navbar-navlink"
                     />
                 ))}
             </AppShell.Navbar>

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
-const ExerciseSchema = new Schema({
+const UnitSchema = new Schema({
     userId: {
         type: ObjectId,
         ref: "User",
@@ -19,9 +19,9 @@ const ExerciseSchema = new Schema({
                 ref: "Question",
                 required: true,
             },
-            userAnswer: [{
+            userAnswer: {
                 type: String,
-            }],
+            },
             userCorrect: {
                 type: Boolean,
             },
@@ -34,5 +34,3 @@ const ExerciseSchema = new Schema({
     totalTimeSpent: { type: Number, required: true },
     totalCorrect: { type: Number, required: true },
 });
-
-module.exports = Exercise = mongoose.model("exercises", ExerciseSchema);

@@ -1,4 +1,4 @@
-import { Card, Grid, Text } from "@mantine/core";
+import { Avatar, Card, Flex, Grid, Text } from "@mantine/core";
 import Layout from "../components/Layout";
 
 const Profile: React.FC = () => {
@@ -7,8 +7,18 @@ const Profile: React.FC = () => {
             <Grid>
                 <Grid.Col>
                     <Card shadow="sm" withBorder>
-                        <Text>Helen Wu</Text>
-                        <Text>helen.wu@vanderbilt.edu</Text>
+                        <Flex gap="lg" align="center">
+                            <Avatar
+                                size="xl"
+                                key={"HW"}
+                                name={"HW"}
+                                color="initials"
+                            />
+                            <Flex direction="column">
+                                <Text>Helen Wu</Text>
+                                <Text>helen.wu@vanderbilt.edu</Text>
+                            </Flex>
+                        </Flex>
                     </Card>
                 </Grid.Col>
             </Grid>

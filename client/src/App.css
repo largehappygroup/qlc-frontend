@@ -1,0 +1,7 @@
+.navbar-navlink:hover {
+    background-color: var(--mantine-color-cyan-4);
+}
+
+.navbar-navlink[data-active]:hover {
+    background-color: var(--mantine-color-cyan-6);
+}

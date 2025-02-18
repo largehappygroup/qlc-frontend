@@ -17,6 +17,7 @@ const QuestionSchema = new Schema({
         required: true,
     },
     topics: [{ type: String, required: true }],
+    hints: [{ type: String }],
     correctAnswer: {
         type: String,
         required: true,
