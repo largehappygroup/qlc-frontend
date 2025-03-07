@@ -23,6 +23,7 @@ import {
     IconUser,
 } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/AuthContext";
 
 interface LayoutProps {
     children?: React.ReactNode;
@@ -33,6 +34,8 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
     const navigate = useNavigate();
     const location = useLocation();
+
+    const { user } = useAuth();
 
     const pages = [
         {
@@ -93,8 +96,8 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                             <UnstyledButton>
                                 <Avatar
                                     size={40}
-                                    key={"HW"}
-                                    name={"HW"}
+                                    key={`${user?.firstName} ${user?.lastName}`}
+                                    name={`${user?.firstName} ${user?.lastName}`}
                                     color="initials"
                                 />
                             </UnstyledButton>
@@ -110,6 +113,7 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                             <NavLink
                                 label="Log out"
                                 c="red"
+                                onClick={() => navigate("/login")}
                                 leftSection={
                                     <IconLogout size={16} stroke={1.5} />
                                 }

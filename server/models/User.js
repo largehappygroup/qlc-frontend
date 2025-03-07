@@ -30,10 +30,6 @@ const UserSchema = new Schema({
         required: true,
         enum: ["admin", "faculty", "ta", "student"]
     },
-    graduationYear: {
-        type: Number, // required only for students
-    },
-    majors: [{ type: String }], // required only for students
-    minors: [{ type: String }],
-    gender: { type: String },
 });
+
+module.exports = User = mongoose.model("user", UserSchema);

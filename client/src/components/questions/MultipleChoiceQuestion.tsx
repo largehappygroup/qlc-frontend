@@ -1,20 +1,30 @@
 import { Button, Flex, Grid, Text } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Question } from "../../types/Question";
+import axios from "axios";
 
 interface MultipleChoiceQuestionProps {
-    question?: string;
-    availableAnswers?: string[];
+    query: string | undefined;
+    availableAnswers: string[] | undefined;
+    value?: string;
+    onChange?: (item: string) => void;
 }
 
 const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
-    question,
+    query,
     availableAnswers,
+    value,
+    onChange,
 }: MultipleChoiceQuestionProps) => {
-    const [selectedAnswer, setSelectedAnswer] = useState(-1);
+    const selectAnswer = (answer: string) => {
+        if (onChange) {
+            onChange(answer);
+        }
+    };
 
     return (
         <Flex direction="column" gap="xl">
-            <Text ta="center">{question}</Text>
+            <Text ta="center">{query}</Text>
             <Grid>
                 {availableAnswers?.map((answer, index) => (
                     <Grid.Col span={{ base: 12, lg: 6 }}>
@@ -22,13 +32,16 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
                             fullWidth
                             key={index}
                             size="md"
-                            variant={
-                                index == selectedAnswer ? "filled" : "light"
-                            }
+                            h="100%"
+                            variant={answer == value ? "filled" : "light"}
                             radius="xl"
-                            onClick={() => setSelectedAnswer(index)}
+                            py="sm"
+                            style={{ whiteSpace: "normal" }}
+                            onClick={() => selectAnswer(answer)}
                         >
-                            {answer}
+                            <Text style={{ whiteSpace: "normal" }}>
+                                {answer}
+                            </Text>
                         </Button>
                     </Grid.Col>
                 ))}

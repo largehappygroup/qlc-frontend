@@ -14,14 +14,16 @@ const ExerciseSchema = new Schema({
     },
     questions: [
         {
-            questionId: {
+            _id: {
                 type: ObjectId,
                 ref: "Question",
                 required: true,
             },
-            userAnswer: [{
-                type: String,
-            }],
+            userAnswer: [
+                {
+                    type: String,
+                },
+            ],
             userCorrect: {
                 type: Boolean,
             },
@@ -31,8 +33,9 @@ const ExerciseSchema = new Schema({
             },
         },
     ],
+    status: { type: String, required: true },
     totalTimeSpent: { type: Number, required: true },
     totalCorrect: { type: Number, required: true },
 });
 
-module.exports = Exercise = mongoose.model("exercises", ExerciseSchema);
+module.exports = Exercise = mongoose.model("exercise", ExerciseSchema);

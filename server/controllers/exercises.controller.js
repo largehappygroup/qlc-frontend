@@ -2,37 +2,51 @@ const Exercise = require("../models/Exercise.js");
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Types;
 
+/**
+ * Creates a new exercise with AI.
+ * @param {*} req - request details
+ * @param {*} res - response details
+ * @returns - response details (with status)
+ */
 const createExercise = async (req, res) => {
     const { userId } = req.body;
     try {
         if (userId) {
             const date = Date.now();
             //generate and create new exercises here
-            const newExercise = new Exercise({
+            const exercise = new Exercise({
                 userId,
             });
-            await newExercise.save();
+            await exercise.save();
 
-            return res
-                .status(200)
-                .send({ message: "Exercise successfully created." });
+            return res.status(200).json(exercise);
         } else {
             return res.status(400).send({ message: "User ID not found." });
         }
     } catch (err) {
         console.error(err.message);
-        return res
-            .status(500)
-            .send({ message: "Error when initializing exercise." });
+        return res.status(500).send({
+            message: "Error when initializing exercise.",
+            error: err.message,
+        });
     }
 };
 
+/**
+ * Deletes an exercise from MongoDB by ID.
+ * @param {*} req - request details
+ * @param {*} res - response details
+ * @returns - response details (with status)
+ */
 const deleteExercise = async (req, res) => {
     const id = req.params?.id;
 
     try {
         if (id) {
-            Exercise.findbyIdAndDelete(id);
+            const exercise = await Exercise.findbyIdAndDelete(id);
+            if (!exercise) {
+                return res.status(404).send({ message: "Exercise not found." });
+            }
             return res
                 .status(200)
                 .send({ message: "Successfully deleted exercise." });
@@ -41,17 +55,27 @@ const deleteExercise = async (req, res) => {
         }
     } catch (err) {
         console.error(err.message);
-        return res
-            .status(500)
-            .send({ message: "Issue with deleting exercise." });
+        return res.status(500).send({
+            message: "Issue with deleting exercise.",
+            error: err.message,
+        });
     }
 };
 
+/**
+ * Updates exercise by ID.
+ * @param {*} req - request details
+ * @param {*} res - response details
+ * @returns - response details (with status)
+ */
 const editExercise = async (req, res) => {
     const id = req.params?.id;
     try {
         if (id) {
-            const exercise = Exercise.findByIdAndUpdate(id, req.body);
+            const exercise = await Exercise.findByIdAndUpdate(id, req.body);
+            if (!exercise) {
+                return res.status(404).send({ message: "Exercise not found." });
+            }
             return res
                 .status(200)
                 .send({ message: "Successfully updated exercise." });
@@ -60,31 +84,46 @@ const editExercise = async (req, res) => {
         }
     } catch (err) {
         console.error(err.message);
-        return res
-            .status(500)
-            .send({ message: "Issue with updating exercise." });
+        return res.status(500).send({
+            message: "Issue with updating exercise.",
+            error: err.message,
+        });
     }
 };
 
+/**
+ * Retrieves an exercise by ID.
+ * @param {*} req - request details
+ * @param {*} res - response details
+ * @returns - response details (with status)
+ */
 const getExercise = async (req, res) => {
     const id = req.params?.id;
     try {
-        const exercise = await Exercise.findById(id);
-        if (!exercise) {
-            return res.status(404).send({ message: "Missing Exercise ID." });
+        if (id) {
+            const exercise = await Exercise.findById(id);
+            if (!exercise) {
+                return res.status(404).send({ message: "Exercise not found." });
+            }
+            return res.status(200).json(exercise);
+        } else {
+            return res.status(400).send({ message: "Missing Exercise ID." });
         }
-        return res.status(200).send({
-            message: "Successfully retrieved exercise.",
-            data: exercise,
-        });
     } catch (err) {
         console.error(err.message);
-        return res
-            .status(500)
-            .send({ message: "Issue with retrieving exercise." });
+        return res.status(500).send({
+            message: "Issue with retrieving exercise.",
+            error: err.message,
+        });
     }
 };
 
+/**
+ * Retrieves all exercises by filter.
+ * @param {*} req - request details
+ * @param {*} res - response details
+ * @returns - response details (with status)
+ */
 const getAllExercises = async (req, res) => {
     const { userId, date } = req.body;
     try {
@@ -104,17 +143,17 @@ const getAllExercises = async (req, res) => {
             filter.date = { $gte: startOfDay, $lte: endOfDay };
         }
 
-        const exercises = await Exercise.find();
+        const exercises = await Exercise.find(filter);
 
-        return res.status(200).send({
-            message: "Successfully retrieved all exercises.",
-            data: exercises,
-        });
+        return res.status(200).json(exercises);
     } catch (err) {
         console.error(err.message);
         return res
             .status(500)
-            .send({ message: "Issue with retrieving all exercises." });
+            .send({
+                message: "Issue with retrieving all exercises.",
+                error: err.message,
+            });
     }
 };
 

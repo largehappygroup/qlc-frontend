@@ -10,11 +10,13 @@ import Summary from "./components/Summary";
 import Performance from "./pages/Performance";
 import Profile from "./pages/Profile";
 import Skills from "./pages/Skills";
+import Login from "./pages/Login";
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
+                <Route path="/login" element={<Login />} />
                 <Route index element={<Home />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/skills" element={<Skills />} />

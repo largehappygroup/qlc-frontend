@@ -9,4 +9,5 @@ export interface Exercise {
     }[];
     totalTimeSpent: number;
     totalCorrect: number;
+    status: string;
 }

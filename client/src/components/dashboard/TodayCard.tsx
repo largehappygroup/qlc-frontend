@@ -3,24 +3,47 @@ import Summary from "../Summary";
 import Quiz from "../Quiz";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Exercise } from "../../types/Exercise";
 
 interface TodayCardProps {
-    date?: Date;
     status?: string;
     topics?: string[];
 }
 
 const TodayCard: React.FC<TodayCardProps> = ({
-    date,
     status,
     topics,
 }: TodayCardProps) => {
-    
+    const [exercise, setExercise] = useState<Exercise>();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get<Exercise>(
+                    `${
+                        import.meta.env.VITE_BACKEND_URL
+                    }/exercises/67ba05edff0c62a324ed6b18`
+                );
+                setExercise(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const formatDate = (date: Date | undefined) => {
+        if (date && !isNaN(new Date(date).getTime())) {
+            return new Date(date).toLocaleDateString();
+        }
+        return "Invalid Date"; // or any fallback text you prefer
+    };
+
     return (
         <Card shadow="sm" withBorder>
             <Flex justify="space-between" gap="sm">
-                <Badge>{date?.toLocaleDateString()}</Badge>
-                <Badge tt="capitalize">{status}</Badge>
+                <Badge>{formatDate(exercise?.date)}</Badge>
+                <Badge tt="capitalize">{exercise?.status}</Badge>
             </Flex>
             <Flex
                 justify="space-between"
@@ -32,7 +55,7 @@ const TodayCard: React.FC<TodayCardProps> = ({
                     <Title>Today's Exercises</Title>
                     <Text>Topic(s): Arithmetic, Strings</Text>
                 </Flex>
-                
+
                 {status == "Complete" ? (
                     <Summary questions={["", "", "", "", ""]}>
                         <Button
@@ -44,7 +67,7 @@ const TodayCard: React.FC<TodayCardProps> = ({
                         </Button>
                     </Summary>
                 ) : (
-                    <Quiz>
+                    <Quiz exercise={exercise}>
                         <Button
                             radius="xl"
                             size="compact-md"

@@ -19,18 +19,21 @@ import {
 import Layout from "../components/Layout";
 import { DatePicker } from "@mantine/dates";
 import StreakCard from "../components/dashboard/StreakCard";
+import { useAuth } from "../hooks/AuthContext";
 
 const Home: React.FC = () => {
     const [viewMonth, setViewMonth] = useState("");
+    const { user } = useAuth();
+
     return (
         <>
             <Layout>
                 <Grid gutter="md">
                     <Grid.Col>
-                        <Title order={3}>Hello, Helen!</Title>
+                        <Title order={3}>Hello, {user?.firstName}!</Title>
                     </Grid.Col>
                     <Grid.Col span={{ base: 12, lg: 8 }}>
-                        <TodayCard date={new Date()} status="Incomplete" />
+                        <TodayCard />
                     </Grid.Col>
                     <Grid.Col span={{ base: 12, lg: 4 }}>
                         <StreakCard />

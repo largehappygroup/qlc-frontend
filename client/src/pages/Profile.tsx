@@ -1,7 +1,10 @@
 import { Avatar, Card, Flex, Grid, Text } from "@mantine/core";
 import Layout from "../components/Layout";
+import { useAuth } from "../hooks/AuthContext";
 
 const Profile: React.FC = () => {
+    const { user } = useAuth();
+
     return (
         <Layout>
             <Grid>
@@ -10,13 +13,13 @@ const Profile: React.FC = () => {
                         <Flex gap="lg" align="center">
                             <Avatar
                                 size="xl"
-                                key={"HW"}
-                                name={"HW"}
+                                key={`${user?.firstName} ${user?.lastName}`}
+                                name={`${user?.firstName} ${user?.lastName}`}
                                 color="initials"
                             />
                             <Flex direction="column">
-                                <Text>Helen Wu</Text>
-                                <Text>helen.wu@vanderbilt.edu</Text>
+                                <Text>{`${user?.firstName} ${user?.lastName}`}</Text>
+                                <Text>{user?.email}</Text>
                             </Flex>
                         </Flex>
                     </Card>

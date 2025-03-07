@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import {
     ActionIcon,
@@ -20,19 +20,31 @@ import {
     IconTrash,
 } from "@tabler/icons-react";
 import ViewStudentModal from "../components/performance/ViewStudentModal";
-
-const elements = [
-    { progress: 5 / 20, vuNetId: "wuh31", name: "Helen Wu" },
-    { progress: 3 / 20, vuNetId: "bobsmith", name: "Bob Smith" },
-    { progress: 4 / 20, vuNetId: "suebrown", name: "Sue Brown" },
-];
+import { User } from "../hooks/AuthContext";
+import axios from "axios";
 
 const Performance: React.FC = () => {
-    const rows = elements.map((element) => (
-        <Table.Tr key={element.name}>
-            <Table.Td>{element.name}</Table.Td>
-            <Table.Td>{element.vuNetId}</Table.Td>
-            <Table.Td>{element.progress}</Table.Td>
+    const [students, setStudents] = useState<User[]>();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get<User[]>(
+                    `${import.meta.env.VITE_BACKEND_URL}/users?role=student`
+                );
+                setStudents(response.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchData();
+    });
+
+    const rows = students?.map((student) => (
+        <Table.Tr key={student.vuNetId}>
+            <Table.Td>{`${student.firstName} ${student.lastName}`}</Table.Td>
+            <Table.Td>{student.vuNetId}</Table.Td>
+            <Table.Td>{student.email}</Table.Td>
             <Table.Td>
                 <Flex gap="sm" justify="end">
                     <ViewStudentModal />
@@ -76,14 +88,16 @@ const Performance: React.FC = () => {
                         </Button>
                     </Popover.Dropdown>
                 </Popover>
-                <Button size="xs" leftSection={<IconDownload size={20} />}>Download</Button>
+                <Button size="xs" leftSection={<IconDownload size={20} />}>
+                    Download
+                </Button>
             </Flex>
             <Table striped>
                 <Table.Thead>
                     <Table.Tr>
                         <Table.Th>Student Name</Table.Th>
                         <Table.Th>VUNetID</Table.Th>
-                        <Table.Th>Progress</Table.Th>
+                        <Table.Th>Email</Table.Th>
                         <Table.Th ta="end">Actions</Table.Th>
                     </Table.Tr>
                 </Table.Thead>

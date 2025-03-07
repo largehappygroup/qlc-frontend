@@ -9,11 +9,14 @@ import "@mantine/dates/styles.css";
 import "./index.css";
 
 import App from "./App.tsx";
+import { AuthProvider } from "./hooks/AuthContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <MantineProvider theme={theme}>
-            <App />
-        </MantineProvider>
+        <AuthProvider>
+            <MantineProvider theme={theme}>
+                <App />
+            </MantineProvider>
+        </AuthProvider>
     </StrictMode>
 );
