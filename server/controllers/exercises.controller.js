@@ -1,5 +1,7 @@
 const Exercise = require("../models/Exercise.js");
+const Question = require("../models/Question.js");
 const mongoose = require("mongoose");
+const axios = require("axios");
 const { ObjectId } = mongoose.Types;
 
 /**
@@ -12,10 +14,51 @@ const createExercise = async (req, res) => {
     const { userId } = req.body;
     try {
         if (userId) {
-            const date = Date.now();
+            const date = new Date();
+
+            const search = await Exercise.findOne({
+                date: {
+                    $gte: new Date(date.setHours(0, 0, 0, 0)), // Start date
+                    $lte: new Date(date.setHours(23, 59, 59, 999)), // End date
+                },
+            });
+
+            if (search) {
+                return res.status(201).json(search);
+            }
+
+            const response = await axios.get(
+                "https://opentdb.com/api.php?amount=5&category=18&difficulty=easy"
+            );
+            let questions = [];
+            const results = response.data.results;
+
+            for (let i = 0; i < results.length; i++) {
+                const result = results[i];
+
+                const question = new Question({
+                    _id: new ObjectId(),
+                    query: result.question,
+                    type: "multiple-choice",
+                    topics: ["Programming"],
+                    correctAnswer: result.correct_answer,
+                    difficulty: result.difficulty,
+                    otherAnswers: result.incorrect_answers,
+                    explanation: "Pretend an explanation exists here.",
+                });
+
+                await question.save();
+                questions.push({ _id: question._id, timeSpent: 0 });
+            }
             //generate and create new exercises here
             const exercise = new Exercise({
+                _id: new ObjectId(),
+                date,
                 userId,
+                questions,
+                status: "incomplete",
+                totalTimeSpent: 0,
+                totalCorrect: 0,
             });
             await exercise.save();
 
@@ -148,12 +191,10 @@ const getAllExercises = async (req, res) => {
         return res.status(200).json(exercises);
     } catch (err) {
         console.error(err.message);
-        return res
-            .status(500)
-            .send({
-                message: "Issue with retrieving all exercises.",
-                error: err.message,
-            });
+        return res.status(500).send({
+            message: "Issue with retrieving all exercises.",
+            error: err.message,
+        });
     }
 };
 

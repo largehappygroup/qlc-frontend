@@ -4,6 +4,7 @@ import Quiz from "../Quiz";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Exercise } from "../../types/Exercise";
+import { useAuth } from "../../hooks/AuthContext";
 
 interface TodayCardProps {
     status?: string;
@@ -15,22 +16,23 @@ const TodayCard: React.FC<TodayCardProps> = ({
     topics,
 }: TodayCardProps) => {
     const [exercise, setExercise] = useState<Exercise>();
-
+    const { user } = useAuth();
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get<Exercise>(
-                    `${
-                        import.meta.env.VITE_BACKEND_URL
-                    }/exercises/67ba05edff0c62a324ed6b18`
+                const response = await axios.post<Exercise>(
+                    `${import.meta.env.VITE_BACKEND_URL}/exercises`,
+                    {userId: user?._id}
                 );
                 setExercise(response.data);
             } catch (error) {
                 console.error(error);
             }
         };
-        fetchData();
-    }, []);
+        if (user) {
+            fetchData();
+        }
+    }, [user]);
 
     const formatDate = (date: Date | undefined) => {
         if (date && !isNaN(new Date(date).getTime())) {

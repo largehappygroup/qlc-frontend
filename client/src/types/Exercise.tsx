@@ -2,7 +2,7 @@ export interface Exercise {
     userId: string;
     date: Date;
     questions: {
-        questionId: string;
+        _id: string;
         userAnswer?: string;
         userCorrect?: boolean;
         timeSpent: number;

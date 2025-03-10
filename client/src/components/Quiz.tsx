@@ -42,7 +42,7 @@ const Quiz: React.FC<QuizProps> = ({ children, exercise }: QuizProps) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const questionId = exercise?.questions[questionIndex].questionId;
+            const questionId = exercise?.questions[questionIndex]._id;
             if (questionId) {
                 const response = await axios.get<Question>(
                     `${
@@ -57,7 +57,7 @@ const Quiz: React.FC<QuizProps> = ({ children, exercise }: QuizProps) => {
 
     const checkAnswer = async () => {
         if (selectedAnswer !== "") {
-            const questionId = exercise?.questions[questionIndex].questionId;
+            const questionId = exercise?.questions[questionIndex]._id;
             const response = await axios.post(
                 `${
                     import.meta.env.VITE_BACKEND_URL

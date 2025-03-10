@@ -158,7 +158,10 @@ const getStreak = async (req, res) => {
     const id = req.params?.id;
     try {
         if (id) {
-            const exercises = await Exercise.find({ userId: id });
+            const exercises = await Exercise.find({
+                userId: id,
+                status: "complete",
+            });
             let sortExercises = [...exercises];
             sortExercises.sort((a, b) => b.date - a.date);
 
@@ -182,7 +185,9 @@ const getStreak = async (req, res) => {
                     break;
                 }
             }
-            return res.status(200).json(`${streak} day${streak != 1 ? "s" : ""}`);
+            return res
+                .status(200)
+                .json(`${streak} day${streak != 1 ? "s" : ""}`);
         } else {
             return res.status(400).send({ message: "Missing User ID" });
         }
@@ -206,5 +211,5 @@ module.exports = {
     getUser,
     getAllUsers,
     downloadUsers,
-    getStreak
+    getStreak,
 };

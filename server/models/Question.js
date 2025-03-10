@@ -23,7 +23,7 @@ const QuestionSchema = new Schema({
         required: true,
     },
     difficulty: {
-        type: Number,
+        type: String,
         required: true,
     },
     otherAnswers: [{ type: String }],
