@@ -55,6 +55,7 @@ const createExercise = async (req, res) => {
                 _id: new ObjectId(),
                 date,
                 userId,
+                topics: ["Programming"],
                 questions,
                 status: "incomplete",
                 totalTimeSpent: 0,

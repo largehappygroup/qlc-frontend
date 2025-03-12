@@ -22,7 +22,7 @@ const TodayCard: React.FC<TodayCardProps> = ({
             try {
                 const response = await axios.post<Exercise>(
                     `${import.meta.env.VITE_BACKEND_URL}/exercises`,
-                    {userId: user?._id}
+                    { userId: user?._id }
                 );
                 setExercise(response.data);
             } catch (error) {
@@ -54,8 +54,10 @@ const TodayCard: React.FC<TodayCardProps> = ({
                 gap={{ base: "sm", lg: "md" }}
             >
                 <Flex direction="column" gap={{ base: "sm", lg: "md" }}>
-                    <Title>Today's Exercises</Title>
-                    <Text>Topic(s): Arithmetic, Strings</Text>
+                    <Title>Today's Exercise</Title>
+                    <Text>
+                        {`Topic(s): ${exercise?.topics.join(", ") || "N/A"}`}
+                    </Text>
                 </Flex>
 
                 {status == "Complete" ? (

@@ -40,6 +40,9 @@ const Quiz: React.FC<QuizProps> = ({ children, exercise }: QuizProps) => {
     const [submitted, setSubmitted] = useState(false);
     const [userCorrect, setUserCorrect] = useState(false);
 
+    const [timePaused, setTimePaused] = useState(true);
+    const [timeSpent, setTimeSpent] = useState(0);
+
     useEffect(() => {
         const fetchData = async () => {
             const questionId = exercise?.questions[questionIndex]._id;
@@ -54,6 +57,18 @@ const Quiz: React.FC<QuizProps> = ({ children, exercise }: QuizProps) => {
         };
         fetchData();
     }, [questionIndex, exercise]);
+
+    useEffect(() => {
+        setTimeSpent(0);
+
+        if (!timePaused) {
+            const timer = setInterval(() => {
+                setTimeSpent((timeSpent) => timeSpent + 1);
+            }, 1000);
+
+            return () => clearInterval(timer);
+        }
+    }, [timePaused]);
 
     const checkAnswer = async () => {
         if (selectedAnswer !== "") {
@@ -75,14 +90,24 @@ const Quiz: React.FC<QuizProps> = ({ children, exercise }: QuizProps) => {
         setSelectedAnswer("");
     };
 
+    const showModal = () => {
+        setTimePaused(false);
+        open();
+    };
+
+    const hideModal = () => {
+        setTimePaused(true);
+        close();
+    };
+
     return (
         <>
-            <Box w={{ base: "100%", lg: "auto" }} onClick={open}>
+            <Box w={{ base: "100%", lg: "auto" }} onClick={showModal}>
                 {children}
             </Box>
             <Modal
                 opened={opened}
-                onClose={close}
+                onClose={hideModal}
                 withCloseButton={false}
                 scrollAreaComponent={ScrollArea.Autosize}
                 centered
@@ -103,8 +128,8 @@ const Quiz: React.FC<QuizProps> = ({ children, exercise }: QuizProps) => {
                                 striped
                                 animated
                             />
-
-                            <CloseButton onClick={close} />
+                            {timeSpent}
+                            <CloseButton onClick={hideModal} />
                         </Flex>
                         <MultipleChoiceQuestion
                             value={selectedAnswer}

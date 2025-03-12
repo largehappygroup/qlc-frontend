@@ -7,6 +7,7 @@ export interface Exercise {
         userCorrect?: boolean;
         timeSpent: number;
     }[];
+    topics: string[];
     totalTimeSpent: number;
     totalCorrect: number;
     status: string;

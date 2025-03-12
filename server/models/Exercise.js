@@ -33,6 +33,7 @@ const ExerciseSchema = new Schema({
             },
         },
     ],
+    topics: [{type: String, required: true}],
     status: { type: String, required: true },
     totalTimeSpent: { type: Number, required: true },
     totalCorrect: { type: Number, required: true },
