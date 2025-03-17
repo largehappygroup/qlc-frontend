@@ -26,13 +26,20 @@ import axios from "axios";
 import { Exercise } from "../types/Exercise";
 import { Question } from "../types/Question";
 import Explanation from "./questions/Explanation";
+import { useAuth } from "../hooks/AuthContext";
 
 interface QuizProps {
     children?: React.ReactNode;
     exercise: Exercise | undefined;
+    setExercise: (exercise: Exercise) => void;
 }
 
-const Quiz: React.FC<QuizProps> = ({ children, exercise }: QuizProps) => {
+const Quiz: React.FC<QuizProps> = ({
+    children,
+    exercise,
+    setExercise,
+}: QuizProps) => {
+    const { user } = useAuth();
     const [opened, { open, close }] = useDisclosure(false);
     const [questionIndex, setQuestionIndex] = useState(0);
     const [question, setQuestion] = useState<Question>();
@@ -55,7 +62,10 @@ const Quiz: React.FC<QuizProps> = ({ children, exercise }: QuizProps) => {
                 setQuestion(response.data);
             }
         };
-        fetchData();
+        if (exercise) {
+            console.log(exercise)
+            fetchData();
+        }
     }, [questionIndex, exercise]);
 
     useEffect(() => {

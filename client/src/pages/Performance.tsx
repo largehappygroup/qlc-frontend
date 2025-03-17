@@ -47,7 +47,7 @@ const Performance: React.FC = () => {
             <Table.Td>{student.email}</Table.Td>
             <Table.Td>
                 <Flex gap="sm" justify="end">
-                    <ViewStudentModal />
+                    <ViewStudentModal student={student} />
                     <ActionIcon>
                         <IconEdit stroke={1.5} />
                     </ActionIcon>
@@ -66,28 +66,7 @@ const Performance: React.FC = () => {
                 <ActionIcon size="md">
                     <IconSearch size={20} />
                 </ActionIcon>
-                <Popover width={200} position="bottom" withArrow shadow="md">
-                    <Popover.Target>
-                        <Button
-                            size="xs"
-                            leftSection={<IconFilter size={20} />}
-                        >
-                            Filter
-                        </Button>
-                    </Popover.Target>
-                    <Popover.Dropdown>
-                        <Flex direction="column" gap="xs">
-                            <Flex align="center" gap="xs">
-                                <Checkbox />
-                                <Text size="sm">Test</Text>
-                            </Flex>
-                        </Flex>
-                        <Space h="xs" />
-                        <Button fullWidth size="compact-xs">
-                            Apply
-                        </Button>
-                    </Popover.Dropdown>
-                </Popover>
+               
                 <Button size="xs" leftSection={<IconDownload size={20} />}>
                     Download
                 </Button>

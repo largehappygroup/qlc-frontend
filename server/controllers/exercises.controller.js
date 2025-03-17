@@ -11,7 +11,7 @@ const { ObjectId } = mongoose.Types;
  * @returns - response details (with status)
  */
 const createExercise = async (req, res) => {
-    const { userId } = req.body;
+    const { userId } = req.query;
     try {
         if (userId) {
             const date = new Date();
@@ -22,6 +22,7 @@ const createExercise = async (req, res) => {
                     $lte: new Date(date.setHours(23, 59, 59, 999)), // End date
                 },
             });
+
 
             if (search) {
                 return res.status(201).json(search);
@@ -169,7 +170,7 @@ const getExercise = async (req, res) => {
  * @returns - response details (with status)
  */
 const getAllExercises = async (req, res) => {
-    const { userId, date } = req.body;
+    const { userId, date, month, year } = req.query;
     try {
         let filter = {};
 
@@ -185,6 +186,11 @@ const getAllExercises = async (req, res) => {
             endOfDay.setHours(23, 59, 59, 999);
 
             filter.date = { $gte: startOfDay, $lte: endOfDay };
+        } else if (month && year) {
+            const startOfMonth = new Date(year, month, 1);
+            const today = new Date();
+            today.setHours(-1, 59, 59, 999);
+            filter.date = { $gte: startOfMonth, $lte: today };
         }
 
         const exercises = await Exercise.find(filter);

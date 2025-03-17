@@ -21,8 +21,9 @@ const TodayCard: React.FC<TodayCardProps> = ({
         const fetchData = async () => {
             try {
                 const response = await axios.post<Exercise>(
-                    `${import.meta.env.VITE_BACKEND_URL}/exercises`,
-                    { userId: user?._id }
+                    `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
+                        user?._id
+                    }`
                 );
                 setExercise(response.data);
             } catch (error) {
@@ -71,7 +72,7 @@ const TodayCard: React.FC<TodayCardProps> = ({
                         </Button>
                     </Summary>
                 ) : (
-                    <Quiz exercise={exercise}>
+                    <Quiz exercise={exercise} setExercise={setExercise}>
                         <Button
                             radius="xl"
                             size="compact-md"

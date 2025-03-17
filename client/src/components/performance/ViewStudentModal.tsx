@@ -2,8 +2,15 @@ import { ActionIcon, Button, Flex, Modal, Tooltip } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDownload, IconEye } from "@tabler/icons-react";
 import React from "react";
+import { User } from "../../hooks/AuthContext";
 
-const ViewStudentModal: React.FC = () => {
+interface ViewStudentModalProps {
+    student: User;
+}
+
+const ViewStudentModal: React.FC<ViewStudentModalProps> = ({
+    student,
+}: ViewStudentModalProps) => {
     const [opened, { open, close }] = useDisclosure(false);
 
     return (
@@ -12,10 +19,14 @@ const ViewStudentModal: React.FC = () => {
                 fullScreen
                 opened={opened}
                 onClose={close}
-                title="View Helen's Details"
+                title={`View Details for ${student.firstName} ${student.lastName}`}
             >
                 <Flex justify="end">
-                    <Button leftSection={<IconDownload size={16} stroke={1.5} />}>Download</Button>
+                    <Button
+                        leftSection={<IconDownload size={16} stroke={1.5} />}
+                    >
+                        Download
+                    </Button>
                 </Flex>
             </Modal>
             <Tooltip label="View" withArrow>

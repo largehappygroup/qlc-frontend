@@ -9,7 +9,7 @@ const { ObjectId } = mongoose.Types;
  * @returns - response details (with status)
  */
 const createQuestion = async (req, res) => {
-    const { userId } = req.body;
+    const { userId } = req.query;
     try {
         if (userId) {
             const date = Date.now();
@@ -17,6 +17,7 @@ const createQuestion = async (req, res) => {
             const question = new Question({
                 userId,
             });
+        
             await question.save();
 
             return res.status(200).json(question);

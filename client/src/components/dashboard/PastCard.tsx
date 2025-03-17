@@ -9,24 +9,46 @@ import {
     Divider,
     Table,
     ActionIcon,
+    Popover,
 } from "@mantine/core";
-import { DatePicker } from "@mantine/dates";
-import { IconCaretLeftFilled, IconCaretRightFilled, IconEye } from "@tabler/icons-react";
+import { MonthPicker, MonthPickerInput } from "@mantine/dates";
+import {
+    IconCaretLeftFilled,
+    IconCaretRightFilled,
+    IconEye,
+} from "@tabler/icons-react";
 import Summary from "../Summary";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Exercise } from "../../types/Exercise";
+import { useAuth } from "../../hooks/AuthContext";
 
 const PastCard: React.FC = () => {
-    const fakeExerciseData = [
-        { date: new Date(2025, 1, 9), topics: ["Variables", "Data Types"] },
-        { date: new Date(2025, 1, 8), topics: ["Integers", "Floats"] },
-        { date: new Date(2025, 1, 7), topics: ["Methods"] },
-        { date: new Date(2025, 1, 6), topics: ["Classes", "OOP"] },
-        { date: new Date(2025, 1, 5), topics: ["Formatting", "JavaDoc"] },
-    ];
+    const { user } = useAuth();
+    const [currentMonth, setCurrentMonth] = useState<Date | null>(new Date());
+    const [exercises, setExercises] = useState<Exercise[]>([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get<Exercise[]>(
+                    `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
+                        user?._id
+                    }&month=${currentMonth?.getMonth()}&year=${currentMonth?.getFullYear()}`
+                );
+                setExercises(response.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        if (user) {
+            fetchData();
+        }
+    }, [currentMonth, user]);
 
-    const rows = fakeExerciseData.map((exercise) => (
-        <Table.Tr key={exercise.date.toLocaleDateString()}>
+    const rows = exercises.map((exercise) => (
+        <Table.Tr key={new Date(exercise.date).toLocaleDateString()}>
             <Table.Td>
-                <Badge>{exercise.date.toLocaleDateString()}</Badge>
+                <Badge>{new Date(exercise.date).toLocaleDateString()}</Badge>
             </Table.Td>
             <Table.Td>{exercise.topics.join(", ")}</Table.Td>
             <Table.Td ta="end">
@@ -42,24 +64,31 @@ const PastCard: React.FC = () => {
     return (
         <Card shadow="sm" withBorder>
             <Flex justify="space-between">
-                <Button
-                    size="compact-sm"
-                    variant="subtle"
-                    leftSection={<IconCaretLeftFilled size={16} stroke={1.5} />}
-                >
-                    01/2025
-                </Button>
-                <Text>02/2025 Exercises</Text>
-
-                <Button
-                    size="compact-sm"
-                    variant="subtle"
-                    rightSection={
-                        <IconCaretRightFilled size={16} stroke={1.5} />
-                    }
-                >
-                    03/2025
-                </Button>
+                <Text>{`${
+                    (currentMonth?.getMonth() || new Date().getMonth()) + 1
+                }/${currentMonth?.getFullYear()} Exercises`}</Text>
+                <Popover>
+                    <Popover.Target>
+                        <Button>{`${
+                            (currentMonth?.getMonth() ||
+                                new Date().getMonth()) + 1
+                        }/${currentMonth?.getFullYear()}`}</Button>
+                    </Popover.Target>
+                    <Popover.Dropdown>
+                        <MonthPicker
+                            value={currentMonth}
+                            onChange={setCurrentMonth}
+                        >
+                            <Button>Month</Button>
+                        </MonthPicker>
+                        <Flex justify="end" gap="xs">
+                            <Button size="compact-xs" variant="outline">
+                                Cancel
+                            </Button>
+                            <Button size="compact-xs">Ok</Button>
+                        </Flex>
+                    </Popover.Dropdown>
+                </Popover>
             </Flex>
             <Space h="md" />
             <Table>
@@ -70,7 +99,14 @@ const PastCard: React.FC = () => {
                         <Table.Th ta="end">Action</Table.Th>
                     </Table.Tr>
                 </Table.Thead>
-                <Table.Tbody>{rows}</Table.Tbody>
+                <Table.Tbody>
+                    {rows.length === 0
+                        ? `No exercises found for ${
+                              (currentMonth?.getMonth() ||
+                                  new Date().getMonth()) + 1
+                          }/${currentMonth?.getFullYear()}.`
+                        : rows}
+                </Table.Tbody>
             </Table>
         </Card>
     );

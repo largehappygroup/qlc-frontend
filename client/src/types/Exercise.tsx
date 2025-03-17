@@ -1,4 +1,5 @@
 export interface Exercise {
+    _id: string;
     userId: string;
     date: Date;
     questions: {
