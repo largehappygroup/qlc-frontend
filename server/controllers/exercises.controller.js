@@ -23,7 +23,6 @@ const createExercise = async (req, res) => {
                 },
             });
 
-
             if (search) {
                 return res.status(201).json(search);
             }
@@ -189,8 +188,13 @@ const getAllExercises = async (req, res) => {
         } else if (month && year) {
             const startOfMonth = new Date(year, month, 1);
             const today = new Date();
-            today.setHours(-1, 59, 59, 999);
-            filter.date = { $gte: startOfMonth, $lte: today };
+            if (Number(month) === today.getMonth()) {
+                today.setHours(-1, 59, 59, 999);
+                filter.date = { $gte: startOfMonth, $lte: today };
+            } else {
+                const endOfMonth = new Date(year, Number(month) + 1, 0);
+                filter.date = { $gte: startOfMonth, $lte: endOfMonth };
+            }
         }
 
         const exercises = await Exercise.find(filter);

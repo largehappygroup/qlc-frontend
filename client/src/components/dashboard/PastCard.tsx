@@ -21,10 +21,13 @@ import Summary from "../Summary";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Exercise } from "../../types/Exercise";
-import { useAuth } from "../../hooks/AuthContext";
+import { useAuth, User } from "../../hooks/AuthContext";
 
-const PastCard: React.FC = () => {
-    const { user } = useAuth();
+interface PastCardProps {
+    user: User | null;
+}
+
+const PastCard: React.FC<PastCardProps> = ({user}: PastCardProps) => {
     const [currentMonth, setCurrentMonth] = useState<Date | null>(new Date());
     const [exercises, setExercises] = useState<Exercise[]>([]);
     useEffect(() => {
@@ -64,50 +67,45 @@ const PastCard: React.FC = () => {
     return (
         <Card shadow="sm" withBorder>
             <Flex justify="space-between">
-                <Text>{`${
-                    (currentMonth?.getMonth() || new Date().getMonth()) + 1
-                }/${currentMonth?.getFullYear()} Exercises`}</Text>
+                <Text>{`${currentMonth?.toLocaleString("default", {
+                    month: "long",
+                })} ${currentMonth?.getFullYear()} Exercises`}</Text>
                 <Popover>
                     <Popover.Target>
-                        <Button>{`${
-                            (currentMonth?.getMonth() ||
-                                new Date().getMonth()) + 1
-                        }/${currentMonth?.getFullYear()}`}</Button>
+                        <Button>{`${currentMonth?.toLocaleString("default", {
+                            month: "long",
+                        })} ${currentMonth?.getFullYear()}`}</Button>
                     </Popover.Target>
                     <Popover.Dropdown>
                         <MonthPicker
                             value={currentMonth}
                             onChange={setCurrentMonth}
+                            minDate={new Date(2024, 7, 1)}
+                            maxDate={new Date()}
                         >
                             <Button>Month</Button>
                         </MonthPicker>
-                        <Flex justify="end" gap="xs">
-                            <Button size="compact-xs" variant="outline">
-                                Cancel
-                            </Button>
-                            <Button size="compact-xs">Ok</Button>
-                        </Flex>
                     </Popover.Dropdown>
                 </Popover>
             </Flex>
             <Space h="md" />
-            <Table>
-                <Table.Thead>
-                    <Table.Tr>
-                        <Table.Th>Date</Table.Th>
-                        <Table.Th>Topic(s)</Table.Th>
-                        <Table.Th ta="end">Action</Table.Th>
-                    </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                    {rows.length === 0
-                        ? `No exercises found for ${
-                              (currentMonth?.getMonth() ||
-                                  new Date().getMonth()) + 1
-                          }/${currentMonth?.getFullYear()}.`
-                        : rows}
-                </Table.Tbody>
-            </Table>
+            {rows.length === 0 ? (
+                `No exercises found for ${currentMonth?.toLocaleString(
+                    "default",
+                    { month: "long" }
+                )} ${currentMonth?.getFullYear()}.`
+            ) : (
+                <Table>
+                    <Table.Thead>
+                        <Table.Tr>
+                            <Table.Th>Date</Table.Th>
+                            <Table.Th>Topic(s)</Table.Th>
+                            <Table.Th ta="end">Action</Table.Th>
+                        </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>{rows}</Table.Tbody>
+                </Table>
+            )}
         </Card>
     );
 };

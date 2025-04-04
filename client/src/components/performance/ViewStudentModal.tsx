@@ -1,8 +1,9 @@
-import { ActionIcon, Button, Flex, Modal, Tooltip } from "@mantine/core";
+import { ActionIcon, Button, Flex, Grid, Modal, Space, Tooltip } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDownload, IconEye } from "@tabler/icons-react";
 import React from "react";
 import { User } from "../../hooks/AuthContext";
+import PastCard from "../dashboard/PastCard";
 
 interface ViewStudentModalProps {
     student: User;
@@ -28,6 +29,12 @@ const ViewStudentModal: React.FC<ViewStudentModalProps> = ({
                         Download
                     </Button>
                 </Flex>
+                <Space h="md" />
+                <Grid>
+                    <Grid.Col>
+                        <PastCard user={student} />
+                    </Grid.Col>
+                </Grid>
             </Modal>
             <Tooltip label="View" withArrow>
                 <ActionIcon onClick={open}>

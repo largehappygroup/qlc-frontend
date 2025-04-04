@@ -22,6 +22,9 @@ import {
 import ViewStudentModal from "../components/performance/ViewStudentModal";
 import { User } from "../hooks/AuthContext";
 import axios from "axios";
+import EditStudentModal from "../components/performance/EditStudentModal";
+import ConfirmPopup from "../components/ConfirmPopup";
+import Search from "../components/performance/Search";
 
 const Performance: React.FC = () => {
     const [students, setStudents] = useState<User[]>();
@@ -48,12 +51,12 @@ const Performance: React.FC = () => {
             <Table.Td>
                 <Flex gap="sm" justify="end">
                     <ViewStudentModal student={student} />
-                    <ActionIcon>
-                        <IconEdit stroke={1.5} />
-                    </ActionIcon>
-                    <ActionIcon color="red">
-                        <IconTrash stroke={1.5} />
-                    </ActionIcon>
+                    <EditStudentModal student={student} />
+                    <ConfirmPopup prompt="Are you sure you wish to delete this student? All progress and previous exercises will be deleted.">
+                        <ActionIcon color="red">
+                            <IconTrash stroke={1.5} />
+                        </ActionIcon>
+                    </ConfirmPopup>
                 </Flex>
             </Table.Td>
         </Table.Tr>
@@ -62,11 +65,8 @@ const Performance: React.FC = () => {
     return (
         <Layout>
             <Flex justify="end" gap="md" align="center">
-                <TextInput size="xs" placeholder="e.g. John Doe" />
-                <ActionIcon size="md">
-                    <IconSearch size={20} />
-                </ActionIcon>
-               
+                <Search />
+
                 <Button size="xs" leftSection={<IconDownload size={20} />}>
                     Download
                 </Button>

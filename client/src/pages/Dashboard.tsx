@@ -39,7 +39,7 @@ const Home: React.FC = () => {
                         <StreakCard />
                     </Grid.Col>
                     <Grid.Col>
-                        <PastCard />
+                        <PastCard user={user} />
                     </Grid.Col>
                 </Grid>
                 <Divider />
