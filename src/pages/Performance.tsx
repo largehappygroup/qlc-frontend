@@ -10,12 +10,19 @@ import {
     TextInput,
     Checkbox,
     Space,
+    Group,
+    Menu,
 } from "@mantine/core";
 import {
+    IconDots,
     IconDownload,
     IconEdit,
     IconEye,
     IconFilter,
+    IconMail,
+    IconNote,
+    IconPencil,
+    IconReportAnalytics,
     IconSearch,
     IconTrash,
 } from "@tabler/icons-react";
@@ -45,41 +52,82 @@ const Performance: React.FC = () => {
 
     const rows = students?.map((student) => (
         <Table.Tr key={student.vuNetId}>
-            <Table.Td>{`${student.firstName} ${student.lastName}`}</Table.Td>
-            <Table.Td>{student.vuNetId}</Table.Td>
-            <Table.Td>{student.email}</Table.Td>
             <Table.Td>
-                <Flex gap="sm" justify="end">
-                    <ViewStudentModal student={student} />
+                <Group gap="sm">
+                    <div>
+                        <Text fz="sm" fw={500}>
+                            {`${student.firstName} ${student.lastName}`}
+                        </Text>
+                        <Text c="dimmed" fz="xs" tt="capitalize">
+                            {student.role}
+                        </Text>
+                    </div>
+                </Group>
+            </Table.Td>
+            <Table.Td>
+                <Text fz="sm">{student.email}</Text>
+                <Text fz="xs" c="dimmed">
+                    Email
+                </Text>
+            </Table.Td>
+            <Table.Td>
+                <Group gap={0} justify="flex-end">
                     <EditStudentModal student={student} />
-                    <ConfirmPopup prompt="Are you sure you wish to delete this student? All progress and previous exercises will be deleted.">
-                        <ActionIcon color="red">
-                            <IconTrash stroke={1.5} />
-                        </ActionIcon>
-                    </ConfirmPopup>
-                </Flex>
+                    <Menu
+                        transitionProps={{ transition: "pop" }}
+                        withArrow
+                        position="bottom-end"
+                        withinPortal
+                    >
+                        <Menu.Target>
+                            <ActionIcon variant="subtle" color="gray">
+                                <IconDots size={16} stroke={1.5} />
+                            </ActionIcon>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                            <Menu.Item
+                                leftSection={
+                                    <IconMail size={16} stroke={1.5} />
+                                }
+                            >
+                                Add note
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={
+                                    <IconReportAnalytics
+                                        size={16}
+                                        stroke={1.5}
+                                    />
+                                }
+                            >
+                                Analytics
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={
+                                    <IconTrash size={16} stroke={1.5} />
+                                }
+                                color="red"
+                            >
+                                Delete
+                            </Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
+                </Group>
             </Table.Td>
         </Table.Tr>
     ));
 
     return (
         <Layout>
-            <Flex justify="end" gap="md" align="center">
+            
+            <Flex justify="space-between" gap="md" align="center">
                 <Search />
-
                 <Button size="xs" leftSection={<IconDownload size={20} />}>
                     Download
                 </Button>
             </Flex>
-            <Table striped>
-                <Table.Thead>
-                    <Table.Tr>
-                        <Table.Th>Student Name</Table.Th>
-                        <Table.Th>VUNetID</Table.Th>
-                        <Table.Th>Email</Table.Th>
-                        <Table.Th ta="end">Actions</Table.Th>
-                    </Table.Tr>
-                </Table.Thead>
+            <Space h="md" />
+            <Table verticalSpacing="sm">
                 <Table.Tbody>{rows}</Table.Tbody>
             </Table>
         </Layout>

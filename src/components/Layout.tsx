@@ -19,6 +19,7 @@ import {
     IconHome2,
     IconLogout,
     IconStar,
+    IconSticker2,
     IconTrendingUp,
     IconUser,
 } from "@tabler/icons-react";
@@ -48,15 +49,16 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
             path: "/profile",
             icon: <IconUser size={16} stroke={1.5} />,
         },
-        {
-            label: "Skills",
-            path: "/skills",
-            icon: <IconTrendingUp size={16} stroke={1.5} />,
-        },
+
         {
             label: "Performance",
             path: "/performance",
             icon: <IconStar size={16} stroke={1.5} />,
+        },
+        {
+            label: "Chapters",
+            path: "/chapters",
+            icon: <IconSticker2 size={16} stroke={1.5} />,
         },
     ];
 

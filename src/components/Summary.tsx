@@ -36,7 +36,7 @@ const Summary: React.FC<SummaryProps> = ({
                 opened={opened}
                 fullScreen
                 onClose={close}
-                title="Summary"
+                title={date? `Summary for ${date.toLocaleDateString()}` : "Summary"}
                 centered
             >
                 <Flex direction="column" gap="lg">

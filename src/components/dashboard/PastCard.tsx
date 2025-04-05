@@ -27,9 +27,11 @@ interface PastCardProps {
     user: User | null;
 }
 
-const PastCard: React.FC<PastCardProps> = ({user}: PastCardProps) => {
+const PastCard: React.FC<PastCardProps> = ({ user }: PastCardProps) => {
     const [currentMonth, setCurrentMonth] = useState<Date | null>(new Date());
     const [exercises, setExercises] = useState<Exercise[]>([]);
+    const [opened, setOpened] = useState(false);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -48,6 +50,11 @@ const PastCard: React.FC<PastCardProps> = ({user}: PastCardProps) => {
         }
     }, [currentMonth, user]);
 
+    const handleMonthChange = (e: Date | null) => {
+        setOpened(false);
+        setCurrentMonth(e);
+    };
+
     const rows = exercises.map((exercise) => (
         <Table.Tr key={new Date(exercise.date).toLocaleDateString()}>
             <Table.Td>
@@ -55,9 +62,12 @@ const PastCard: React.FC<PastCardProps> = ({user}: PastCardProps) => {
             </Table.Td>
             <Table.Td>{exercise.topics.join(", ")}</Table.Td>
             <Table.Td ta="end">
-                <Summary questions={["", "", "", "", ""]}>
-                    <ActionIcon size="lg">
-                        <IconEye />
+                <Summary
+                    date={new Date(exercise.date)}
+                    questions={["", "", "", "", ""]}
+                >
+                    <ActionIcon variant="subtle" color="gray">
+                        <IconEye size={16} stroke={1.5} />
                     </ActionIcon>
                 </Summary>
             </Table.Td>
@@ -70,16 +80,18 @@ const PastCard: React.FC<PastCardProps> = ({user}: PastCardProps) => {
                 <Text>{`${currentMonth?.toLocaleString("default", {
                     month: "long",
                 })} ${currentMonth?.getFullYear()} Exercises`}</Text>
-                <Popover>
+                <Popover opened={opened} onChange={setOpened}>
                     <Popover.Target>
-                        <Button>{`${currentMonth?.toLocaleString("default", {
+                        <Button
+                            onClick={() => setOpened((e) => !e)}
+                        >{`${currentMonth?.toLocaleString("default", {
                             month: "long",
                         })} ${currentMonth?.getFullYear()}`}</Button>
                     </Popover.Target>
                     <Popover.Dropdown>
                         <MonthPicker
                             value={currentMonth}
-                            onChange={setCurrentMonth}
+                            onChange={handleMonthChange}
                             minDate={new Date(2024, 7, 1)}
                             maxDate={new Date()}
                         >

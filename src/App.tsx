@@ -2,14 +2,11 @@ import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { Divider } from "@mantine/core";
 import "./App.css";
 
-import Layout from "./components/Layout";
+import Home from "./pages/StudentDashboard";
 
-import Home from "./pages/Dashboard";
-import Quiz from "./components/Quiz";
-import Summary from "./components/Summary";
+import Chapters from "./pages/Chapters";
 import Performance from "./pages/Performance";
 import Profile from "./pages/Profile";
-import Skills from "./pages/Skills";
 import Login from "./pages/Login";
 
 function App() {
@@ -19,8 +16,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route index element={<Home />} />
                 <Route path="/profile" element={<Profile />} />
-                <Route path="/skills" element={<Skills />} />
                 <Route path="/performance" element={<Performance />} />
+                <Route path="/chapters" element={<Chapters />} />
             </Routes>
         </BrowserRouter>
     );

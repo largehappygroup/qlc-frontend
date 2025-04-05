@@ -1,6 +1,19 @@
-import { ActionIcon, Button, Flex, Grid, Modal, Space, Tooltip } from "@mantine/core";
+import {
+    ActionIcon,
+    Button,
+    Flex,
+    Grid,
+    Menu,
+    Modal,
+    Space,
+    Tooltip,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconDownload, IconEye } from "@tabler/icons-react";
+import {
+    IconDownload,
+    IconEye,
+    IconReportAnalytics,
+} from "@tabler/icons-react";
 import React from "react";
 import { User } from "../../hooks/AuthContext";
 import PastCard from "../dashboard/PastCard";
@@ -36,11 +49,12 @@ const ViewStudentModal: React.FC<ViewStudentModalProps> = ({
                     </Grid.Col>
                 </Grid>
             </Modal>
-            <Tooltip label="View" withArrow>
-                <ActionIcon onClick={open}>
-                    <IconEye stroke={1.5} />
-                </ActionIcon>
-            </Tooltip>
+            <Menu.Item
+                onClick={open}
+                leftSection={<IconReportAnalytics size={16} stroke={1.5} />}
+            >
+                Analytics
+            </Menu.Item>
         </>
     );
 };

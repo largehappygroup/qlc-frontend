@@ -21,7 +21,7 @@ import { DatePicker } from "@mantine/dates";
 import StreakCard from "../components/dashboard/StreakCard";
 import { useAuth } from "../hooks/AuthContext";
 
-const Home: React.FC = () => {
+const StudentDashboard: React.FC = () => {
     const [viewMonth, setViewMonth] = useState("");
     const { user } = useAuth();
 
@@ -48,4 +48,4 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
+export default StudentDashboard;

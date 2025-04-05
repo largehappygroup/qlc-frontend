@@ -9,20 +9,25 @@ const Profile: React.FC = () => {
         <Layout>
             <Grid>
                 <Grid.Col>
-                    <Card shadow="sm" withBorder>
-                        <Flex gap="lg" align="center">
-                            <Avatar
-                                size="xl"
-                                key={`${user?.firstName} ${user?.lastName}`}
-                                name={`${user?.firstName} ${user?.lastName}`}
-                                color="initials"
-                            />
-                            <Flex direction="column">
-                                <Text>{`${user?.firstName} ${user?.lastName}`}</Text>
-                                <Text>{user?.email}</Text>
-                            </Flex>
+                    <Flex
+                        gap="lg"
+                        align="center"
+                        direction={{ base: "column", md: "row" }}
+                    >
+                        <Avatar
+                            size="xl"
+                            key={`${user?.firstName} ${user?.lastName}`}
+                            name={`${user?.firstName} ${user?.lastName}`}
+                            color="initials"
+                        />
+                        <Flex
+                            ta={{ base: "center", md: "left" }}
+                            direction="column"
+                        >
+                            <Text fw={700} size="xl">{`${user?.firstName} ${user?.lastName}`}</Text>
+                            <Text>{user?.email}</Text>
                         </Flex>
-                    </Card>
+                    </Flex>
                 </Grid.Col>
             </Grid>
         </Layout>
