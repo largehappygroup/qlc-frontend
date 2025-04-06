@@ -35,7 +35,9 @@ const Chapters: React.FC = () => {
                 const response = await axios.get<ChapterWithID[]>(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters`
                 );
-                handlers.setState(response.data);
+                handlers.setState(
+                    response.data.sort((a, b) => a.order - b.order)
+                );
             } catch (err) {
                 console.error(err);
             }
@@ -55,8 +57,44 @@ const Chapters: React.FC = () => {
         }
     };
 
+    const handleDragEnd = ({ destination, source }: any) => {
+        if (!destination) return; // If dropped outside a droppable area, do nothing
+
+        // Create a copy of the chapters array from the state
+        const reorderedChapters = [...state];
+        const [movedItem] = reorderedChapters.splice(source.index, 1); // Remove the dragged item
+        reorderedChapters.splice(destination.index, 0, movedItem); // Insert it at the new position
+
+        // Update order in state based on the new order after dragging
+        reorderedChapters.forEach((chapter, index) => {
+            chapter.order = index + 1; // Update order for each chapter
+        });
+
+        // Update the state with the new order
+        handlers.setState(reorderedChapters);
+    };
+
+    const handleSaveOrder = async () => {
+        try {
+            await axios.put(`${import.meta.env.VITE_BACKEND_URL}/chapters`, {
+                chapters: state.map((chapter, index) => ({
+                    ...chapter,
+                    order: index + 1,
+                })),
+            });
+            setReorderMode(false);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const items = state.map((item, index) => (
-        <Draggable key={item._id} index={index} draggableId={item._id}>
+        <Draggable
+            key={item._id}
+            index={index}
+            draggableId={item._id}
+            isDragDisabled={!reorderMode}
+        >
             {(provided, snapshot) => (
                 <Flex
                     gap="xs"
@@ -110,18 +148,17 @@ const Chapters: React.FC = () => {
         <Layout>
             <Flex w="100%" flex="1" gap="xs" direction="column">
                 <Flex justify="end">
-                    <Button onClick={() => setReorderMode(!reorderMode)}>
+                    <Button
+                        onClick={
+                            reorderMode
+                                ? handleSaveOrder
+                                : () => setReorderMode(true)
+                        }
+                    >
                         {reorderMode ? "Save New Order" : "Reorder Chapters"}
                     </Button>
                 </Flex>
-                <DragDropContext
-                    onDragEnd={({ destination, source }) =>
-                        handlers.reorder({
-                            from: source.index,
-                            to: destination?.index || 0,
-                        })
-                    }
-                >
+                <DragDropContext onDragEnd={handleDragEnd}>
                     <Droppable droppableId="dnd-list" direction="vertical">
                         {(provided) => (
                             <div
