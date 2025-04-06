@@ -36,6 +36,17 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
               },
     });
 
+    const hideModal = () => {
+        if (!chapter) {
+            form.reset();
+        }
+        close();
+    }
+
+    const showModal = () => {
+        open();
+    }
+
     const handleAddObjective = () => {
         form.setFieldValue("learningObjectives", [
             ...form.values.learningObjectives,
@@ -59,7 +70,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
         form.setFieldValue("learningObjectives", updatedObjectives);
     };
 
-    const handleSubmit = async (values: FormData) => {
+    const handleSubmit = async (values: Chapter) => {
         try {
             if (chapter) {
                 const response = await axios.put(
@@ -69,7 +80,6 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                     values
                 );
             } else {
-                console.log(values);
                 const response = await axios.post(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters`,
                     values
@@ -85,7 +95,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
 
     return (
         <>
-            <Modal fullScreen opened={opened} onClose={close}>
+            <Modal fullScreen opened={opened} onClose={hideModal}>
                 <form
                     onSubmit={form.onSubmit((values) => handleSubmit(values))}
                 >
@@ -150,7 +160,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                         </Flex>
 
                         <Flex justify="end" gap="md">
-                            <Button variant="default" onClick={close}>
+                            <Button variant="default" onClick={hideModal}>
                                 Cancel
                             </Button>
                             <Button type="submit">Save Changes</Button>
@@ -158,7 +168,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                     </Flex>
                 </form>
             </Modal>
-            <Box onClick={open}>{target}</Box>
+            <Box onClick={showModal}>{target}</Box>
         </>
     );
 };

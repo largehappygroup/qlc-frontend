@@ -1,5 +1,5 @@
 export interface Chapter {
-    order: number;
+    order?: number;
     assignments?: string[];
     learningObjectives: string[];
     title: string;

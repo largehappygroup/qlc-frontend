@@ -20,7 +20,7 @@ const ConfirmPopup: React.FC<ConfirmPopupProps> = ({
             <Modal opened={opened} centered onClose={close}>
                 {prompt}
                 <Space h="md" />
-                <Flex justify="end" gap="small">
+                <Flex justify="end" gap="xs">
                     <Button variant="outlined" onClick={close}>
                         Cancel
                     </Button>
