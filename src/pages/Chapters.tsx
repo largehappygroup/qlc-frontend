@@ -69,54 +69,42 @@ const Chapters: React.FC = () => {
 
     return (
         <Layout>
-            <DragDropContext
-                onDragEnd={({ destination, source }) =>
-                    handlers.reorder({
-                        from: source.index,
-                        to: destination?.index || 0,
-                    })
-                }
-            >
-                <Droppable droppableId="dnd-list" direction="vertical">
-                    {(provided) => (
-                        <div
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
-                        >
-                            {items}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-            </DragDropContext>
-            <Flex align="center" gap="xs" direction="column">
-                {state?.map((chapter) => (
-                    <Card w="100%" withBorder>
-                        <Flex justify="space-between" align="center">
-                            <h3>Chapter {chapter.order}</h3>
-                            <ChapterModal
-                                onUpdate={() => setRefresh(refresh + 1)}
-                                target={
-                                    <ActionIcon variant="subtle" color="gray">
-                                        <IconPencil size={16} stroke={1.5} />
-                                    </ActionIcon>
-                                }
-                                chapter={chapter}
-                            />
-                        </Flex>
-                    </Card>
-                ))}
-                <ChapterModal
-                    onUpdate={() => setRefresh(refresh + 1)}
-                    target={
-                        <Button
-                            variant="default"
-                            rightSection={<IconPlus size={16} stroke={1.5} />}
-                        >
-                            Add a New Chapter
-                        </Button>
+            <Flex w="100%" flex="1" gap="xs" direction="column">
+                <DragDropContext
+                    onDragEnd={({ destination, source }) =>
+                        handlers.reorder({
+                            from: source.index,
+                            to: destination?.index || 0,
+                        })
                     }
-                />
+                >
+                    <Droppable droppableId="dnd-list" direction="vertical">
+                        {(provided) => (
+                            <div
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                            >
+                                {items}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
+                <Flex justify="center">
+                    <ChapterModal
+                        onUpdate={() => setRefresh(refresh + 1)}
+                        target={
+                            <Button
+                                variant="default"
+                                leftSection={
+                                    <IconPlus size={16} stroke={1.5} />
+                                }
+                            >
+                                Add a New Chapter
+                            </Button>
+                        }
+                    />
+                </Flex>
             </Flex>
         </Layout>
     );
