@@ -14,6 +14,8 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import cx from "clsx";
 import ChapterModal from "../components/topics/ChapterModal";
 import {
+    IconArrowsUpDown,
+    IconDeviceFloppy,
     IconGripVertical,
     IconPencil,
     IconPlus,
@@ -176,15 +178,21 @@ const Chapters: React.FC = () => {
                 <Flex justify="end">
                     {state.length > 1 && (
                         <Button
+                            variant="default"
                             onClick={
                                 reorderMode
                                     ? handleSaveOrder
                                     : () => setReorderMode(true)
                             }
+                            rightSection={
+                                reorderMode ? (
+                                    <IconDeviceFloppy stroke={1.5} size={16} />
+                                ) : (
+                                    <IconArrowsUpDown stroke={1.5} size={16} />
+                                )
+                            }
                         >
-                            {reorderMode
-                                ? "Save New Order"
-                                : "Reorder Chapters"}
+                            {reorderMode ? "Save" : "Reorder"}
                         </Button>
                     )}
                 </Flex>
