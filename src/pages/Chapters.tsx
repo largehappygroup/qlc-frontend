@@ -18,7 +18,7 @@ import {
     IconTrash,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { Chapter, ChapterWithID } from "../types/Chapter";
+import { Chapter, NewChapter } from "../types/Chapter";
 import axios from "axios";
 import { useListState } from "@mantine/hooks";
 import classes from "../styles/DndList.module.css";
@@ -26,13 +26,13 @@ import ConfirmPopup from "../components/ConfirmPopup";
 
 const Chapters: React.FC = () => {
     const [refresh, setRefresh] = useState<number>(0);
-    const [state, handlers] = useListState<ChapterWithID>([]);
+    const [state, handlers] = useListState<Chapter>([]);
     const [reorderMode, setReorderMode] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get<ChapterWithID[]>(
+                const response = await axios.get<Chapter[]>(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters`
                 );
                 handlers.setState(
@@ -148,15 +148,19 @@ const Chapters: React.FC = () => {
         <Layout>
             <Flex w="100%" flex="1" gap="xs" direction="column">
                 <Flex justify="end">
-                    <Button
-                        onClick={
-                            reorderMode
-                                ? handleSaveOrder
-                                : () => setReorderMode(true)
-                        }
-                    >
-                        {reorderMode ? "Save New Order" : "Reorder Chapters"}
-                    </Button>
+                    {state.length > 1 && (
+                        <Button
+                            onClick={
+                                reorderMode
+                                    ? handleSaveOrder
+                                    : () => setReorderMode(true)
+                            }
+                        >
+                            {reorderMode
+                                ? "Save New Order"
+                                : "Reorder Chapters"}
+                        </Button>
+                    )}
                 </Flex>
                 <DragDropContext onDragEnd={handleDragEnd}>
                     <Droppable droppableId="dnd-list" direction="vertical">

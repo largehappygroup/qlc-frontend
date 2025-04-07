@@ -12,11 +12,14 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
-import { Chapter, ChapterWithID } from "../../types/Chapter";
+import { Chapter, NewChapter} from "../../types/Chapter";
 import { useForm } from "@mantine/form";
 import axios from "axios";
+import ChapterAssignments from "./ChapterAssignments";
+import { ChapterAssignment } from "../../types/ChapterAssignment";
+import { useEffect, useState } from "react";
 interface ChapterModalProps {
-    chapter?: ChapterWithID;
+    chapter?: Chapter;
     target: React.ReactNode;
     onUpdate: () => void;
 }
@@ -27,12 +30,48 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
     onUpdate,
 }: ChapterModalProps) => {
     const [opened, { open, close }] = useDisclosure(false);
+    const [chapterAssignments, setChapterAssignments] = useState<
+        ChapterAssignment[]
+    >([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let assignmentDetails: ChapterAssignment[] = [];
+                for (const assignmentId of chapter?.assignments || []) {
+                    const response = await axios.get<ChapterAssignment>(
+                        `${
+                            import.meta.env.VITE_BACKEND_URL
+                        }/chapter-assignments/${assignmentId}`
+                    );
+                    assignmentDetails = [
+                        ...assignmentDetails,
+                        {
+                            ...response.data,
+                            initialDueDate: new Date(
+                                response.data.initialDueDate
+                            ),
+                        },
+                    ];
+                }
+
+                setChapterAssignments(assignmentDetails);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        if (chapter) {
+            fetchData();
+        }
+    }, [chapter]);
+
     const form = useForm({
         initialValues: chapter
             ? chapter
             : {
                   learningObjectives: [],
                   title: "",
+                  assignments: [] as string[],
               },
     });
 
@@ -41,11 +80,41 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
             form.reset();
         }
         close();
-    }
+    };
 
     const showModal = () => {
         open();
-    }
+    };
+
+    const handleAddAssignment = () => {
+        setChapterAssignments([
+            ...(chapterAssignments || []),
+            {
+                title: "",
+                identifier: "",
+                instructions: "",
+                initialDueDate: new Date(),
+            },
+        ]);
+    };
+
+    const handleDeleteAssignment = (index: number) => {
+        const updatedAssignments = chapterAssignments?.filter(
+            (_, i) => i !== index
+        );
+        setChapterAssignments(updatedAssignments);
+    };
+
+    const handleUpdateAssignment = (
+        index: number,
+        field: string,
+        value: any
+    ) => {
+        const updatedAssignments = chapterAssignments?.map((obj, i) =>
+            i === index ? { ...obj, [field]: value } : obj
+        );
+        setChapterAssignments(updatedAssignments);
+    };
 
     const handleAddObjective = () => {
         form.setFieldValue("learningObjectives", [
@@ -70,20 +139,93 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
         form.setFieldValue("learningObjectives", updatedObjectives);
     };
 
-    const handleSubmit = async (values: Chapter) => {
+    const handleSubmit = async (values: NewChapter) => {
         try {
             if (chapter) {
+                let allAssignments: ChapterAssignment[] = [];
+
+                const newAssignments = chapterAssignments.filter(
+                    (assignment) => assignment._id === undefined
+                );
+                for (const assignment of newAssignments || []) {
+                    const assignmentResponse =
+                        await axios.post<ChapterAssignment>(
+                            `${
+                                import.meta.env.VITE_BACKEND_URL
+                            }/chapter-assignments`,
+                            { ...assignment, chapter: chapter._id }
+                        );
+                    allAssignments = [
+                        ...allAssignments,
+                        assignmentResponse.data,
+                    ];
+                }
+
+                const prevAssignments = chapterAssignments.filter(
+                    (assignment) => assignment._id !== undefined
+                );
+
+                for (const assignment of prevAssignments || []) {
+                    console.log(chapter._id);
+
+                    const assignmentResponse =
+                        await axios.put<ChapterAssignment>(
+                            `${
+                                import.meta.env.VITE_BACKEND_URL
+                            }/chapter-assignments/${assignment._id}`,
+                            { ...assignment, chapter: chapter._id }
+                        );
+                    allAssignments = [
+                        ...allAssignments,
+                        assignmentResponse.data,
+                    ];
+                }
+
                 const response = await axios.put(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters/${
                         chapter._id
                     }`,
-                    values
+                    {
+                        ...values,
+                        assignments: allAssignments.map(
+                            (assignment) => assignment._id
+                        ),
+                    }
                 );
             } else {
-                const response = await axios.post(
+                const response = await axios.post<Chapter>(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters`,
-                    values
+                    { ...values, assignments: [] }
                 );
+
+                const newChapter = response.data;
+                let withIDAssignments: ChapterAssignment[] = [];
+
+                for (const assignment of chapterAssignments || []) {
+                    const assignmentResponse =
+                        await axios.post<ChapterAssignment>(
+                            `${
+                                import.meta.env.VITE_BACKEND_URL
+                            }/chapter-assignments`,
+                            { ...assignment, chapter: newChapter._id }
+                        );
+                    withIDAssignments = [
+                        ...withIDAssignments,
+                        assignmentResponse.data,
+                    ];
+                }
+                await axios.put(
+                    `${import.meta.env.VITE_BACKEND_URL}/chapters/${
+                        newChapter._id
+                    }`,
+                    {
+                        ...values,
+                        assignments: withIDAssignments.map(
+                            (assignment) => assignment._id
+                        ),
+                    }
+                );
+
                 form.reset();
             }
             onUpdate();
@@ -112,7 +254,6 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                             <Input.Label required>
                                 Learning Objectives
                             </Input.Label>
-
                             {form.values.learningObjectives.map(
                                 (objective, index) => (
                                     <Flex
@@ -158,6 +299,12 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                                 </Button>
                             </Flex>
                         </Flex>
+                        <ChapterAssignments
+                            assignments={chapterAssignments || []}
+                            handleAddAssignment={handleAddAssignment}
+                            handleDeleteAssignment={handleDeleteAssignment}
+                            handleUpdateAssignment={handleUpdateAssignment}
+                        />
 
                         <Flex justify="end" gap="md">
                             <Button variant="default" onClick={hideModal}>
