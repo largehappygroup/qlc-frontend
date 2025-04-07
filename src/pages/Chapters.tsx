@@ -1,9 +1,11 @@
 import {
+    Accordion,
     ActionIcon,
     Affix,
     Button,
     Card,
     Flex,
+    List,
     Text,
     Tooltip,
 } from "@mantine/core";
@@ -106,7 +108,7 @@ const Chapters: React.FC = () => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                 >
-                    <Flex gap="xs">
+                    <Flex gap="xs" flex="1">
                         {reorderMode && (
                             <Flex
                                 align="center"
@@ -116,20 +118,31 @@ const Chapters: React.FC = () => {
                                 <IconGripVertical size={18} stroke={1.5} />
                             </Flex>
                         )}
-                        <Flex direction="column">
+                        <Flex direction="column" flex="1">
                             <h3 style={{ textTransform: "capitalize" }}>
                                 Chapter {item.order}: {item.title}
                             </h3>
-                            {(item.assignments || []).length > 0 && (
-                                <Flex gap="xs">
-                                    <Text c="gray">Learning Objectives:</Text>
-                                    {item.learningObjectives.map(
-                                        (objective) => (
-                                            <Text>{objective}</Text>
-                                        )
-                                    )}
-                                </Flex>
-                            )}
+                            <Accordion>
+                                <Accordion.Item
+                                    value="learningObjectives"
+                                    key="learningObjectives"
+                                >
+                                    <Accordion.Control>
+                                        Learning Objectives
+                                    </Accordion.Control>
+                                    <Accordion.Panel>
+                                        <List>
+                                            {item.learningObjectives.map(
+                                                (objective) => (
+                                                    <List.Item>
+                                                        {objective}
+                                                    </List.Item>
+                                                )
+                                            )}
+                                        </List>
+                                    </Accordion.Panel>
+                                </Accordion.Item>
+                            </Accordion>
                         </Flex>
                     </Flex>
 
