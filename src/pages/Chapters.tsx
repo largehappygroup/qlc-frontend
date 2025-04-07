@@ -98,6 +98,7 @@ const Chapters: React.FC = () => {
             {(provided, snapshot) => (
                 <Flex
                     gap="xs"
+                    justify="space-between"
                     align="center"
                     className={cx(classes.item, {
                         [classes.itemDragging]: snapshot.isDragging,
@@ -105,39 +106,51 @@ const Chapters: React.FC = () => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                 >
-                    {reorderMode && (
-                        <Flex
-                            align="center"
-                            {...provided.dragHandleProps}
-                            className={classes.dragHandle}
-                        >
-                            <IconGripVertical size={18} stroke={1.5} />
-                        </Flex>
-                    )}
-
-                    <Flex flex="1" justify="space-between" align="center">
-                        <h3 style={{ textTransform: "capitalize" }}>
-                            Chapter {item.order}: {item.title}
-                        </h3>
-                        <Flex justify="end" gap="xs">
-                            <ChapterModal
-                                onUpdate={() => setRefresh(refresh + 1)}
-                                target={
-                                    <ActionIcon variant="subtle" color="gray">
-                                        <IconPencil size={16} stroke={1.5} />
-                                    </ActionIcon>
-                                }
-                                chapter={item}
-                            />
-                            <ConfirmPopup
-                                action={() => deleteChapter(item._id)}
-                                prompt="Are you sure you want to delete this chapter?"
+                    <Flex gap="xs">
+                        {reorderMode && (
+                            <Flex
+                                align="center"
+                                {...provided.dragHandleProps}
+                                className={classes.dragHandle}
                             >
-                                <ActionIcon variant="subtle" color="red">
-                                    <IconTrash size={16} stroke={1.5} />
-                                </ActionIcon>
-                            </ConfirmPopup>
+                                <IconGripVertical size={18} stroke={1.5} />
+                            </Flex>
+                        )}
+                        <Flex direction="column">
+                            <h3 style={{ textTransform: "capitalize" }}>
+                                Chapter {item.order}: {item.title}
+                            </h3>
+                            {(item.assignments || []).length > 0 && (
+                                <Flex gap="xs">
+                                    <Text c="gray">Learning Objectives:</Text>
+                                    {item.learningObjectives.map(
+                                        (objective) => (
+                                            <Text>{objective}</Text>
+                                        )
+                                    )}
+                                </Flex>
+                            )}
                         </Flex>
+                    </Flex>
+
+                    <Flex justify="end" gap="xs">
+                        <ChapterModal
+                            onUpdate={() => setRefresh(refresh + 1)}
+                            target={
+                                <ActionIcon variant="subtle" color="gray">
+                                    <IconPencil size={16} stroke={1.5} />
+                                </ActionIcon>
+                            }
+                            chapter={item}
+                        />
+                        <ConfirmPopup
+                            action={() => deleteChapter(item._id)}
+                            prompt="Are you sure you want to delete this chapter?"
+                        >
+                            <ActionIcon variant="subtle" color="red">
+                                <IconTrash size={16} stroke={1.5} />
+                            </ActionIcon>
+                        </ConfirmPopup>
                     </Flex>
                 </Flex>
             )}

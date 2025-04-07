@@ -3,6 +3,7 @@ import { DateInput } from "@mantine/dates";
 import { IconPlus } from "@tabler/icons-react";
 import React from "react";
 import { ChapterAssignment } from "../../types/ChapterAssignment";
+import { useHover } from "@mantine/hooks";
 
 interface ChapterAssignmentsProps {
     assignments: ChapterAssignment[];
@@ -17,6 +18,8 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
     handleDeleteAssignment,
     handleUpdateAssignment,
 }: ChapterAssignmentsProps) => {
+    const { hovered, ref } = useHover();
+
     return (
         <>
             <Input.Label>Assignments</Input.Label>
@@ -73,7 +76,13 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
                 ))}
 
                 <Grid.Col span={{ base: 12, md: 3 }}>
-                    <Card h="100%" withBorder onClick={handleAddAssignment}>
+                    <Card
+                        h="100%"
+                        shadow={hovered ? "md" : "none"}
+                        withBorder
+                        ref={ref}
+                        onClick={handleAddAssignment}
+                    >
                         <Flex flex="1" align="center" justify="center">
                             <IconPlus />
                         </Flex>

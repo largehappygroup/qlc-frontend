@@ -10,9 +10,9 @@ import {
     List,
     Input,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useHover } from "@mantine/hooks";
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
-import { Chapter, NewChapter} from "../../types/Chapter";
+import { Chapter, NewChapter } from "../../types/Chapter";
 import { useForm } from "@mantine/form";
 import axios from "axios";
 import ChapterAssignments from "./ChapterAssignments";
@@ -141,47 +141,41 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
 
     const handleSubmit = async (values: NewChapter) => {
         try {
+            const newAssignments = chapterAssignments.filter(
+                (assignment) => !assignment._id
+            );
             if (chapter) {
-                let allAssignments: ChapterAssignment[] = [];
-
-                const newAssignments = chapterAssignments.filter(
-                    (assignment) => assignment._id === undefined
-                );
-                for (const assignment of newAssignments || []) {
-                    const assignmentResponse =
-                        await axios.post<ChapterAssignment>(
-                            `${
-                                import.meta.env.VITE_BACKEND_URL
-                            }/chapter-assignments`,
-                            { ...assignment, chapter: chapter._id }
-                        );
-                    allAssignments = [
-                        ...allAssignments,
-                        assignmentResponse.data,
-                    ];
-                }
-
-                const prevAssignments = chapterAssignments.filter(
-                    (assignment) => assignment._id !== undefined
+                const assignmentsToUpdate = chapterAssignments.filter(
+                    (assignment) => assignment._id
                 );
 
-                for (const assignment of prevAssignments || []) {
-                    console.log(chapter._id);
+                const allAssignments = [
+                    ...(await Promise.all(
+                        newAssignments.map(async (assignment) => {
+                            const { data } =
+                                await axios.post<ChapterAssignment>(
+                                    `${
+                                        import.meta.env.VITE_BACKEND_URL
+                                    }/chapter-assignments`,
+                                    { ...assignment, chapter: chapter?._id }
+                                );
+                            return data;
+                        })
+                    )),
+                    ...(await Promise.all(
+                        assignmentsToUpdate.map(async (assignment) => {
+                            const { data } = await axios.put<ChapterAssignment>(
+                                `${
+                                    import.meta.env.VITE_BACKEND_URL
+                                }/chapter-assignments/${assignment._id}`,
+                                { ...assignment, chapter: chapter?._id }
+                            );
+                            return data;
+                        })
+                    )),
+                ];
 
-                    const assignmentResponse =
-                        await axios.put<ChapterAssignment>(
-                            `${
-                                import.meta.env.VITE_BACKEND_URL
-                            }/chapter-assignments/${assignment._id}`,
-                            { ...assignment, chapter: chapter._id }
-                        );
-                    allAssignments = [
-                        ...allAssignments,
-                        assignmentResponse.data,
-                    ];
-                }
-
-                const response = await axios.put(
+                await axios.put(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters/${
                         chapter._id
                     }`,
@@ -193,41 +187,24 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                     }
                 );
             } else {
-                const response = await axios.post<Chapter>(
+                const chapterResponse = await axios.post<Chapter>(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters`,
                     { ...values, assignments: [] }
                 );
 
-                const newChapter = response.data;
-                let withIDAssignments: ChapterAssignment[] = [];
-
-                for (const assignment of chapterAssignments || []) {
-                    const assignmentResponse =
-                        await axios.post<ChapterAssignment>(
-                            `${
-                                import.meta.env.VITE_BACKEND_URL
-                            }/chapter-assignments`,
-                            { ...assignment, chapter: newChapter._id }
-                        );
-                    withIDAssignments = [
-                        ...withIDAssignments,
-                        assignmentResponse.data,
-                    ];
-                }
-                await axios.put(
-                    `${import.meta.env.VITE_BACKEND_URL}/chapters/${
-                        newChapter._id
-                    }`,
-                    {
-                        ...values,
-                        assignments: withIDAssignments.map(
-                            (assignment) => assignment._id
-                        ),
-                    }
-                );
+                newAssignments.map(async (assignment) => {
+                    const { data } = await axios.post<ChapterAssignment>(
+                        `${
+                            import.meta.env.VITE_BACKEND_URL
+                        }/chapter-assignments`,
+                        { ...assignment, chapter: chapterResponse.data._id }
+                    );
+                    return data;
+                });
 
                 form.reset();
             }
+
             onUpdate();
             close();
         } catch (err) {
@@ -290,6 +267,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                                 <Button
                                     variant="default"
                                     size="xs"
+                                  
                                     onClick={handleAddObjective}
                                     leftSection={
                                         <IconPlus size={20} stroke={1.5} />
