@@ -196,6 +196,7 @@ const Chapters: React.FC = () => {
                         </Button>
                     )}
                 </Flex>
+                {items.length === 0 && <Text>No Chapters Found.</Text>}
                 <DragDropContext onDragEnd={handleDragEnd}>
                     <Droppable droppableId="dnd-list" direction="vertical">
                         {(provided) => (

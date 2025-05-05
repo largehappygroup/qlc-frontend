@@ -44,19 +44,15 @@ const theme = createTheme({
         },
     },
     components: {
-        AppShellNavbar: AppShell.Navbar.extend({
+       /* AppShellNavbar: AppShell.Navbar.extend({
             defaultProps: {
                 bg: "cyan.3",
                 c: "white",
                 px: 0,
             },
-        }),
+        }),*/
 
-        NavLink: NavLink.extend({
-            defaultProps: {
-                autoContrast: true,
-            },
-        }),
+     
         Card: Card.extend({
             defaultProps: {},
         }),

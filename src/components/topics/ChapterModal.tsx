@@ -42,7 +42,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                     const response = await axios.get<ChapterAssignment>(
                         `${
                             import.meta.env.VITE_BACKEND_URL
-                        }/chapter-assignments/${assignmentId}`
+                        }/assignments/${assignmentId}`
                     );
                     assignmentDetails = [
                         ...assignmentDetails,
@@ -156,7 +156,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                                 await axios.post<ChapterAssignment>(
                                     `${
                                         import.meta.env.VITE_BACKEND_URL
-                                    }/chapter-assignments`,
+                                    }/assignments`,
                                     { ...assignment, chapter: chapter?._id }
                                 );
                             return data;
@@ -167,7 +167,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                             const { data } = await axios.put<ChapterAssignment>(
                                 `${
                                     import.meta.env.VITE_BACKEND_URL
-                                }/chapter-assignments/${assignment._id}`,
+                                }/assignments/${assignment._id}`,
                                 { ...assignment, chapter: chapter?._id }
                             );
                             return data;
@@ -194,9 +194,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
 
                 newAssignments.map(async (assignment) => {
                     const { data } = await axios.post<ChapterAssignment>(
-                        `${
-                            import.meta.env.VITE_BACKEND_URL
-                        }/chapter-assignments`,
+                        `${import.meta.env.VITE_BACKEND_URL}/assignments`,
                         { ...assignment, chapter: chapterResponse.data._id }
                     );
                     return data;
@@ -267,7 +265,6 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                                 <Button
                                     variant="default"
                                     size="xs"
-                                  
                                     onClick={handleAddObjective}
                                     leftSection={
                                         <IconPlus size={20} stroke={1.5} />

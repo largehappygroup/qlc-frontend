@@ -1,6 +1,4 @@
 import { useState } from "react";
-import TodayCard from "../components/dashboard/TodayCard";
-import PastCard from "../components/dashboard/PastCard";
 import {
     Button,
     Container,
@@ -18,8 +16,10 @@ import {
 } from "@tabler/icons-react";
 import Layout from "../components/Layout";
 import { DatePicker } from "@mantine/dates";
-import StreakCard from "../components/dashboard/StreakCard";
 import { useAuth } from "../hooks/AuthContext";
+import ProgressCard from "../components/dashboard/ProgressCard";
+import TimeCard from "../components/dashboard/TimeCard";
+import UpcomingCard from "../components/dashboard/UpcomingCard";
 
 const StudentDashboard: React.FC = () => {
     const [viewMonth, setViewMonth] = useState("");
@@ -32,17 +32,16 @@ const StudentDashboard: React.FC = () => {
                     <Grid.Col>
                         <Title order={3}>Hello, {user?.firstName}!</Title>
                     </Grid.Col>
-                    <Grid.Col span={{ base: 12, lg: 8 }}>
-                        <TodayCard />
+                    <Grid.Col span={6}>
+                        <ProgressCard />
                     </Grid.Col>
-                    <Grid.Col span={{ base: 12, lg: 4 }}>
-                        <StreakCard />
+                    <Grid.Col span={6}>
+                        <TimeCard />
                     </Grid.Col>
                     <Grid.Col>
-                        <PastCard user={user} />
+                        <UpcomingCard />
                     </Grid.Col>
                 </Grid>
-                <Divider />
             </Layout>
         </>
     );

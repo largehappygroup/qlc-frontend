@@ -15,16 +15,12 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
-    IconHome,
-    IconHome2,
     IconLogout,
-    IconStar,
-    IconSticker2,
-    IconTrendingUp,
     IconUser,
 } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/AuthContext";
+import { NavbarNested } from "./navbar/NavbarNested";
 
 interface LayoutProps {
     children?: React.ReactNode;
@@ -38,36 +34,13 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
 
     const { user } = useAuth();
 
-    const pages = [
-        {
-            label: "Dashboard",
-            path: "/",
-            icon: <IconHome2 size={16} stroke={1.5} />,
-        },
-        {
-            label: "Profile",
-            path: "/profile",
-            icon: <IconUser size={16} stroke={1.5} />,
-        },
-
-        {
-            label: "Performance",
-            path: "/performance",
-            icon: <IconStar size={16} stroke={1.5} />,
-        },
-        {
-            label: "Chapters",
-            path: "/chapters",
-            icon: <IconSticker2 size={16} stroke={1.5} />,
-        },
-    ];
-
+    
     return (
         <AppShell
             layout="alt"
             header={{ height: 60 }}
             navbar={{
-                width: 200,
+                width: 250,
                 breakpoint: "sm",
                 collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
             }}
@@ -75,7 +48,7 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
         >
             <AppShell.Header>
                 <Group h="100%" px="md" justify="space-between">
-                    <Group h="100%">
+                    <Group h="100%" gap="lg">
                         <Burger
                             opened={mobileOpened}
                             onClick={toggleMobile}
@@ -88,6 +61,7 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                             visibleFrom="sm"
                             size="sm"
                         />
+                        <Text size="lg">Dashboard</Text>
                     </Group>
                     <Popover
                         width={200}
@@ -134,18 +108,8 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                     />
                     <Space h="md" hiddenFrom="sm" />
                 </Flex>
-
-                {pages.map((page) => (
-                    <NavLink
-                        onClick={() => navigate(page.path)}
-                        variant="filled"
-                        color="cyan.5"
-                        label={page.label}
-                        leftSection={page.icon}
-                        active={location.pathname === page.path}
-                        className="navbar-navlink"
-                    />
-                ))}
+                <NavbarNested />
+              
             </AppShell.Navbar>
             <AppShell.Main>
                 <Container>{children}</Container>
