@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Exercise } from "../../types/Exercise";
 import { useAuth } from "../../hooks/AuthContext";
+import ChapterExercises from "../exercises/ChapterExercises";
 
 interface UpcomingCardProps {
     status?: string;
@@ -21,12 +22,7 @@ const UpcomingCard: React.FC<UpcomingCardProps> = ({}: UpcomingCardProps) => {
                     Exercises This Week
                 </Text>
             </Flex>
-            <Text size="xl" fw="bold">
-                1 Minute
-            </Text>
-            <Text size="xs" c="dimmed">
-                Per Question
-            </Text>
+            <ChapterExercises chapterID="6818cbb5bca8c567cca5c657" />
         </Card>
     );
 };

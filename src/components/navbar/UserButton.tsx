@@ -6,7 +6,11 @@ import { useAuth } from "../../hooks/AuthContext";
 export function UserButton() {
     const { user } = useAuth();
     return (
-        <UnstyledButton className={classes.user}>
+        <UnstyledButton<"a">
+            component="a"
+            href="/profile"
+            className={classes.user}
+        >
             <Group>
                 <div style={{ flex: 1 }}>
                     <Text size="sm" fw={500}>

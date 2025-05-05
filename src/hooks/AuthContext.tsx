@@ -35,7 +35,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const fetchUser = async () => {
             try {
                 const response = await axios.get<User>(
-                    `${import.meta.env.VITE_BACKEND_URL}/users/${"64f6b9e9f4f0c1b82b4417ed"}`
+                    `${import.meta.env.VITE_BACKEND_URL}/users/${"665abcde1234567890abc001"}`
                 );
                 if (response.data) {
                     setUser(response.data); // Set user in context state
