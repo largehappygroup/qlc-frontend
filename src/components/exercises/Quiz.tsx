@@ -1,36 +1,26 @@
 import {
-    Affix,
     Button,
     CloseButton,
     Container,
     Divider,
     Flex,
     Progress,
-    Title,
-    Text,
-    Code,
-    ThemeIcon,
     Box,
     Modal,
     ScrollArea,
-    Popover,
-    Space,
 } from "@mantine/core";
-import MultipleChoiceQuestion from "./questions/MultipleChoiceQuestion";
-import CodingQuestion from "./questions/CodingQuestion";
-import { IconCheck } from "@tabler/icons-react";
-import Layout from "./Layout";
+import MultipleChoiceQuestion from "../questions/MultipleChoiceQuestion";
+
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Exercise } from "../types/Exercise";
-import { Question } from "../types/Question";
-import Explanation from "./questions/Explanation";
-import { useAuth } from "../hooks/AuthContext";
+import { Exercise } from "../../types/Exercise";
+import Explanation from "../questions/Explanation";
+import { useAuth } from "../../hooks/AuthContext";
 
 interface QuizProps {
     children?: React.ReactNode;
-    exercise: Exercise | undefined;
+    exercise: Exercise;
     setExercise: (exercise: Exercise) => void;
 }
 
@@ -42,31 +32,10 @@ const Quiz: React.FC<QuizProps> = ({
     const { user } = useAuth();
     const [opened, { open, close }] = useDisclosure(false);
     const [questionIndex, setQuestionIndex] = useState(0);
-    const [question, setQuestion] = useState<Question>();
     const [selectedAnswer, setSelectedAnswer] = useState<string>("");
     const [submitted, setSubmitted] = useState(false);
-    const [userCorrect, setUserCorrect] = useState(false);
-
     const [timePaused, setTimePaused] = useState(true);
     const [timeSpent, setTimeSpent] = useState(0);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const questionId = exercise?.questions[questionIndex]._id;
-            if (questionId) {
-                const response = await axios.get<Question>(
-                    `${
-                        import.meta.env.VITE_BACKEND_URL
-                    }/questions/${questionId}`
-                );
-                setQuestion(response.data);
-            }
-        };
-        if (exercise) {
-            console.log(exercise)
-            fetchData();
-        }
-    }, [questionIndex, exercise]);
 
     useEffect(() => {
         setTimeSpent(0);
@@ -89,7 +58,6 @@ const Quiz: React.FC<QuizProps> = ({
                 }/questions/${questionId}/check`,
                 { userAnswer: selectedAnswer }
             );
-            setUserCorrect(response.data);
             setSubmitted(true);
         }
     };
@@ -144,14 +112,14 @@ const Quiz: React.FC<QuizProps> = ({
                         <MultipleChoiceQuestion
                             value={selectedAnswer}
                             onChange={setSelectedAnswer}
-                            query={question?.query}
-                            availableAnswers={question?.availableAnswers}
+                            query={exercise.questions[questionIndex].query}
+                            availableAnswers={exercise.questions[questionIndex].availableAnswers}
                         />
                         <Divider />
                         {submitted && (
                             <Explanation
-                                explanation={question?.explanation}
-                                correct={userCorrect}
+                                explanation={exercise.questions[questionIndex].explanation}
+                               
                             />
                         )}
                         <Flex justify="end">

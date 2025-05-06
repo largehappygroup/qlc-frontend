@@ -6,11 +6,11 @@ import { Badge, Button, Divider, Flex, Text } from "@mantine/core";
 import { IconProgressCheck } from "@tabler/icons-react";
 
 interface ChapterExercisesProps {
-    chapterID: string;
+    chapterId?: string;
 }
 
 const ChapterExercises: React.FC<ChapterExercisesProps> = ({
-    chapterID,
+    chapterId,
 }: ChapterExercisesProps) => {
     const [chapterAssignments, setChapterAssignments] =
         useState<ChapterAssignment[]>();
@@ -20,13 +20,14 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
             const response = await axios.get<ChapterAssignment[]>(
                 `${
                     import.meta.env.VITE_BACKEND_URL
-                }/assignments?chapter=${chapterID}`
+                }/assignments?chapter=${chapterId}`
             );
             setChapterAssignments(response.data);
         };
-
-        fetchData();
-    }, [chapterID]);
+        if (chapterId) {
+            fetchData();
+        }
+    }, [chapterId]);
 
     const items = chapterAssignments?.map((assignment) => (
         <Flex gap="sm" direction="column">
@@ -35,7 +36,9 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
                 <Badge size="md" variant="light">
                     {new Date(assignment.initialDueDate).toLocaleDateString()}
                 </Badge>
-                <Badge variant="default" size="md">Completed</Badge>
+                <Badge variant="default" size="md">
+                    Completed
+                </Badge>
             </Flex>
             <Flex gap="md" justify="space-between" align="end">
                 <Flex direction="column" justify="flex-start">
@@ -46,7 +49,7 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
                         3/5 Questions
                     </Text>
                 </Flex>
-                    <Button size="compact-sm">Continue</Button>
+                <Button size="compact-sm">Continue</Button>
             </Flex>
         </Flex>
     ));

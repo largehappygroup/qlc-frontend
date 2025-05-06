@@ -6,7 +6,7 @@ const Profile: React.FC = () => {
     const { user } = useAuth();
 
     return (
-        <Layout>
+        <Layout title="Profile">
             <Grid>
                 <Grid.Col>
                     <Flex

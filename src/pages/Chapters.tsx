@@ -27,11 +27,12 @@ import axios from "axios";
 import { useListState } from "@mantine/hooks";
 import classes from "../styles/DndList.module.css";
 import ConfirmPopup from "../components/ConfirmPopup";
+import { useLocation } from "react-router-dom";
 
 const Chapters: React.FC = () => {
-    const [refresh, setRefresh] = useState<number>(0);
     const [state, handlers] = useListState<Chapter>([]);
     const [reorderMode, setReorderMode] = useState<boolean>(false);
+    const location = useLocation();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,14 +49,14 @@ const Chapters: React.FC = () => {
         };
 
         fetchData();
-    }, [refresh]);
+    }, []);
 
     const deleteChapter = async (id: string) => {
         try {
             const response = await axios.delete(
                 `${import.meta.env.VITE_BACKEND_URL}/chapters/${id}`
             );
-            setRefresh(refresh + 1);
+            window.location.reload();
         } catch (err) {
             console.error(err);
         }
@@ -150,7 +151,9 @@ const Chapters: React.FC = () => {
 
                     <Flex justify="end" gap="xs">
                         <ChapterModal
-                            onUpdate={() => setRefresh(refresh + 1)}
+                            onUpdate={() => {
+                                window.location.reload();
+                            }}
                             target={
                                 <ActionIcon variant="subtle" color="gray">
                                     <IconPencil size={16} stroke={1.5} />
@@ -213,7 +216,9 @@ const Chapters: React.FC = () => {
             </Flex>
             <Affix position={{ bottom: 50, right: 25 }}>
                 <ChapterModal
-                    onUpdate={() => setRefresh(refresh + 1)}
+                    onUpdate={() => {
+                        window.location.reload();
+                    }}
                     target={
                         <Tooltip label="Add a new chapter" position="right">
                             <ActionIcon size="xl" radius="xl" variant="filled">

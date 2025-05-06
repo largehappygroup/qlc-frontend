@@ -26,24 +26,22 @@ const StudentDashboard: React.FC = () => {
     const { user } = useAuth();
 
     return (
-        <>
-            <Layout>
-                <Grid gutter="md">
-                    <Grid.Col>
-                        <Title order={3}>Hello, {user?.firstName}!</Title>
-                    </Grid.Col>
-                    <Grid.Col span={6}>
-                        <ProgressCard />
-                    </Grid.Col>
-                    <Grid.Col span={6}>
-                        <TimeCard />
-                    </Grid.Col>
-                    <Grid.Col>
-                        <UpcomingCard />
-                    </Grid.Col>
-                </Grid>
-            </Layout>
-        </>
+        <Layout title="Dashboard">
+            <Grid gutter="md">
+                <Grid.Col>
+                    <Title order={3}>Hello, {user?.firstName}!</Title>
+                </Grid.Col>
+                <Grid.Col span={6}>
+                    <ProgressCard />
+                </Grid.Col>
+                <Grid.Col span={6}>
+                    <TimeCard />
+                </Grid.Col>
+                <Grid.Col>
+                    <UpcomingCard />
+                </Grid.Col>
+            </Grid>
+        </Layout>
     );
 };
 

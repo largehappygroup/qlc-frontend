@@ -4,11 +4,18 @@ export interface Exercise {
     date: Date;
     questions: {
         _id: string;
-        userAnswer?: string;
-        userCorrect?: boolean;
+        query: string;
+        type: string;
+        hints?: string[];
+        difficulty: string;
+        availableAnswers: string[];
+        explanation: string;
+        userAnswers?: {
+            timeStamp: Date;
+            selectedAnswer: string;
+        }[];
         timeSpent: number;
     }[];
-    topics: string[];
     totalTimeSpent: number;
     totalCorrect: number;
     status: string;

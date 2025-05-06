@@ -14,19 +14,17 @@ import {
     UnstyledButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import {
-    IconLogout,
-    IconUser,
-} from "@tabler/icons-react";
+import { IconLogout, IconUser } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/AuthContext";
 import { NavbarNested } from "./navbar/NavbarNested";
 
 interface LayoutProps {
     children?: React.ReactNode;
+    title?: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
+const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
     const navigate = useNavigate();
@@ -34,7 +32,6 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
 
     const { user } = useAuth();
 
-    
     return (
         <AppShell
             layout="alt"
@@ -61,7 +58,7 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                             visibleFrom="sm"
                             size="sm"
                         />
-                        <Text size="lg">Dashboard</Text>
+                        {title && <Text size="lg">{title}</Text>}
                     </Group>
                     <Popover
                         width={200}
@@ -109,7 +106,6 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                     <Space h="md" hiddenFrom="sm" />
                 </Flex>
                 <NavbarNested />
-              
             </AppShell.Navbar>
             <AppShell.Main>
                 <Container>{children}</Container>
