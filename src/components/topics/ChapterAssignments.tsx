@@ -64,12 +64,23 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
                                 onChange={(e) =>
                                     handleUpdateAssignment(
                                         index,
-                                        "initialDueDate",
+                                        "startDate",
                                         e
                                     )
                                 }
-                                label="Initial Assignment Due Date"
-                                value={assignment.initialDueDate}
+                                label="Exercise Start Date"
+                                value={assignment.startDate}
+                            />
+                              <DateInput
+                                onChange={(e) =>
+                                    handleUpdateAssignment(
+                                        index,
+                                        "dueDate",
+                                        e
+                                    )
+                                }
+                                label="Exercise Due Date"
+                                value={assignment.dueDate}
                             />
                         </Card>
                     </Grid.Col>

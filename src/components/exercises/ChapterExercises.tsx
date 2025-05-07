@@ -20,7 +20,7 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
             const response = await axios.get<ChapterAssignment[]>(
                 `${
                     import.meta.env.VITE_BACKEND_URL
-                }/assignments?chapter=${chapterId}`
+                }/assignments?chapterId=${chapterId}`
             );
             setChapterAssignments(response.data);
         };
@@ -29,18 +29,23 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
         }
     }, [chapterId]);
 
-    const items = chapterAssignments?.map((assignment) => (
+    const items = chapterAssignments?.map((assignment, index) => (
         <Flex gap="sm" direction="column">
-            <Divider />
+            {index !== 0 && <Divider />}
             <Flex justify="space-between" gap="md">
                 <Badge size="md" variant="light">
-                    {new Date(assignment.initialDueDate).toLocaleDateString()}
+                    {new Date(assignment.dueDate).toLocaleDateString()}
                 </Badge>
                 <Badge variant="default" size="md">
                     Completed
                 </Badge>
             </Flex>
-            <Flex gap="md" justify="space-between" align="end">
+            <Flex
+                gap="md"
+                direction={{ base: "column", sm: "row" }}
+                justify="space-between"
+                align={{ base: "start", sm: "end" }}
+            >
                 <Flex direction="column" justify="flex-start">
                     <Text size="xl" fw="bold">
                         {assignment.identifier}: {assignment.title}
@@ -49,7 +54,9 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
                         3/5 Questions
                     </Text>
                 </Flex>
-                <Button size="compact-sm">Continue</Button>
+                <Button radius="xl" size="sm" w={{ base: "100%", sm: "auto" }}>
+                    Continue
+                </Button>
             </Flex>
         </Flex>
     ));

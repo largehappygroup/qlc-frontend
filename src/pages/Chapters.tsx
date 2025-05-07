@@ -2,11 +2,15 @@ import {
     Accordion,
     ActionIcon,
     Affix,
+    Badge,
     Button,
     Card,
     Flex,
+    HoverCard,
     List,
+    Menu,
     Text,
+    Title,
     Tooltip,
 } from "@mantine/core";
 import Layout from "../components/Layout";
@@ -16,13 +20,14 @@ import ChapterModal from "../components/topics/ChapterModal";
 import {
     IconArrowsUpDown,
     IconDeviceFloppy,
+    IconDots,
     IconGripVertical,
     IconPencil,
     IconPlus,
     IconTrash,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { Chapter, NewChapter } from "../types/Chapter";
+import { Chapter } from "../types/Chapter";
 import axios from "axios";
 import { useListState } from "@mantine/hooks";
 import classes from "../styles/DndList.module.css";
@@ -41,7 +46,9 @@ const Chapters: React.FC = () => {
                     `${import.meta.env.VITE_BACKEND_URL}/chapters`
                 );
                 handlers.setState(
-                    response.data.sort((a, b) => a.order - b.order)
+                    response.data.sort((a, b) =>
+                        a.order && b.order ? a.order - b.order : -1
+                    )
                 );
             } catch (err) {
                 console.error(err);
@@ -51,14 +58,16 @@ const Chapters: React.FC = () => {
         fetchData();
     }, []);
 
-    const deleteChapter = async (id: string) => {
-        try {
-            const response = await axios.delete(
-                `${import.meta.env.VITE_BACKEND_URL}/chapters/${id}`
-            );
-            window.location.reload();
-        } catch (err) {
-            console.error(err);
+    const deleteChapter = async (id: string | undefined) => {
+        if (id) {
+            try {
+                const response = await axios.delete(
+                    `${import.meta.env.VITE_BACKEND_URL}/chapters/${id}`
+                );
+                window.location.reload();
+            } catch (err) {
+                console.error(err);
+            }
         }
     };
 
@@ -97,44 +106,111 @@ const Chapters: React.FC = () => {
         <Draggable
             key={item._id}
             index={index}
-            draggableId={item._id}
+            draggableId={item._id ? item._id : item.title}
             isDragDisabled={!reorderMode}
         >
             {(provided, snapshot) => (
-                <Flex
-                    gap="xs"
-                    justify="space-between"
-                    align="center"
+                <Card
+                    withBorder
                     className={cx(classes.item, {
                         [classes.itemDragging]: snapshot.isDragging,
                     })}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                 >
-                    <Flex gap="xs" flex="1">
+                    <Flex gap="sm" justify="space-between">
                         {reorderMode && (
                             <Flex
                                 align="center"
                                 {...provided.dragHandleProps}
                                 className={classes.dragHandle}
                             >
-                                <IconGripVertical size={18} stroke={1.5} />
+                                <ActionIcon variant="transparent">
+                                    <IconGripVertical size={35} stroke={1.5} />
+                                </ActionIcon>
                             </Flex>
                         )}
-                        <Flex direction="column" flex="1">
-                            <h3 style={{ textTransform: "capitalize" }}>
-                                Chapter {item.order}: {item.title}
-                            </h3>
-                            <Accordion>
+                        <Flex direction="column" flex="1" gap="xs">
+                            <Flex justify="space-between" align="center">
+                                <Flex gap="sm" align="center">
+                                    <Title
+                                        py="xs"
+                                        px="sm"
+                                        size="lg"
+                                        order={3}
+                                        style={{ textTransform: "capitalize" }}
+                                    >
+                                        Chapter {item.order}: {item.title}
+                                    </Title>
+                                    <HoverCard width={280} shadow="md">
+                                        <HoverCard.Target>
+                                            <Badge>
+                                                {item.assignmentIds
+                                                    ? `${
+                                                          item.assignmentIds
+                                                              .length
+                                                      } Assignment${
+                                                          item.assignmentIds
+                                                              .length === 1
+                                                              ? ""
+                                                              : "s"
+                                                      }`
+                                                    : "0 Assignments"}
+                                            </Badge>
+                                        </HoverCard.Target>
+                                        <HoverCard.Dropdown>
+                                            <Text size="sm">
+                                                Hover card is revealed when user
+                                                hovers over target element, it
+                                                will be hidden once mouse is not
+                                                over both target and dropdown
+                                                elements
+                                            </Text>
+                                        </HoverCard.Dropdown>
+                                    </HoverCard>
+                                </Flex>
+                                <Flex justify="end" flex="1" gap="xs">
+                                    <ChapterModal
+                                        onUpdate={() => {}}
+                                        target={
+                                            <ActionIcon
+                                                variant="subtle"
+                                                color="gray"
+                                            >
+                                                <IconPencil
+                                                    size={16}
+                                                    stroke={1.5}
+                                                />
+                                            </ActionIcon>
+                                        }
+                                        chapter={item}
+                                    />
+                                    <ConfirmPopup
+                                        action={() => deleteChapter(item._id)}
+                                        prompt="Are you sure you want to delete this chapter?"
+                                    >
+                                        <ActionIcon
+                                            color="red"
+                                            variant="subtle"
+                                        >
+                                            <IconTrash size={16} stroke={1.5} />
+                                        </ActionIcon>
+                                    </ConfirmPopup>
+                                </Flex>
+                            </Flex>
+
+                            <Accordion variant="filled">
                                 <Accordion.Item
                                     value="learningObjectives"
                                     key="learningObjectives"
                                 >
                                     <Accordion.Control>
-                                        Learning Objectives
+                                        <Text size="sm">
+                                            Learning Objectives
+                                        </Text>
                                     </Accordion.Control>
                                     <Accordion.Panel>
-                                        <List>
+                                        <List size="sm">
                                             {item.learningObjectives.map(
                                                 (objective) => (
                                                     <List.Item>
@@ -148,29 +224,7 @@ const Chapters: React.FC = () => {
                             </Accordion>
                         </Flex>
                     </Flex>
-
-                    <Flex justify="end" gap="xs">
-                        <ChapterModal
-                            onUpdate={() => {
-                                window.location.reload();
-                            }}
-                            target={
-                                <ActionIcon variant="subtle" color="gray">
-                                    <IconPencil size={16} stroke={1.5} />
-                                </ActionIcon>
-                            }
-                            chapter={item}
-                        />
-                        <ConfirmPopup
-                            action={() => deleteChapter(item._id)}
-                            prompt="Are you sure you want to delete this chapter?"
-                        >
-                            <ActionIcon variant="subtle" color="red">
-                                <IconTrash size={16} stroke={1.5} />
-                            </ActionIcon>
-                        </ConfirmPopup>
-                    </Flex>
-                </Flex>
+                </Card>
             )}
         </Draggable>
     ));
@@ -203,22 +257,22 @@ const Chapters: React.FC = () => {
                 <DragDropContext onDragEnd={handleDragEnd}>
                     <Droppable droppableId="dnd-list" direction="vertical">
                         {(provided) => (
-                            <div
+                            <Flex
+                                direction="column"
+                                gap="sm"
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
                             >
                                 {items}
                                 {provided.placeholder}
-                            </div>
+                            </Flex>
                         )}
                     </Droppable>
                 </DragDropContext>
             </Flex>
             <Affix position={{ bottom: 50, right: 25 }}>
                 <ChapterModal
-                    onUpdate={() => {
-                        window.location.reload();
-                    }}
+                    onUpdate={() => {}}
                     target={
                         <Tooltip label="Add a new chapter" position="right">
                             <ActionIcon size="xl" radius="xl" variant="filled">

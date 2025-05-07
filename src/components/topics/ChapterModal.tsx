@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure, useHover } from "@mantine/hooks";
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
-import { Chapter, NewChapter } from "../../types/Chapter";
+import { Chapter } from "../../types/Chapter";
 import { useForm } from "@mantine/form";
 import axios from "axios";
 import ChapterAssignments from "./ChapterAssignments";
@@ -38,7 +38,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
         const fetchData = async () => {
             try {
                 let assignmentDetails: ChapterAssignment[] = [];
-                for (const assignmentId of chapter?.assignments || []) {
+                for (const assignmentId of chapter?.assignmentIds || []) {
                     const response = await axios.get<ChapterAssignment>(
                         `${
                             import.meta.env.VITE_BACKEND_URL
@@ -48,9 +48,9 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                         ...assignmentDetails,
                         {
                             ...response.data,
-                            initialDueDate: new Date(
-                                response.data.initialDueDate
-                            ),
+                            startDate: new Date(response.data.startDate),
+
+                            dueDate: new Date(response.data.dueDate),
                         },
                     ];
                 }
@@ -93,7 +93,8 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                 title: "",
                 identifier: "",
                 instructions: "",
-                initialDueDate: new Date(),
+                startDate: new Date(),
+                dueDate: new Date(),
             },
         ]);
     };
@@ -139,66 +140,33 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
         form.setFieldValue("learningObjectives", updatedObjectives);
     };
 
-    const handleSubmit = async (values: NewChapter) => {
+    const handleSubmit = async (values: Chapter) => {
         try {
-            const newAssignments = chapterAssignments.filter(
-                (assignment) => !assignment._id
-            );
             if (chapter) {
-                const assignmentsToUpdate = chapterAssignments.filter(
-                    (assignment) => assignment._id
-                );
-
-                const allAssignments = [
-                    ...(await Promise.all(
-                        newAssignments.map(async (assignment) => {
-                            const { data } =
-                                await axios.post<ChapterAssignment>(
-                                    `${
-                                        import.meta.env.VITE_BACKEND_URL
-                                    }/assignments`,
-                                    { ...assignment, chapter: chapter?._id }
-                                );
-                            return data;
-                        })
-                    )),
-                    ...(await Promise.all(
-                        assignmentsToUpdate.map(async (assignment) => {
-                            const { data } = await axios.put<ChapterAssignment>(
-                                `${
-                                    import.meta.env.VITE_BACKEND_URL
-                                }/assignments/${assignment._id}`,
-                                { ...assignment, chapter: chapter?._id }
-                            );
-                            return data;
-                        })
-                    )),
-                ];
-
-                await axios.put(
+                const response = axios.put(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters/${
                         chapter._id
                     }`,
                     {
                         ...values,
-                        assignments: allAssignments.map(
-                            (assignment) => assignment._id
-                        ),
+                        assignments: chapterAssignments,
                     }
                 );
             } else {
-                const chapterResponse = await axios.post<Chapter>(
-                    `${import.meta.env.VITE_BACKEND_URL}/chapters`,
-                    { ...values, assignments: [] }
-                );
-
-                newAssignments.map(async (assignment) => {
-                    const { data } = await axios.post<ChapterAssignment>(
-                        `${import.meta.env.VITE_BACKEND_URL}/assignments`,
-                        { ...assignment, chapter: chapterResponse.data._id }
+                if (chapterAssignments.length > 0) {
+                    const response = axios.post(
+                        `${import.meta.env.VITE_BACKEND_URL}/chapters`,
+                        {
+                            ...values,
+                            assignments: chapterAssignments,
+                        }
                     );
-                    return data;
-                });
+                } else {
+                    const response = axios.post(
+                        `${import.meta.env.VITE_BACKEND_URL}/chapters`,
+                        values
+                    );
+                }
 
                 form.reset();
             }
@@ -212,7 +180,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
 
     return (
         <>
-            <Modal fullScreen opened={opened} onClose={hideModal}>
+            <Modal fullScreen opened={opened} onClose={hideModal} withinPortal>
                 <form
                     onSubmit={form.onSubmit((values) => handleSubmit(values))}
                 >

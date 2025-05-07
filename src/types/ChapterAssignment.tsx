@@ -1,8 +1,9 @@
 export interface ChapterAssignment {
     _id?: string;
-    chapter?: string;
+    chapterId?: string;
     title: string;
     identifier: string;
     instructions: string;
-    initialDueDate: Date;
+    startDate: Date;
+    dueDate: Date;
 }
