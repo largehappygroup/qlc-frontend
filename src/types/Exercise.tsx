@@ -2,6 +2,8 @@ export interface Exercise {
     _id: string;
     userId: string;
     date: Date;
+    completedQuestions: number;
+    completedTimestamp?: Date;
     questions: {
         _id: string;
         query: string;

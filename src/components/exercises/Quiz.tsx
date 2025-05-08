@@ -20,8 +20,8 @@ import { useAuth } from "../../hooks/AuthContext";
 
 interface QuizProps {
     children?: React.ReactNode;
-    exercise: Exercise;
-    setExercise: (exercise: Exercise) => void;
+    exercise?: Exercise;
+    setExercise?: (exercise: Exercise) => void;
 }
 
 const Quiz: React.FC<QuizProps> = ({
@@ -31,7 +31,9 @@ const Quiz: React.FC<QuizProps> = ({
 }: QuizProps) => {
     const { user } = useAuth();
     const [opened, { open, close }] = useDisclosure(false);
-    const [questionIndex, setQuestionIndex] = useState(0);
+    const [questionIndex, setQuestionIndex] = useState(
+        exercise ? exercise.completedQuestions : 0
+    );
     const [selectedAnswer, setSelectedAnswer] = useState<string>("");
     const [submitted, setSubmitted] = useState(false);
     const [timePaused, setTimePaused] = useState(true);
@@ -112,14 +114,19 @@ const Quiz: React.FC<QuizProps> = ({
                         <MultipleChoiceQuestion
                             value={selectedAnswer}
                             onChange={setSelectedAnswer}
-                            query={exercise.questions[questionIndex].query}
-                            availableAnswers={exercise.questions[questionIndex].availableAnswers}
+                            query={exercise?.questions[questionIndex].query}
+                            availableAnswers={
+                                exercise?.questions[questionIndex]
+                                    .availableAnswers
+                            }
                         />
                         <Divider />
                         {submitted && (
                             <Explanation
-                                explanation={exercise.questions[questionIndex].explanation}
-                               
+                                explanation={
+                                    exercise?.questions[questionIndex]
+                                        .explanation
+                                }
                             />
                         )}
                         <Flex justify="end">
