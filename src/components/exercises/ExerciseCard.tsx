@@ -64,7 +64,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                             </Text>
                         </Flex>
 
-                        <Quiz exercise={exercise}>
+                        <Quiz exercise={exercise} setExercise={setExercise}>
                             <Button
                                 radius="xl"
                                 size="sm"

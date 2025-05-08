@@ -36,46 +36,78 @@ const Quiz: React.FC<QuizProps> = ({
     );
     const [selectedAnswer, setSelectedAnswer] = useState<string>("");
     const [submitted, setSubmitted] = useState(false);
-    const [timePaused, setTimePaused] = useState(true);
+    const [correct, setCorrect] = useState(false);
+
+    const [timePaused, setTimePaused] = useState(false);
+    const [timeStopped, setTimeStopped] = useState(true);
     const [timeSpent, setTimeSpent] = useState(0);
 
     useEffect(() => {
-        setTimeSpent(0);
+        if (timeStopped) {
+            setTimeSpent(
+                exercise ? exercise?.questions[questionIndex].timeSpent : 0
+            );
+        }
 
-        if (!timePaused) {
+        if (!timePaused && !timeStopped) {
             const timer = setInterval(() => {
                 setTimeSpent((timeSpent) => timeSpent + 1);
             }, 1000);
 
             return () => clearInterval(timer);
         }
-    }, [timePaused]);
+    }, [timePaused, timeStopped]);
 
     const checkAnswer = async () => {
         if (selectedAnswer !== "") {
+            setTimePaused(true);
             const questionId = exercise?.questions[questionIndex]._id;
             const response = await axios.post(
-                `${
-                    import.meta.env.VITE_BACKEND_URL
-                }/questions/${questionId}/check`,
-                { userAnswer: selectedAnswer }
+                `${import.meta.env.VITE_BACKEND_URL}/exercises/${
+                    exercise?._id
+                }/check?questionId=${questionId}`,
+                { userAnswer: selectedAnswer, timeSpent }
             );
+            if (response.data.result) {
+                setTimeStopped(true);
+                setCorrect(true);
+               
+            }
             setSubmitted(true);
         }
     };
 
-    const nextQuestion = () => {
+    const nextQuestion = async () => {
         setQuestionIndex(questionIndex + 1);
         setSubmitted(false);
+        setCorrect(false);
         setSelectedAnswer("");
+        setTimeStopped(false);
+        setTimePaused(false);
+        if (setExercise) {
+            const refreshExercise = await axios.get<Exercise>(
+                `${import.meta.env.VITE_BACKEND_URL}/exercises/${
+                    exercise?._id
+                }`
+            );
+            setExercise(refreshExercise.data);
+        }
+    };
+
+    const stayQuestion = () => {
+        setSubmitted(false);
+        setSelectedAnswer("");
+        setTimePaused(false);
     };
 
     const showModal = () => {
         setTimePaused(false);
+        setTimeStopped(false);
         open();
     };
 
     const hideModal = () => {
+        setTimeStopped(false);
         setTimePaused(true);
         close();
     };
@@ -132,7 +164,9 @@ const Quiz: React.FC<QuizProps> = ({
                         <Flex justify="end">
                             {submitted ? (
                                 <Button
-                                    onClick={nextQuestion}
+                                    onClick={
+                                        correct ? nextQuestion : stayQuestion
+                                    }
                                     radius="xl"
                                     w={{ base: "100%", md: "auto" }}
                                 >
