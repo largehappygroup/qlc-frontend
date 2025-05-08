@@ -1,6 +1,5 @@
 import { Button, Flex, Grid, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { Question } from "../../types/Question";
 import axios from "axios";
 
 interface MultipleChoiceQuestionProps {

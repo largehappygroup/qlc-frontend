@@ -10,7 +10,6 @@ import {
     Box,
 } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
-import Layout from "./Layout";
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -28,7 +27,7 @@ const Summary: React.FC<SummaryProps> = ({
     const [opened, { open, close }] = useDisclosure(false);
     return (
         <>
-            <Box onClick={open} w="100%">
+             <Box w={{ base: "100%", lg: "auto" }} onClick={open}>
                 {children}
             </Box>
 

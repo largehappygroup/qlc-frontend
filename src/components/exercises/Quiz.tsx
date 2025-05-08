@@ -16,7 +16,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Exercise } from "../../types/Exercise";
 import Explanation from "../questions/Explanation";
-import { useAuth } from "../../hooks/AuthContext";
 
 interface QuizProps {
     children?: React.ReactNode;
@@ -29,7 +28,6 @@ const Quiz: React.FC<QuizProps> = ({
     exercise,
     setExercise,
 }: QuizProps) => {
-    const { user } = useAuth();
     const [opened, { open, close }] = useDisclosure(false);
     const [questionIndex, setQuestionIndex] = useState(
         exercise ? exercise.completedQuestions : 0
@@ -71,33 +69,40 @@ const Quiz: React.FC<QuizProps> = ({
             if (response.data.result) {
                 setTimeStopped(true);
                 setCorrect(true);
-               
             }
             setSubmitted(true);
         }
     };
 
-    const nextQuestion = async () => {
-        setQuestionIndex(questionIndex + 1);
-        setSubmitted(false);
-        setCorrect(false);
-        setSelectedAnswer("");
-        setTimeStopped(false);
-        setTimePaused(false);
-        if (setExercise) {
-            const refreshExercise = await axios.get<Exercise>(
-                `${import.meta.env.VITE_BACKEND_URL}/exercises/${
-                    exercise?._id
-                }`
-            );
-            setExercise(refreshExercise.data);
+    const handleContinue = async () => {
+        if (questionIndex + 1 === exercise?.questions.length) {
+            if (setExercise) {
+                const refreshExercise = await axios.get<Exercise>(
+                    `${import.meta.env.VITE_BACKEND_URL}/exercises/${
+                        exercise?._id
+                    }`
+                );
+                setExercise(refreshExercise.data);
+            }
+            hideModal();
+        } else {
+            if (correct) {
+                setQuestionIndex(questionIndex + 1);
+                setCorrect(false);
+                setTimeStopped(false);
+                if (setExercise) {
+                    const refreshExercise = await axios.get<Exercise>(
+                        `${import.meta.env.VITE_BACKEND_URL}/exercises/${
+                            exercise?._id
+                        }`
+                    );
+                    setExercise(refreshExercise.data);
+                }
+            }
+            setSubmitted(false);
+            setSelectedAnswer("");
+            setTimePaused(false);
         }
-    };
-
-    const stayQuestion = () => {
-        setSubmitted(false);
-        setSelectedAnswer("");
-        setTimePaused(false);
     };
 
     const showModal = () => {
@@ -155,6 +160,7 @@ const Quiz: React.FC<QuizProps> = ({
                         <Divider />
                         {submitted && (
                             <Explanation
+                                correct={correct}
                                 explanation={
                                     exercise?.questions[questionIndex]
                                         .explanation
@@ -164,9 +170,7 @@ const Quiz: React.FC<QuizProps> = ({
                         <Flex justify="end">
                             {submitted ? (
                                 <Button
-                                    onClick={
-                                        correct ? nextQuestion : stayQuestion
-                                    }
+                                    onClick={handleContinue}
                                     radius="xl"
                                     w={{ base: "100%", md: "auto" }}
                                 >

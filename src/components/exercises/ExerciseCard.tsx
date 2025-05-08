@@ -5,6 +5,7 @@ import { useAuth } from "../../hooks/AuthContext";
 import axios from "axios";
 import { Exercise } from "../../types/Exercise";
 import Quiz from "./Quiz";
+import Summary from "./Summary";
 
 interface ExerciseCardProps {
     index: number;
@@ -36,7 +37,6 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
     return (
         <>
-            {" "}
             {exercise && (
                 <Flex py="sm" gap="sm" direction="column">
                     {index !== 0 && <Divider pb="sm" />}
@@ -63,18 +63,29 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                                 {exercise.questions.length} Questions Completed
                             </Text>
                         </Flex>
-
-                        <Quiz exercise={exercise} setExercise={setExercise}>
-                            <Button
-                                radius="xl"
-                                size="sm"
-                                w={{ base: "100%", sm: "auto" }}
-                            >
-                                {exercise.status === "Not Started"
-                                    ? "Start"
-                                    : "Continue"}
-                            </Button>
-                        </Quiz>
+                        {exercise.status === "Complete" ? (
+                            <Summary>
+                                <Button
+                                    radius="xl"
+                                    size="sm"
+                                    w={{ base: "100%", lg: "auto" }}
+                                >
+                                    View Results
+                                </Button>
+                            </Summary>
+                        ) : (
+                            <Quiz exercise={exercise} setExercise={setExercise}>
+                                <Button
+                                    radius="xl"
+                                    size="sm"
+                                    w={{ base: "100%", lg: "auto" }}
+                                >
+                                    {exercise.status === "Not Started"
+                                        ? "Start"
+                                        : "Continue"}
+                                </Button>
+                            </Quiz>
+                        )}
                     </Flex>
                 </Flex>
             )}
