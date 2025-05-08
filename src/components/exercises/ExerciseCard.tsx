@@ -64,7 +64,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                             </Text>
                         </Flex>
                         {exercise.status === "Complete" ? (
-                            <Summary>
+                            <Summary exercise={exercise}>
                                 <Button
                                     radius="xl"
                                     size="sm"
