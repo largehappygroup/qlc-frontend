@@ -12,7 +12,7 @@ import {
     Card,
     RingProgress,
 } from "@mantine/core";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Exercise } from "../../types/Exercise";
@@ -66,10 +66,10 @@ const Summary: React.FC<SummaryProps> = ({
                                             size="xl"
                                         >
                                             {exercise &&
-                                                (exercise?.totalCorrect /
+                                                Math.round((exercise?.totalCorrect /
                                                     exercise?.questions
                                                         .length) *
-                                                    100}
+                                                    100)}
                                             %
                                         </Text>
                                     }
@@ -86,8 +86,8 @@ const Summary: React.FC<SummaryProps> = ({
                                 >
                                     <Accordion.Control
                                         icon={
-                                            <ThemeIcon color="green">
-                                                <IconCheck />
+                                            <ThemeIcon color={question.correct ? "green" : "red"}>
+                                                {question.correct ? <IconCheck /> : <IconX />}
                                             </ThemeIcon>
                                         }
                                     >

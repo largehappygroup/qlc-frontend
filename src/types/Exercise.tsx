@@ -16,6 +16,7 @@ export interface Exercise {
             timeStamp: Date;
             selectedAnswer: string;
         }[];
+        correct?: boolean;
         timeSpent: number;
     }[];
     totalTimeSpent: number;

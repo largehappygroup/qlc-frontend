@@ -75,7 +75,15 @@ const Quiz: React.FC<QuizProps> = ({
     };
 
     const handleContinue = async () => {
-        if (questionIndex + 1 === exercise?.questions.length) {
+        if (correct) {
+            if (questionIndex + 1 === exercise?.questions.length) {
+                hideModal();
+            } else {
+                setQuestionIndex(questionIndex + 1);
+                setCorrect(false);
+                setTimeStopped(false);
+            }
+
             if (setExercise) {
                 const refreshExercise = await axios.get<Exercise>(
                     `${import.meta.env.VITE_BACKEND_URL}/exercises/${
@@ -84,25 +92,10 @@ const Quiz: React.FC<QuizProps> = ({
                 );
                 setExercise(refreshExercise.data);
             }
-            hideModal();
-        } else {
-            if (correct) {
-                setQuestionIndex(questionIndex + 1);
-                setCorrect(false);
-                setTimeStopped(false);
-                if (setExercise) {
-                    const refreshExercise = await axios.get<Exercise>(
-                        `${import.meta.env.VITE_BACKEND_URL}/exercises/${
-                            exercise?._id
-                        }`
-                    );
-                    setExercise(refreshExercise.data);
-                }
-            }
-            setSubmitted(false);
-            setSelectedAnswer("");
-            setTimePaused(false);
         }
+        setSubmitted(false);
+        setSelectedAnswer("");
+        setTimePaused(false);
     };
 
     const showModal = () => {
