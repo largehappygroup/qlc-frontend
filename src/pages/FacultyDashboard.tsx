@@ -1,5 +1,7 @@
+import Layout from "../components/Layout";
+
 const FacultyDashboard: React.FC = () => {
-    return <></>;
+    return <Layout title="Dashboard"></Layout>;
 };
 
 export default FacultyDashboard;
