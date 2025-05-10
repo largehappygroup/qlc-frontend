@@ -9,6 +9,10 @@ import {
     Box,
     List,
     Input,
+    Tabs,
+    Container,
+    Space,
+    Title,
 } from "@mantine/core";
 import { useDisclosure, useHover } from "@mantine/hooks";
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
@@ -18,6 +22,8 @@ import axios from "axios";
 import ChapterAssignments from "./ChapterAssignments";
 import { ChapterAssignment } from "../../types/ChapterAssignment";
 import { useEffect, useState } from "react";
+import GeneralInfo from "./GeneralInfo";
+import LearningObjectives from "./LearningObjectives";
 interface ChapterModalProps {
     chapter?: Chapter;
     target: React.ReactNode;
@@ -170,7 +176,6 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
 
                 form.reset();
             }
-
             onUpdate();
             close();
         } catch (err) {
@@ -184,78 +189,72 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                 <form
                     onSubmit={form.onSubmit((values) => handleSubmit(values))}
                 >
-                    <Flex direction="column" gap="xs">
-                        <TextInput
-                            withAsterisk
-                            label="Title"
-                            placeholder="e.g. Introduction to Methods"
-                            key={form.key("title")}
-                            {...form.getInputProps("title")}
-                        />
-
-                        <Flex direction="column" gap="xs">
-                            <Input.Label required>
-                                Learning Objectives
-                            </Input.Label>
-                            {form.values.learningObjectives.map(
-                                (objective, index) => (
-                                    <Flex
-                                        key={index}
-                                        flex="1"
-                                        align="center"
-                                        gap="xs"
-                                        w="100%"
-                                    >
-                                        <TextInput
-                                            w="100%"
-                                            size="xs"
-                                            value={objective}
-                                            onChange={(e) =>
-                                                handleUpdateObjective(
-                                                    index,
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                        <ActionIcon
-                                            color="red"
-                                            variant="subtle"
-                                            onClick={() =>
-                                                handleDeleteObjective(index)
-                                            }
-                                        >
-                                            <IconTrash stroke={1.5} size={16} />
-                                        </ActionIcon>
-                                    </Flex>
-                                )
-                            )}
-                            <Flex justify="center">
-                                <Button
-                                    variant="default"
-                                    size="xs"
-                                    onClick={handleAddObjective}
-                                    leftSection={
-                                        <IconPlus size={20} stroke={1.5} />
-                                    }
-                                >
-                                    Add a new learning objective
+                    <Container size="xl">
+                        <Flex justify="space-between" gap="sm" align="center">
+                            <Title size="xl" order={1}>
+                                {chapter
+                                    ? "Edit Existing Chapter"
+                                    : "Create New Chapter"}
+                            </Title>
+                            <Flex justify="end" gap="md">
+                                <Button variant="default" onClick={hideModal}>
+                                    Cancel
                                 </Button>
+                                <Button type="submit">Save Changes</Button>
                             </Flex>
                         </Flex>
-                        <ChapterAssignments
-                            assignments={chapterAssignments || []}
-                            handleAddAssignment={handleAddAssignment}
-                            handleDeleteAssignment={handleDeleteAssignment}
-                            handleUpdateAssignment={handleUpdateAssignment}
-                        />
 
-                        <Flex justify="end" gap="md">
-                            <Button variant="default" onClick={hideModal}>
-                                Cancel
-                            </Button>
-                            <Button type="submit">Save Changes</Button>
-                        </Flex>
-                    </Flex>
+                        <Space h="lg" />
+
+                        <Tabs
+                            variant="pills"
+                            orientation="horizontal"
+                            defaultValue="general"
+                        >
+                            <Tabs.List>
+                                <Tabs.Tab value="general">
+                                    General Information
+                                </Tabs.Tab>
+                                <Tabs.Tab value="objectives">
+                                    Learning Objectives
+                                </Tabs.Tab>
+                                <Tabs.Tab value="assignments">
+                                    Assignments
+                                </Tabs.Tab>
+                            </Tabs.List>
+                            <Space h="lg" />
+
+                            <Tabs.Panel value="general">
+                                <GeneralInfo form={form} />
+                            </Tabs.Panel>
+
+                            <Tabs.Panel value="objectives">
+                                <LearningObjectives
+                                    form={form}
+                                    handleAddObjective={handleAddObjective}
+                                    handleDeleteObjective={
+                                        handleDeleteObjective
+                                    }
+                                    handleUpdateObjective={
+                                        handleUpdateObjective
+                                    }
+                                />
+                            </Tabs.Panel>
+
+                            <Tabs.Panel value="assignments">
+                                <ChapterAssignments
+                                    assignments={chapterAssignments || []}
+                                    handleAddAssignment={handleAddAssignment}
+                                    handleDeleteAssignment={
+                                        handleDeleteAssignment
+                                    }
+                                    handleUpdateAssignment={
+                                        handleUpdateAssignment
+                                    }
+                                />
+                            </Tabs.Panel>
+                        </Tabs>
+                    </Container>
                 </form>
             </Modal>
             <Box onClick={showModal}>{target}</Box>

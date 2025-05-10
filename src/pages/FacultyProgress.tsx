@@ -26,14 +26,12 @@ import {
     IconSearch,
     IconTrash,
 } from "@tabler/icons-react";
-import ViewStudentModal from "../components/performance/ViewStudentModal";
 import { User } from "../hooks/AuthContext";
 import axios from "axios";
 import EditStudentModal from "../components/performance/EditStudentModal";
-import ConfirmPopup from "../components/ConfirmPopup";
 import Search from "../components/performance/Search";
 
-const Performance: React.FC = () => {
+const FacultyProgress: React.FC = () => {
     const [students, setStudents] = useState<User[]>();
 
     useEffect(() => {
@@ -49,6 +47,28 @@ const Performance: React.FC = () => {
         };
         fetchData();
     });
+
+    const handleDownload = async () => {
+        try {
+            // Use fetch to initiate download as a blob
+            const response = await axios.get(
+                `${import.meta.env.VITE_BACKEND_URL}/exercises/download`,
+                {
+                    responseType: "blob",
+                }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "exercises.csv"); // Set filename
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (error) {
+            console.error("Download error:", error);
+        }
+    };
 
     const rows = students?.map((student) => (
         <Table.Tr key={student.vuNetId}>
@@ -119,10 +139,13 @@ const Performance: React.FC = () => {
 
     return (
         <Layout>
-            
             <Flex justify="space-between" gap="md" align="center">
                 <Search />
-                <Button size="xs" leftSection={<IconDownload size={20} />}>
+                <Button
+                    onClick={handleDownload}
+                    size="xs"
+                    leftSection={<IconDownload size={20} />}
+                >
                     Download
                 </Button>
             </Flex>
@@ -134,4 +157,4 @@ const Performance: React.FC = () => {
     );
 };
 
-export default Performance;
+export default FacultyProgress;

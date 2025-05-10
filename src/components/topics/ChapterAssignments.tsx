@@ -1,6 +1,18 @@
-import { Card, Flex, Grid, Input, Textarea, TextInput } from "@mantine/core";
+import {
+    ActionIcon,
+    Button,
+    Card,
+    Fieldset,
+    Flex,
+    Grid,
+    Space,
+    Text,
+    Textarea,
+    TextInput,
+    Title,
+} from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { IconPlus } from "@tabler/icons-react";
+import { IconPlus, IconTrash } from "@tabler/icons-react";
 import React from "react";
 import { ChapterAssignment } from "../../types/ChapterAssignment";
 import { useHover } from "@mantine/hooks";
@@ -18,16 +30,20 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
     handleDeleteAssignment,
     handleUpdateAssignment,
 }: ChapterAssignmentsProps) => {
-    const { hovered, ref } = useHover();
-
     return (
-        <>
-            <Input.Label>Assignments</Input.Label>
-            <Grid h="100%">
+        <Card withBorder>
+            <Title order={2} pb="xs">
+                Assignments
+            </Title>
+            <Text c="dimmed">Define assignments for this chapter</Text>
+            <Space h="md" />
+            <Flex direction="column" gap="md">
                 {assignments.map((assignment, index) => (
-                    <Grid.Col span={{ base: 12, md: 3 }}>
-                        <Card h="100%" withBorder>
+                    <Fieldset key={index} legend={`Assignment ${index + 1}`}>
+                        <Flex gap="md" flex="1" align="end">
                             <TextInput
+                                flex="1"
+                                withAsterisk
                                 label="Title"
                                 onChange={(e) =>
                                     handleUpdateAssignment(
@@ -39,6 +55,8 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
                                 value={assignment.title}
                             />
                             <TextInput
+                                withAsterisk
+                                flex="1"
                                 label="Identifier"
                                 onChange={(e) =>
                                     handleUpdateAssignment(
@@ -49,18 +67,32 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
                                 }
                                 value={assignment.identifier}
                             />
-                            <Textarea
-                                label="Instructions"
-                                onChange={(e) =>
-                                    handleUpdateAssignment(
-                                        index,
-                                        "instructions",
-                                        e.target.value
-                                    )
-                                }
-                                value={assignment.instructions}
-                            />
+                            <ActionIcon
+                                color="red"
+                                variant="subtle"
+                                onClick={() => handleDeleteAssignment(index)}
+                            >
+                                <IconTrash stroke={1.5} size={20} />
+                            </ActionIcon>
+                        </Flex>
+
+                        <Textarea
+                            withAsterisk
+                            label="Instructions"
+                            onChange={(e) =>
+                                handleUpdateAssignment(
+                                    index,
+                                    "instructions",
+                                    e.target.value
+                                )
+                            }
+                            rows={6}
+                            value={assignment.instructions}
+                        />
+                        <Flex gap="md" flex="1">
                             <DateInput
+                                withAsterisk
+                                flex="1"
                                 onChange={(e) =>
                                     handleUpdateAssignment(
                                         index,
@@ -71,36 +103,29 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
                                 label="Exercise Start Date"
                                 value={assignment.startDate}
                             />
-                              <DateInput
+                            <DateInput
+                                flex="1"
+                                withAsterisk
                                 onChange={(e) =>
-                                    handleUpdateAssignment(
-                                        index,
-                                        "dueDate",
-                                        e
-                                    )
+                                    handleUpdateAssignment(index, "dueDate", e)
                                 }
                                 label="Exercise Due Date"
                                 value={assignment.dueDate}
                             />
-                        </Card>
-                    </Grid.Col>
-                ))}
-
-                <Grid.Col span={{ base: 12, md: 3 }}>
-                    <Card
-                        h="100%"
-                        shadow={hovered ? "md" : "none"}
-                        withBorder
-                        ref={ref}
-                        onClick={handleAddAssignment}
-                    >
-                        <Flex flex="1" align="center" justify="center">
-                            <IconPlus />
                         </Flex>
-                    </Card>
-                </Grid.Col>
-            </Grid>
-        </>
+                    </Fieldset>
+                ))}
+                <Flex justify="center">
+                    <Button
+                        variant="default"
+                        onClick={handleAddAssignment}
+                        leftSection={<IconPlus size={20} stroke={1.5} />}
+                    >
+                        Add a new assignment
+                    </Button>
+                </Flex>
+            </Flex>
+        </Card>
     );
 };
 

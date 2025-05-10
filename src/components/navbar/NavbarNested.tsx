@@ -15,8 +15,11 @@ import { UserButton } from "./UserButton";
 import { Chapter } from "../../types/Chapter";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import WhichAccess from "../WhichAccess";
+import { useAuth } from "../../hooks/AuthContext";
 
 export function NavbarNested() {
+    const { user } = useAuth();
     const [chapters, setChapters] = useState<Chapter[]>([]);
 
     useEffect(() => {
@@ -32,8 +35,15 @@ export function NavbarNested() {
 
     const pages = [
         { label: "Dashboard", icon: IconHome2, links: "/" },
-        ...(!(chapters.length === 0)
+        ...(user && ["admin", "faculty", "ta"].includes(user?.role)
             ? [
+                  {
+                      label: "Chapters",
+                      icon: IconNotes,
+                      links: "/chapters",
+                  },
+              ]
+            : [
                   {
                       label: "Chapters",
                       icon: IconNotes,
@@ -43,21 +53,13 @@ export function NavbarNested() {
                           link: `/chapters/${chapter.order}`,
                       })),
                   },
-              ]
-            : []),
-        { label: "Progress", icon: IconPresentationAnalytics, links: "/" },
+              ]),
         {
-            label: "Admin Panel",
-            icon: IconAdjustments,
-            initiallyOpened: true,
-            links: [
-                { label: "Edit Chapters", link: "/chapters" },
-                {
-                    label: "Student Performance",
-                    link: "/performance",
-                },
-            ],
+            label: "Progress",
+            icon: IconPresentationAnalytics,
+            links: "/progress",
         },
+
         { label: "Settings", icon: IconAdjustments, links: "/" },
     ];
 

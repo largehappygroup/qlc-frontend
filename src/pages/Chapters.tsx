@@ -37,7 +37,6 @@ import { useLocation } from "react-router-dom";
 const Chapters: React.FC = () => {
     const [state, handlers] = useListState<Chapter>([]);
     const [reorderMode, setReorderMode] = useState<boolean>(false);
-    const location = useLocation();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,7 +53,6 @@ const Chapters: React.FC = () => {
                 console.error(err);
             }
         };
-
         fetchData();
     }, []);
 
@@ -64,7 +62,7 @@ const Chapters: React.FC = () => {
                 const response = await axios.delete(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters/${id}`
                 );
-                window.location.reload();
+                window.location.reload()
             } catch (err) {
                 console.error(err);
             }
@@ -131,14 +129,26 @@ const Chapters: React.FC = () => {
                             </Flex>
                         )}
                         <Flex direction="column" flex="1" gap="xs">
-                            <Flex justify="space-between" align="center">
-                                <Flex gap="sm" align="center">
+                            <Flex
+                                justify="space-between"
+                                gap="xs"
+                                align={{ base: "start", md: "center" }}
+                            >
+                                <Flex
+                                    gap={{ base: "xs", md: "sm" }}
+                                    direction={{ base: "column", md: "row" }}
+                                    align={{ base: "start", md: "center" }}
+                                    py="xs"
+                                    px="sm"
+                                >
                                     <Title
-                                        py="xs"
-                                        px="sm"
                                         size="lg"
                                         order={3}
-                                        style={{ textTransform: "capitalize" }}
+                                        style={{
+                                            textTransform: "capitalize",
+                                            wordBreak: "break-all",
+                                            hyphens: "auto",
+                                        }}
                                     >
                                         Chapter {item.order}: {item.title}
                                     </Title>
@@ -169,9 +179,9 @@ const Chapters: React.FC = () => {
                                         </HoverCard.Dropdown>
                                     </HoverCard>
                                 </Flex>
-                                <Flex justify="end" flex="1" gap="xs">
+                                <Flex justify="end" flex="1" gap="xs" py="xs">
                                     <ChapterModal
-                                        onUpdate={() => {}}
+                                        onUpdate={() => window.location.reload()}
                                         target={
                                             <ActionIcon
                                                 variant="subtle"
@@ -272,7 +282,7 @@ const Chapters: React.FC = () => {
             </Flex>
             <Affix position={{ bottom: 50, right: 25 }}>
                 <ChapterModal
-                    onUpdate={() => {}}
+                    onUpdate={() => window.location.reload()}
                     target={
                         <Tooltip label="Add a new chapter" position="right">
                             <ActionIcon size="xl" radius="xl" variant="filled">
