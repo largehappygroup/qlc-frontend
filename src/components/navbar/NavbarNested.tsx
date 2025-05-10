@@ -60,7 +60,7 @@ export function NavbarNested() {
             links: "/progress",
         },
 
-        { label: "Settings", icon: IconAdjustments, links: "/" },
+        { label: "Settings", icon: IconAdjustments, links: "/settings" },
     ];
 
     const links = pages.map((item) => (

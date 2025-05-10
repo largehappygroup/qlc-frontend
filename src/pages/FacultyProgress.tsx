@@ -50,8 +50,20 @@ const FacultyProgress: React.FC = () => {
 
     const handleDownload = async () => {
         try {
-            // Use fetch to initiate download as a blob
             const response = await axios.get(
+                `${import.meta.env.VITE_BACKEND_URL}/users/download`,
+                { responseType: "blob" }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "users.csv");
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            // Use fetch to initiate download as a blob
+            /*const response = await axios.get(
                 `${import.meta.env.VITE_BACKEND_URL}/exercises/download`,
                 {
                     responseType: "blob",
@@ -64,7 +76,7 @@ const FacultyProgress: React.FC = () => {
             link.setAttribute("download", "exercises.csv"); // Set filename
             document.body.appendChild(link);
             link.click();
-            link.remove();
+            link.remove(); */
         } catch (error) {
             console.error("Download error:", error);
         }

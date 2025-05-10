@@ -1,5 +1,7 @@
+import Layout from "../components/Layout";
+
 const StudentProgress: React.FC = () => {
-    return <></>
+    return <Layout title="Progress"></Layout>
 };
 
 export default StudentProgress;

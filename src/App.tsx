@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import ChapterProfile from "./pages/ChapterProfile";
 import WhichAccess from "./components/WhichAccess";
 import StudentProgress from "./pages/StudentProgress";
+import Settings from "./pages/Settings";
 
 function App() {
     return (
@@ -19,18 +20,10 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route index element={<Home />} />
                 <Route path="/profile" element={<Profile />} />
-                <Route
-                    path="/progress"
-                    element={
-                        <WhichAccess
-                            roles={["admin", "faculty", "ta"]}
-                            includesRoleElement={<FacultyProgress />}
-                            excludesRoleElement={<StudentProgress />}
-                        />
-                    }
-                />
+                <Route path="/progress" element={<FacultyProgress />} />
                 <Route path="/chapters" element={<Chapters />} />
                 <Route path="/chapters/:order" element={<ChapterProfile />} />
+                <Route path="/settings" element={<Settings />} />
             </Routes>
         </BrowserRouter>
     );

@@ -22,7 +22,7 @@ const UpcomingCard: React.FC<UpcomingCardProps> = ({}: UpcomingCardProps) => {
                     Exercises This Week
                 </Text>
             </Flex>
-            <ChapterExercises chapterId="6818cbb5bca8c567cca5c657" />
+            <ChapterExercises date={new Date()} />
         </Card>
     );
 };

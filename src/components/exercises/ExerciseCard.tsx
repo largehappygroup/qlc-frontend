@@ -17,6 +17,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     assignment,
 }: ExerciseCardProps) => {
     const [exercise, setExercise] = useState<Exercise>();
+    const [isLoading, setIsLoading] = useState(true);
     const { user } = useAuth();
     useEffect(() => {
         const fetchData = async () => {
@@ -25,10 +26,13 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                     user?._id
                 }&assignmentId=${assignment._id}`
             );
+
             if (response.data.length === 1) {
                 setExercise(response.data[0]);
+            } else {
+                setExercise(undefined);
             }
-            console.log(response.data);
+            setIsLoading(false);
         };
         if (user) {
             fetchData();
