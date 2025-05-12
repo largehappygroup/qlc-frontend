@@ -150,7 +150,7 @@ const FacultyProgress: React.FC = () => {
     ));
 
     return (
-        <Layout>
+        <Layout title="Progress">
             <Flex justify="space-between" gap="md" align="center">
                 <Search />
                 <Button

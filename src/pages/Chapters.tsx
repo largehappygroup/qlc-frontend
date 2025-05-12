@@ -240,7 +240,7 @@ const Chapters: React.FC = () => {
     ));
 
     return (
-        <Layout>
+        <Layout title="Chapters">
             <Flex w="100%" flex="1" gap="xs" direction="column">
                 <Flex justify="end">
                     {state.length > 1 && (

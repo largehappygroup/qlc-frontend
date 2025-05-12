@@ -1,6 +1,7 @@
 import {
     Avatar,
     Button,
+    Divider,
     Flex,
     Grid,
     Switch,
@@ -53,7 +54,7 @@ const Settings: React.FC = () => {
                     </Grid>
                 </Tabs.Panel>
                 <Tabs.Panel value="notifications">
-                    <Grid py="lg">
+                    <Grid py="lg" gutter="md">
                         <Grid.Col span={4}>
                             Email Notifications
                             <Text>
@@ -74,6 +75,9 @@ const Settings: React.FC = () => {
                                     label="Exercise Start Dates"
                                 />
                             </Flex>
+                        </Grid.Col>
+                        <Grid.Col>
+                            <Divider />
                         </Grid.Col>
                         <Grid.Col span={4}>
                             Desktop Notifications

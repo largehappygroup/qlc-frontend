@@ -18,7 +18,7 @@ export interface User {
 
 interface AuthContextType {
     user: User | null;
-    login: (email: string, password: string) => void;
+    login: (id: string) => void; //(email: string, password: string) => void;
     logout: () => void;
 }
 
@@ -31,13 +31,13 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
 
-    useEffect(() => {
+   useEffect(() => {
         const fetchUser = async () => {
             try {
                 const response = await axios.get<User>(
                     `${
                         import.meta.env.VITE_BACKEND_URL
-                    }/users/${"665abcde1234567890abc005"}`
+                    }/users/${"665abcde1234567890abc001"}`
                 );
                 if (response.data) {
                     setUser(response.data); // Set user in context state
@@ -49,9 +49,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         fetchUser();
     }, []);
-
-    const login = async (email: string, password: string) => {
+  
+    const login = async (id: string) => {
+        //async (email: string, password: string) => {
         try {
+            const response = await axios.get<User>(
+                `${import.meta.env.VITE_BACKEND_URL}/users/${id}`
+            );
+            if (response.data) {
+                setUser(response.data); // Set user in context state
+            }
+        } catch (error) {
+            console.error("Login failed", error);
+        }
+        /*try {
             const response = await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/users/login`,
                 { email, password }
@@ -62,7 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             }
         } catch (error) {
             console.error("Login failed", error);
-        }
+        }*/
     };
 
     const logout = () => {

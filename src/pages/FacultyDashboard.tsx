@@ -15,37 +15,22 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import TotalStudentsCard from "../components/dashboard/TotalStudentsCard";
 import ScoreDistributionCard from "../components/dashboard/ScoreDistributionCard";
+import AverageScoreCard from "../components/dashboard/AverageScoreCard";
+import AverageTimeSpentCard from "../components/dashboard/AverageTimeSpentCard";
+import RecentActivityCard from "../components/dashboard/RecentActivityCard";
 
 const FacultyDashboard: React.FC = () => {
     return (
         <Layout title="Dashboard">
             <Grid>
-                <Grid.Col span={6}>
+                <Grid.Col span={{ base: 12, md: 4 }}>
                     <TotalStudentsCard />
                 </Grid.Col>
-                <Grid.Col span={6}>
-                    <Card withBorder>
-                        <Flex direction="column" align="center">
-                            <Title order={2}>88%</Title>
-                            <Text c="dimmed">Average</Text>
-                        </Flex>
-                    </Card>
+                <Grid.Col span={{ base: 12, md: 4 }}>
+                    <AverageScoreCard />
                 </Grid.Col>
-                <Grid.Col span={6}>
-                    <Card withBorder>
-                        <Flex direction="column" align="center">
-                            <Title order={2}>42</Title>
-                            <Text c="dimmed">Total Students</Text>
-                        </Flex>
-                    </Card>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                    <Card withBorder>
-                        <Flex direction="column" align="center">
-                            <Title order={2}>88%</Title>
-                            <Text c="dimmed">Average</Text>
-                        </Flex>
-                    </Card>
+                <Grid.Col span={{ base: 12, md: 4 }}>
+                    <AverageTimeSpentCard />
                 </Grid.Col>
 
                 <Grid.Col>
@@ -53,22 +38,7 @@ const FacultyDashboard: React.FC = () => {
                 </Grid.Col>
 
                 <Grid.Col>
-                    <Card withBorder>
-                        <Flex justify="space-between">
-                            <Title order={1}>Recent Activity</Title>
-                            <ActionIcon variant="default" c="gray">
-                                <IconRefresh size={20} stroke={2} />
-                            </ActionIcon>
-                        </Flex>
-                        <ScrollArea h={400}>
-                            <Flex justify="space-between">
-                                <Flex direction="column">
-                                    <Title order={3}>PA03-A: sfdsdfadsf</Title>
-                                    <Text c="dimmed">John Doe</Text>
-                                </Flex>
-                            </Flex>
-                        </ScrollArea>
-                    </Card>
+                    <RecentActivityCard />
                 </Grid.Col>
             </Grid>
         </Layout>

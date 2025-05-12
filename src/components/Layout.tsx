@@ -8,6 +8,7 @@ import {
     Group,
     NavLink,
     Popover,
+    Select,
     Skeleton,
     Space,
     Text,
@@ -30,7 +31,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { user } = useAuth();
+    const { user, login } = useAuth();
 
     return (
         <AppShell
@@ -60,39 +61,59 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
                         />
                         {title && <Text size="lg">{title}</Text>}
                     </Group>
-                    <Popover
-                        width={200}
-                        position="bottom-end"
-                        offset={{ mainAxis: 12, crossAxis: 0 }}
-                    >
-                        <Popover.Target>
-                            <UnstyledButton>
-                                <Avatar
-                                    size={40}
-                                    key={`${user?.firstName} ${user?.lastName}`}
-                                    name={`${user?.firstName} ${user?.lastName}`}
-                                    color="initials"
+                    <Group gap="sm">
+                        <Select
+                            value={user?._id}
+                            data={[
+                                {
+                                    value: "665abcde1234567890abc001",
+                                    label: "Student (John)",
+                                },
+                                {
+                                    value: "665abcde1234567890abc002",
+                                    label: "Student (Alice)",
+                                },
+                                {
+                                    value: "665abcde1234567890abc005",
+                                    label: "Admin",
+                                },
+                            ]}
+                            onChange={(value) => login(value ? value : "")}
+                        />
+                        <Popover
+                            width={200}
+                            position="bottom-end"
+                            offset={{ mainAxis: 12, crossAxis: 0 }}
+                        >
+                            <Popover.Target>
+                                <UnstyledButton>
+                                    <Avatar
+                                        size={40}
+                                        key={`${user?.firstName} ${user?.lastName}`}
+                                        name={`${user?.firstName} ${user?.lastName}`}
+                                        color="initials"
+                                    />
+                                </UnstyledButton>
+                            </Popover.Target>
+                            <Popover.Dropdown>
+                                <NavLink
+                                    label="Profile"
+                                    onClick={() => navigate("/profile")}
+                                    leftSection={
+                                        <IconUser size={16} stroke={1.5} />
+                                    }
                                 />
-                            </UnstyledButton>
-                        </Popover.Target>
-                        <Popover.Dropdown>
-                            <NavLink
-                                label="Profile"
-                                onClick={() => navigate("/profile")}
-                                leftSection={
-                                    <IconUser size={16} stroke={1.5} />
-                                }
-                            />
-                            <NavLink
-                                label="Log out"
-                                c="red"
-                                onClick={() => navigate("/login")}
-                                leftSection={
-                                    <IconLogout size={16} stroke={1.5} />
-                                }
-                            />
-                        </Popover.Dropdown>
-                    </Popover>
+                                <NavLink
+                                    label="Log out"
+                                    c="red"
+                                    onClick={() => navigate("/login")}
+                                    leftSection={
+                                        <IconLogout size={16} stroke={1.5} />
+                                    }
+                                />
+                            </Popover.Dropdown>
+                        </Popover>
+                    </Group>
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar p="md">
