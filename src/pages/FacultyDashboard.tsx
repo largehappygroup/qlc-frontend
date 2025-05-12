@@ -14,25 +14,14 @@ import { IconRefresh } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import TotalStudentsCard from "../components/dashboard/TotalStudentsCard";
+import ScoreDistributionCard from "../components/dashboard/ScoreDistributionCard";
 
 const FacultyDashboard: React.FC = () => {
-    const [averageScoreDistribution, setAverageScoreDistribution] = useState();
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/users/distribution`
-            );
-            setAverageScoreDistribution(response.data);
-        };
-        fetchData();
-    }, []);
-
     return (
         <Layout title="Dashboard">
             <Grid>
                 <Grid.Col span={6}>
-                   <TotalStudentsCard />
+                    <TotalStudentsCard />
                 </Grid.Col>
                 <Grid.Col span={6}>
                     <Card withBorder>
@@ -58,27 +47,11 @@ const FacultyDashboard: React.FC = () => {
                         </Flex>
                     </Card>
                 </Grid.Col>
-                {averageScoreDistribution && (
-                    <Grid.Col>
-                        <Card withBorder>
-                            <Title order={1}>Average Score Distribution</Title>
-                            <Space h="md" />
-                            <BarChart
-                                h={300}
-                                data={averageScoreDistribution}
-                                xAxisLabel="Average Score as a Percentage"
-                                yAxisLabel="Number of Students"
-                                dataKey="percentage"
-                                series={[
-                                    {
-                                        name: "students",
-                                    },
-                                ]}
-                                tickLine="y"
-                            />
-                        </Card>
-                    </Grid.Col>
-                )}
+
+                <Grid.Col>
+                    <ScoreDistributionCard />
+                </Grid.Col>
+
                 <Grid.Col>
                     <Card withBorder>
                         <Flex justify="space-between">
