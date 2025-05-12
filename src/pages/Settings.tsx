@@ -1,9 +1,20 @@
-import { Avatar, Flex, Grid, Tabs, Text } from "@mantine/core";
+import {
+    Avatar,
+    Button,
+    Flex,
+    Grid,
+    Switch,
+    Tabs,
+    Text,
+    useMantineColorScheme,
+} from "@mantine/core";
 import Layout from "../components/Layout";
 import { useAuth } from "../hooks/AuthContext";
+import { IconMoon, IconSun, IconSunMoon } from "@tabler/icons-react";
 
 const Settings: React.FC = () => {
-    const {user} = useAuth();
+    const { user } = useAuth();
+    const { setColorScheme } = useMantineColorScheme();
 
     return (
         <Layout title="Settings">
@@ -41,9 +52,81 @@ const Settings: React.FC = () => {
                         </Grid.Col>
                     </Grid>
                 </Tabs.Panel>
-                <Tabs.Panel value="notifications">Profile</Tabs.Panel>
+                <Tabs.Panel value="notifications">
+                    <Grid py="lg">
+                        <Grid.Col span={4}>
+                            Email Notifications
+                            <Text>
+                                Get email notifications when you are offline.
+                                You can turn these off.
+                            </Text>
+                        </Grid.Col>
+                        <Grid.Col span={8}>
+                            <Flex direction="column" gap="xs">
+                                <Switch
+                                    defaultChecked
+                                    description="Receive emails when exercises are due"
+                                    label="Exercise Due Dates"
+                                />
+                                <Switch
+                                    defaultChecked
+                                    description="Receive emails when exercises become available"
+                                    label="Exercise Start Dates"
+                                />
+                            </Flex>
+                        </Grid.Col>
+                        <Grid.Col span={4}>
+                            Desktop Notifications
+                            <Text>
+                                Get desktop notifications when you are offline.
+                                You can turn these off.
+                            </Text>
+                        </Grid.Col>
+                        <Grid.Col span={8}>
+                            <Flex direction="column" gap="xs">
+                                <Switch
+                                    defaultChecked
+                                    description="Receive emails when exercises are due"
+                                    label="Exercise Due Dates"
+                                />
+                                <Switch
+                                    defaultChecked
+                                    description="Receive emails when exercises become available"
+                                    label="Exercise Start Dates"
+                                />
+                            </Flex>
+                        </Grid.Col>
+                    </Grid>
+                </Tabs.Panel>
 
-                <Tabs.Panel value="theme">Profile</Tabs.Panel>
+                <Tabs.Panel value="theme">
+                    <Flex justify="space-between" gap="sm">
+                        <Button
+                            leftSection={<IconSun size={20} stroke={2} />}
+                            flex="1"
+                            variant="default"
+                            onClick={() => setColorScheme("light")}
+                        >
+                            Light
+                        </Button>
+                        <Button
+                            leftSection={<IconMoon size={20} stroke={2} />}
+                            flex="1"
+                            variant="default"
+                            onClick={() => setColorScheme("dark")}
+                        >
+                            Dark
+                        </Button>
+                        <Button
+                            leftSection={<IconSunMoon size={20} stroke={2} />}
+                            flex="1"
+                            variant="default"
+                            onClick={() => setColorScheme("auto")}
+                        >
+                            System
+                        </Button>
+                    </Flex>
+                </Tabs.Panel>
             </Tabs>
         </Layout>
     );

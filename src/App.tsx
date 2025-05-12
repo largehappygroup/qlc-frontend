@@ -1,5 +1,5 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { Divider } from "@mantine/core";
+import { Divider, MantineProvider } from "@mantine/core";
 import "./App.css";
 
 import Home from "./pages/StudentDashboard";
@@ -11,12 +11,15 @@ import Login from "./pages/Login";
 import ChapterProfile from "./pages/ChapterProfile";
 import WhichAccess from "./components/WhichAccess";
 import StudentProgress from "./pages/StudentProgress";
+import theme from "./theme.ts";
+
 import Settings from "./pages/Settings";
-import { useAuth } from "./hooks/AuthContext";
+import { AuthProvider, useAuth } from "./hooks/AuthContext";
+import ColorSchemeContext from "./hooks/ColorSchemeContext";
+import { useState } from "react";
 
 function App() {
     const { user } = useAuth();
-
     return (
         <BrowserRouter>
             <Routes>
