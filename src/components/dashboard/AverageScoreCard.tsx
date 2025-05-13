@@ -1,7 +1,8 @@
-import { Card, Flex, Title, Text } from "@mantine/core";
+import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/AuthContext";
+import { IconStars } from "@tabler/icons-react";
 
 interface AverageScoreCardProps {
     individualUser?: boolean;
@@ -26,9 +27,21 @@ const AverageScoreCard: React.FC<AverageScoreCardProps> = ({
 
     return (
         <Card withBorder>
-            <Flex direction="column" align="center">
-                <Title order={2}>{average}%</Title>
-                <Text c="dimmed">Average Score</Text>
+            <Flex direction="column" gap="sm">
+                <Flex justify="space-between" align="center">
+                    <Title c="dimmed" size="sm" order={1}>
+                        Average Score
+                    </Title>
+                    <ThemeIcon c="dimmed" variant="transparent">
+                        <IconStars stroke={1.5} size={25} />
+                    </ThemeIcon>
+                </Flex>
+                <Flex direction="column">
+                    <Title order={2}>{average}%</Title>
+                    <Text size="md" c="dimmed">
+                        Per Exercise
+                    </Text>
+                </Flex>
             </Flex>
         </Card>
     );

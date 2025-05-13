@@ -57,7 +57,19 @@ const Summary: React.FC<SummaryProps> = ({
                                         `${exercise?.totalCorrect} out of ${exercise?.questions.length} questions correctly`}
                                 </Text>
                                 <RingProgress
-                                    sections={[{ value: 40, color: "green" }]}
+                                    sections={[
+                                        {
+                                            value: exercise
+                                                ? Math.round(
+                                                      (exercise?.totalCorrect /
+                                                          exercise?.questions
+                                                              .length) *
+                                                          100
+                                                  )
+                                                : 0,
+                                            color: "green",
+                                        },
+                                    ]}
                                     label={
                                         <Text
                                             c="green"
@@ -66,10 +78,12 @@ const Summary: React.FC<SummaryProps> = ({
                                             size="xl"
                                         >
                                             {exercise &&
-                                                Math.round((exercise?.totalCorrect /
-                                                    exercise?.questions
-                                                        .length) *
-                                                    100)}
+                                                Math.round(
+                                                    (exercise?.totalCorrect /
+                                                        exercise?.questions
+                                                            .length) *
+                                                        100
+                                                )}
                                             %
                                         </Text>
                                     }
@@ -86,8 +100,18 @@ const Summary: React.FC<SummaryProps> = ({
                                 >
                                     <Accordion.Control
                                         icon={
-                                            <ThemeIcon color={question.correct ? "green" : "red"}>
-                                                {question.correct ? <IconCheck /> : <IconX />}
+                                            <ThemeIcon
+                                                color={
+                                                    question.correct
+                                                        ? "green"
+                                                        : "red"
+                                                }
+                                            >
+                                                {question.correct ? (
+                                                    <IconCheck />
+                                                ) : (
+                                                    <IconX />
+                                                )}
                                             </ThemeIcon>
                                         }
                                     >

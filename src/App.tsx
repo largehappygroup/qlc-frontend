@@ -5,7 +5,7 @@ import "./App.css";
 import FacultyDashboard from "./pages/FacultyDashboard";
 import Chapters from "./pages/Chapters";
 import FacultyProgress from "./pages/FacultyProgress";
-import Profile from "./pages/Profile";
+import Profile from "./components/settings/Profile";
 import Login from "./pages/Login";
 import ChapterProfile from "./pages/ChapterProfile";
 import WhichAccess from "./components/WhichAccess";

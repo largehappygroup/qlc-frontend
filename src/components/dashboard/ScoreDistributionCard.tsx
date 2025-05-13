@@ -21,7 +21,9 @@ const ScoreDistributionCard: React.FC = () => {
         <>
             {averageScoreDistribution && (
                 <Card withBorder>
-                    <Title order={1}>Average Score Distribution</Title>
+                    <Title order={1} size="sm" c="dimmed">
+                        Average Score Distribution
+                    </Title>
                     <Space h="md" />
                     <BarChart
                         h={300}

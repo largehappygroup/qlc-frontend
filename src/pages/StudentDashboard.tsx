@@ -18,7 +18,6 @@ import Layout from "../components/Layout";
 import { DatePicker } from "@mantine/dates";
 import { useAuth } from "../hooks/AuthContext";
 import ProgressCard from "../components/dashboard/ProgressCard";
-import TimeCard from "../components/dashboard/TimeCard";
 import UpcomingCard from "../components/dashboard/UpcomingCard";
 
 const StudentDashboard: React.FC = () => {
@@ -34,9 +33,7 @@ const StudentDashboard: React.FC = () => {
                 <Grid.Col span={6}>
                     <ProgressCard />
                 </Grid.Col>
-                <Grid.Col span={6}>
-                    <TimeCard />
-                </Grid.Col>
+            
                 <Grid.Col>
                     <UpcomingCard />
                 </Grid.Col>

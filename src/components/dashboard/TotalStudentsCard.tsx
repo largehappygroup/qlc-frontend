@@ -1,4 +1,5 @@
-import { Card, Flex, Title, Text } from "@mantine/core";
+import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
+import { IconStars, IconUsers } from "@tabler/icons-react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -17,9 +18,21 @@ const TotalStudentsCard: React.FC = () => {
 
     return (
         <Card withBorder>
-            <Flex direction="column" align="center">
-                <Title order={2}>{totalStudents}</Title>
-                <Text c="dimmed">Total Student(s)</Text>
+            <Flex direction="column" gap="sm">
+                <Flex justify="space-between" align="center">
+                    <Title c="dimmed" size="sm" order={1}>
+                        Students
+                    </Title>
+                    <ThemeIcon c="dimmed" variant="transparent">
+                        <IconUsers stroke={2} size={25} />
+                    </ThemeIcon>
+                </Flex>
+                <Flex direction="column">
+                    <Title order={2}>{totalStudents}</Title>
+                    <Text size="md" c="dimmed">
+                        Enrolled
+                    </Text>
+                </Flex>
             </Flex>
         </Card>
     );
