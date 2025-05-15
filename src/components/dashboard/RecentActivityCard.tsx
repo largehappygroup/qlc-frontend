@@ -64,6 +64,7 @@ const RecentActivityCard: React.FC<RecentActivityCardProps> = ({
             ) : (
                 <ScrollArea mah={400}>
                     <Flex direction="column" gap="xs">
+                        {activities.length === 0 && "No recent activity found."}
                         {activities.map((activity, index) => (
                             <>
                                 {index !== 0 && <Divider />}

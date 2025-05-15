@@ -11,13 +11,12 @@ const ChapterProfile: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(order);
         const fetchData = async () => {
             try {
                 const response = await axios.get<Chapter[]>(
                     `${
                         import.meta.env.VITE_BACKEND_URL
-                    }/chapters?order=${order}`
+                    }/chapters?order=${order}&date=${new Date()}`
                 );
                 if (response.data.length === 0) {
                     navigate("/not-found", { replace: true });
