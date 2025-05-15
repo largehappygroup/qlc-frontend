@@ -78,7 +78,23 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                   learningObjectives: [],
                   title: "",
                   assignments: [] as string[],
+                  description: "",
+                  releaseDate: new Date(),
               },
+        validate: {
+            learningObjectives: (value) =>
+                value.length == 0
+                    ? "At least one learning objective is required."
+                    : null,
+            title: (value) =>
+                !value || value.length == 0 ? "A title is required." : null,
+            description: (value) =>
+                !value || value.length == 0
+                    ? "A description is required."
+                    : null,
+            releaseDate: (value) =>
+                !value ? "A release date is required." : null,
+        },
     });
 
     const hideModal = () => {
@@ -185,27 +201,17 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
 
     return (
         <>
-            <Modal fullScreen opened={opened} onClose={hideModal} withinPortal>
+            <Modal
+                title={chapter ? "Edit Existing Chapter" : "Create New Chapter"}
+                fullScreen
+                opened={opened}
+                onClose={hideModal}
+                withinPortal
+            >
                 <form
                     onSubmit={form.onSubmit((values) => handleSubmit(values))}
                 >
                     <Container size="xl">
-                        <Flex justify="space-between" gap="sm" align="center">
-                            <Title size="xl" order={1}>
-                                {chapter
-                                    ? "Edit Existing Chapter"
-                                    : "Create New Chapter"}
-                            </Title>
-                            <Flex justify="end" gap="md">
-                                <Button variant="default" onClick={hideModal}>
-                                    Cancel
-                                </Button>
-                                <Button type="submit">Save Changes</Button>
-                            </Flex>
-                        </Flex>
-
-                        <Space h="lg" />
-
                         <Tabs
                             variant="pills"
                             orientation="horizontal"
@@ -254,6 +260,13 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                                 />
                             </Tabs.Panel>
                         </Tabs>
+                        <Space h="lg" />
+                        <Flex justify="end" gap="md">
+                            <Button variant="default" onClick={hideModal}>
+                                Cancel
+                            </Button>
+                            <Button type="submit">Save Changes</Button>
+                        </Flex>
                     </Container>
                 </form>
             </Modal>

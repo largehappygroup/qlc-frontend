@@ -3,7 +3,13 @@ import { Card, Space, Title } from "@mantine/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const ScoreDistributionCard: React.FC = () => {
+interface ScoreDistributionCardProps {
+    userId?: string;
+}
+
+const ScoreDistributionCard: React.FC<ScoreDistributionCardProps> = ({
+    userId,
+}: ScoreDistributionCardProps) => {
     const [averageScoreDistribution, setAverageScoreDistribution] = useState(
         []
     );
@@ -11,7 +17,9 @@ const ScoreDistributionCard: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/users/distribution`
+                `${import.meta.env.VITE_BACKEND_URL}/users/distribution${
+                    userId ? "?userId=" + userId : ""
+                }`
             );
             setAverageScoreDistribution(response.data);
         };
@@ -29,11 +37,15 @@ const ScoreDistributionCard: React.FC = () => {
                         h={300}
                         data={averageScoreDistribution}
                         xAxisLabel="Average Score as a Percentage"
-                        yAxisLabel="Number of Students"
+                        yAxisLabel={
+                            userId
+                                ? "Number of Exercises"
+                                : "Number of Students"
+                        }
                         dataKey="percentage"
                         series={[
                             {
-                                name: "students",
+                                name: "data",
                             },
                         ]}
                         tickLine="y"

@@ -19,6 +19,7 @@ import { DatePicker } from "@mantine/dates";
 import { useAuth } from "../hooks/AuthContext";
 import ProgressCard from "../components/dashboard/ProgressCard";
 import UpcomingCard from "../components/dashboard/UpcomingCard";
+import ScoreDistributionCard from "../components/dashboard/ScoreDistributionCard";
 
 const StudentDashboard: React.FC = () => {
     const [viewMonth, setViewMonth] = useState("");
@@ -30,10 +31,10 @@ const StudentDashboard: React.FC = () => {
                 <Grid.Col>
                     <Title order={3}>Hello, {user?.firstName}!</Title>
                 </Grid.Col>
-                <Grid.Col span={6}>
-                    <ProgressCard />
+                <Grid.Col>
+                    <ScoreDistributionCard userId={user?._id} />
                 </Grid.Col>
-            
+
                 <Grid.Col>
                     <UpcomingCard />
                 </Grid.Col>

@@ -25,25 +25,24 @@ interface Response {
 }
 
 interface RecentActivityCardProps {
-    individualUser?: boolean;
+    userId?: string;
 }
 
 const RecentActivityCard: React.FC<RecentActivityCardProps> = ({
-    individualUser,
+    userId,
 }: RecentActivityCardProps) => {
     const [activities, setActivities] = useState<Response[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const { user } = useAuth();
 
     useEffect(() => {
         fetchData();
-    }, [user, individualUser]);
+    }, [userId]);
 
     const fetchData = async () => {
         setIsLoading(true);
         const response = await axios.get(
             `${import.meta.env.VITE_BACKEND_URL}/exercises/recent-activity${
-                individualUser ? "?userId=" + user?._id : ""
+                userId ? "?userId=" + userId : ""
             }`
         );
         setActivities(response.data);
@@ -70,7 +69,9 @@ const RecentActivityCard: React.FC<RecentActivityCardProps> = ({
                                 {index !== 0 && <Divider />}
                                 <Flex justify="space-between" align="center">
                                     <Flex gap="md" align="center">
-                                        <Badge size="xl">{activity.score}</Badge>
+                                        <Badge size="xl">
+                                            {activity.score}
+                                        </Badge>
 
                                         <Flex direction="column">
                                             <Title order={2} size="lg">

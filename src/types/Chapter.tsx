@@ -4,4 +4,6 @@ export interface Chapter {
     assignmentIds?: string[];
     learningObjectives: string[];
     title: string;
+    description: string;
+    releaseDate: Date;
 }

@@ -25,7 +25,7 @@ export function NavbarNested() {
     useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get<Chapter[]>(
-                `${import.meta.env.VITE_BACKEND_URL}/chapters`
+                `${import.meta.env.VITE_BACKEND_URL}/chapters?date=${new Date()}`
             );
             setChapters(response.data);
         };

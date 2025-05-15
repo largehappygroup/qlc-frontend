@@ -20,6 +20,7 @@ import AverageTimeSpentCard from "../components/dashboard/AverageTimeSpentCard";
 import RecentActivityCard from "../components/dashboard/RecentActivityCard";
 
 const FacultyDashboard: React.FC = () => {
+
     return (
         <Layout title="Dashboard">
             <Grid>

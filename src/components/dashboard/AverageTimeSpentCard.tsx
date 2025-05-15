@@ -5,20 +5,19 @@ import { useAuth } from "../../hooks/AuthContext";
 import { IconClock } from "@tabler/icons-react";
 
 interface AverageTimeSpentCardProps {
-    individualUser?: boolean;
+    userId?: string
 }
 
 const AverageTimeSpentCard: React.FC<AverageTimeSpentCardProps> = ({
-    individualUser,
+    userId
 }: AverageTimeSpentCardProps) => {
     const [timeSpent, setTimeSpent] = useState("");
-    const { user } = useAuth();
 
     useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get(
                 `${import.meta.env.VITE_BACKEND_URL}/exercises/time-spent${
-                    individualUser ? "?userId=" + user?._id : ""
+                    userId ? "?userId=" + userId : ""
                 }`
             );
             setTimeSpent(response.data);

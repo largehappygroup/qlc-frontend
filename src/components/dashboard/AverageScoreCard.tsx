@@ -5,19 +5,18 @@ import { useAuth } from "../../hooks/AuthContext";
 import { IconStars } from "@tabler/icons-react";
 
 interface AverageScoreCardProps {
-    individualUser?: boolean;
+    userId?: string
 }
 
 const AverageScoreCard: React.FC<AverageScoreCardProps> = ({
-    individualUser,
+    userId
 }: AverageScoreCardProps) => {
     const [average, setAverage] = useState(0);
-    const { user } = useAuth();
     useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get(
                 `${import.meta.env.VITE_BACKEND_URL}/exercises/average${
-                    individualUser ? "?userId=" + user?._id : ""
+                    userId ? "?userId=" + userId : ""
                 }`
             );
             setAverage(response.data);
