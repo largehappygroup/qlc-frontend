@@ -28,7 +28,7 @@ const LearningObjectives: React.FC<LearningObjectivesProps> = ({
     handleAddObjective,
 }: LearningObjectivesProps) => {
     return (
-        <Card withBorder>
+        <Card withBorder shadow="sm">
             <Title order={2} pb="xs">
                 Learning Objectives
             </Title>

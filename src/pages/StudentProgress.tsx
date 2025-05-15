@@ -4,6 +4,7 @@ import RecentActivityCard from "../components/dashboard/RecentActivityCard";
 import AverageScoreCard from "../components/dashboard/AverageScoreCard";
 import AverageTimeSpentCard from "../components/dashboard/AverageTimeSpentCard";
 import { useAuth } from "../hooks/AuthContext";
+import ScoreDistributionCard from "../components/dashboard/ScoreDistributionCard";
 
 const StudentProgress: React.FC = () => {
     const { user } = useAuth();
@@ -17,7 +18,7 @@ const StudentProgress: React.FC = () => {
                     <AverageTimeSpentCard userId={user?._id} />
                 </Grid.Col>
                 <Grid.Col>
-                    <RecentActivityCard userId={user?._id} />
+                    <ScoreDistributionCard userId={user?._id} />
                 </Grid.Col>
             </Grid>
         </Layout>

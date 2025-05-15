@@ -25,7 +25,9 @@ export function NavbarNested() {
     useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get<Chapter[]>(
-                `${import.meta.env.VITE_BACKEND_URL}/chapters?date=${new Date()}`
+                `${
+                    import.meta.env.VITE_BACKEND_URL
+                }/chapters?date=${new Date()}`
             );
             setChapters(response.data);
         };
@@ -69,15 +71,13 @@ export function NavbarNested() {
 
     return (
         <nav className={classes.navbar}>
-            <div className={classes.header}></div>
+            {/*<div className={classes.header}></div>*/}
 
             <ScrollArea className={classes.links}>
                 <div className={classes.linksInner}>{links}</div>
             </ScrollArea>
 
-            <div className={classes.footer}>
-                <UserButton />
-            </div>
+            {/*<div className={classes.footer}></div>*/}
         </nav>
     );
 }

@@ -19,7 +19,7 @@ const Profile: React.FC = () => {
     return (
         <Grid gutter="md">
             <Grid.Col>
-                <Card withBorder>
+                <Card withBorder shadow="sm">
                     <Flex
                         gap="lg"
                         align="center"
@@ -42,7 +42,7 @@ const Profile: React.FC = () => {
                 </Card>
             </Grid.Col>
             <Grid.Col>
-                <Card withBorder>
+                <Card withBorder shadow="sm">
                     <Alert>
                         If you wish to change the listed first name and last
                         name, please contact VUIT to change these details for

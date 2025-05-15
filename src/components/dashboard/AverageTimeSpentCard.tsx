@@ -28,7 +28,7 @@ const AverageTimeSpentCard: React.FC<AverageTimeSpentCardProps> = ({
     return (
         <>
             {timeSpent && (
-                <Card withBorder>
+                <Card withBorder shadow="sm">
                     <Flex direction="column" gap="sm">
                         <Flex justify="space-between" align="center">
                             <Title c="dimmed" size="sm" order={1}>

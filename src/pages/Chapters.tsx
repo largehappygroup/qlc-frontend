@@ -110,6 +110,7 @@ const Chapters: React.FC = () => {
             {(provided, snapshot) => (
                 <Card
                     withBorder
+                    shadow="sm"
                     className={cx(classes.item, {
                         [classes.itemDragging]: snapshot.isDragging,
                     })}

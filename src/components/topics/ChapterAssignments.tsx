@@ -31,7 +31,7 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
     handleUpdateAssignment,
 }: ChapterAssignmentsProps) => {
     return (
-        <Card withBorder>
+        <Card withBorder shadow="sm">
             <Title order={2} pb="xs">
                 Assignments
             </Title>

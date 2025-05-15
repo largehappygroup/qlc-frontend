@@ -17,7 +17,7 @@ const TotalStudentsCard: React.FC = () => {
     });
 
     return (
-        <Card withBorder>
+        <Card withBorder shadow="sm">
             <Flex direction="column" gap="sm">
                 <Flex justify="space-between" align="center">
                     <Title c="dimmed" size="sm" order={1}>

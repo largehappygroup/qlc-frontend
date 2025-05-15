@@ -43,7 +43,7 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
     ));
 
     return (
-        <Flex direction="column" gap="xs" py="sm">
+        <Flex direction="column" gap="xs" pt="sm">
             <Skeleton visible={isLoading}>
                 {items?.length === 0 && <Text>No Assignments Found.</Text>}
                 {items}

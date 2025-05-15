@@ -49,7 +49,7 @@ const RecentActivityCard: React.FC<RecentActivityCardProps> = ({
         setIsLoading(false);
     };
     return (
-        <Card withBorder>
+        <Card withBorder shadow="sm">
             <Flex justify="space-between" align="center">
                 <Title c="dimmed" size="sm" order={1}>
                     Recent Activity

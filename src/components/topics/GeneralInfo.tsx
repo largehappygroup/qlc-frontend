@@ -20,7 +20,7 @@ const GeneralInfo: React.FC<GeneralInfoProps> = ({
     form,
 }: GeneralInfoProps) => {
     return (
-        <Card withBorder>
+        <Card withBorder shadow="sm">
             <Title order={2} pb="xs">
                 General Information
             </Title>
