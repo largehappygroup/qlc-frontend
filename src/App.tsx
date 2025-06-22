@@ -13,7 +13,6 @@ import StudentProgress from "./pages/StudentProgress";
 
 import Settings from "./pages/Settings";
 import { AuthProvider, useAuth } from "./hooks/AuthContext";
-import ColorSchemeContext from "./hooks/ColorSchemeContext";
 import { useState } from "react";
 import StudentDashboard from "./pages/StudentDashboard";
 

@@ -1,31 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
-import {
-    ActionIcon,
-    Button,
-    Flex,
-    Text,
-    Popover,
-    Table,
-    TextInput,
-    Checkbox,
-    Space,
-    Group,
-    Menu,
-} from "@mantine/core";
-import {
-    IconDots,
-    IconDownload,
-    IconEdit,
-    IconEye,
-    IconFilter,
-    IconMail,
-    IconNote,
-    IconPencil,
-    IconReportAnalytics,
-    IconSearch,
-    IconTrash,
-} from "@tabler/icons-react";
+import { Button, Flex, Text, Table, Space, Group } from "@mantine/core";
+import { IconDownload } from "@tabler/icons-react";
 import { User } from "../hooks/AuthContext";
 import axios from "axios";
 import EditStudentModal from "../components/performance/EditStudentModal";
@@ -104,7 +80,7 @@ const FacultyProgress: React.FC = () => {
             </Table.Td>
             <Table.Td>
                 <Group gap={0} justify="flex-end">
-                    <EditStudentModal student={student} />
+                    <EditStudentModal user={student} />
                 </Group>
             </Table.Td>
         </Table.Tr>

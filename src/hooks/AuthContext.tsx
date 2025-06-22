@@ -14,6 +14,18 @@ export interface User {
     email: string;
     vuNetId: string;
     role: string;
+    termSeason?: string;
+    termYear?: number;
+    studyParticipation?: boolean;
+    studyGroup?: string;
+}
+
+export interface PropsWithUser {
+    user?: User | null;
+}
+
+export interface PropsWithUserId {
+    userId?: string;
 }
 
 interface AuthContextType {
@@ -31,7 +43,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
 
-   useEffect(() => {
+    useEffect(() => {
         const fetchUser = async () => {
             try {
                 const response = await axios.get<User>(
@@ -49,7 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         fetchUser();
     }, []);
-  
+
     const login = async (id: string) => {
         //async (email: string, password: string) => {
         try {

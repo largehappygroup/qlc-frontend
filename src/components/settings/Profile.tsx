@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import Layout from "../Layout";
 import { useAuth } from "../../hooks/AuthContext";
+import UserCard from "./UserCard";
 
 const Profile: React.FC = () => {
     const { user } = useAuth();
@@ -19,27 +20,7 @@ const Profile: React.FC = () => {
     return (
         <Grid gutter="md">
             <Grid.Col>
-                <Card withBorder shadow="sm">
-                    <Flex
-                        gap="lg"
-                        align="center"
-                        direction={{ base: "column", md: "row" }}
-                    >
-                        <Avatar
-                            size="xl"
-                            key={`${user?.firstName} ${user?.lastName}`}
-                            name={`${user?.firstName} ${user?.lastName}`}
-                            color="initials"
-                        />
-                        <Flex
-                            ta={{ base: "center", md: "left" }}
-                            direction="column"
-                        >
-                            <Title size="xl">{`${user?.firstName} ${user?.lastName}`}</Title>
-                            <Text>{user?.email}</Text>
-                        </Flex>
-                    </Flex>
-                </Card>
+                <UserCard user={user} />
             </Grid.Col>
             <Grid.Col>
                 <Card withBorder shadow="sm">

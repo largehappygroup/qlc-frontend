@@ -1,16 +1,13 @@
 import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../hooks/AuthContext";
+import { PropsWithUserId, useAuth } from "../../hooks/AuthContext";
 import { IconStars } from "@tabler/icons-react";
 
-interface AverageScoreCardProps {
-    userId?: string
-}
 
-const AverageScoreCard: React.FC<AverageScoreCardProps> = ({
+const AverageScoreCard: React.FC<PropsWithUserId> = ({
     userId
-}: AverageScoreCardProps) => {
+}: PropsWithUserId) => {
     const [average, setAverage] = useState(0);
     useEffect(() => {
         const fetchData = async () => {
