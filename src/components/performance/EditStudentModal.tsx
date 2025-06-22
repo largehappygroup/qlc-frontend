@@ -8,6 +8,10 @@ import {
     Tooltip,
     Text,
     Grid,
+    Space,
+    Card,
+    Title,
+    Divider,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { PropsWithUser, User } from "../../hooks/AuthContext";
@@ -16,50 +20,59 @@ import AverageScoreCard from "../dashboard/AverageScoreCard";
 import AverageTimeSpentCard from "../dashboard/AverageTimeSpentCard";
 import ScoreDistributionCard from "../dashboard/ScoreDistributionCard";
 import RecentActivityCard from "../dashboard/RecentActivityCard";
+import UserCard from "../settings/UserCard";
 
-
-const EdituserModal: React.FC<PropsWithUser> = ({
-    user,
-}: PropsWithUser) => {
+const EdituserModal: React.FC<PropsWithUser> = ({ user }: PropsWithUser) => {
     const [opened, { open, close }] = useDisclosure(false);
 
     return (
         <>
-            <Modal
-                fullScreen
-                opened={opened}
-                onClose={close}
-                title={`Edit Details for ${user?.firstName} ${user?.lastName}`}
-            >
-                <Flex justify="end">
-                    <Button>Download</Button>
-                </Flex>
-                <Flex justify="space-between" gap="lg">
-                    
-                    <TextInput
-                        flex="1"
-                        label="First Name"
-                        value={user?.firstName}
-                    />
-                    <TextInput
-                        flex="1"
-                        label="Last Name"
-                        value={user?.lastName}
-                    />
-                    <TextInput flex="1" label="Email" value={user?.email} />
-                </Flex>
-
-                <Text>{`${user?.termSeason} ${user?.termYear}`}</Text>
-
-                {user?.studyParticipation && (
-                    <Switch
-                        label="Consented to participated in the study?"
-                        checked={user.studyParticipation}
-                    />
-                )}
-
-                {user?.studyGroup && <Text>{user.studyGroup}</Text>}
+            <Modal fullScreen opened={opened} onClose={close}>
+                <Space h="md" />
                 <Grid>
+                    <Grid.Col>
+                        <UserCard user={user} />
+                    </Grid.Col>
+                    <Grid.Col span={4}>
+                        <Card h="100%" withBorder shadow="sm">
+                            <Title c="dimmed" size="sm" order={1}>
+                                Term
+                            </Title>
+                            <Flex justify="center" h="100%" align="center">
+                                <Title>{`${user?.termSeason} ${user?.termYear}`}</Title>
+                            </Flex>
+                        </Card>
+                    </Grid.Col>
+                    <Grid.Col span={8}>
+                        <Card h="100%" withBorder shadow="sm">
+                            <Title c="dimmed" size="sm" order={1}>
+                                Study Participation
+                            </Title>
+                            <Flex
+                                h="100%"
+                                align="center"
+                                justify="center"
+                                gap="lg"
+                            >
+                                {user?.studyParticipation && (
+                                    <Switch
+                                        label="Participating in the Study"
+                                        checked={user.studyParticipation}
+                                    />
+                                )}
+
+                                {user?.studyGroup && (
+                                    <>
+                                        <Divider orientation="vertical" />{" "}
+                                        <Text>{`Group ${user.studyGroup}`}</Text>
+                                    </>
+                                )}
+                            </Flex>
+                        </Card>
+                    </Grid.Col>
+                    <Grid.Col>
+                        <RecentActivityCard userId={user?._id} />
+                    </Grid.Col>
                     <Grid.Col span={6}>
                         <AverageScoreCard userId={user?._id} />
                     </Grid.Col>
@@ -68,9 +81,6 @@ const EdituserModal: React.FC<PropsWithUser> = ({
                     </Grid.Col>
                     <Grid.Col>
                         <ScoreDistributionCard userId={user?._id} />
-                    </Grid.Col>
-                    <Grid.Col>
-                        <RecentActivityCard userId={user?._id} />
                     </Grid.Col>
                 </Grid>
             </Modal>
