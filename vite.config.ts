@@ -12,6 +12,7 @@ export default defineConfig({
         port: 5703,
         strictPort: true,
         host: true,
+        allowedHosts: ["helen.cumberland.isis.vanderbilt.edu"],
         origin: "http://0.0.0.0:5703",
     },
     resolve: {
