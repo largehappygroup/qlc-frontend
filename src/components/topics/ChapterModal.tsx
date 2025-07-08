@@ -1,21 +1,14 @@
 import {
-    ActionIcon,
     Flex,
-    TextInput,
     Modal,
-    Textarea,
-    Tooltip,
     Button,
     Box,
-    List,
-    Input,
     Tabs,
     Container,
     Space,
-    Title,
+    Text,
 } from "@mantine/core";
-import { useDisclosure, useHover } from "@mantine/hooks";
-import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
 import { Chapter } from "../../types/Chapter";
 import { useForm } from "@mantine/form";
 import axios from "axios";
@@ -229,7 +222,14 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                                 </Tabs.Tab>
                             </Tabs.List>
                             <Space h="lg" />
-
+                            {(form.errors.title ||
+                                form.errors.description ||
+                                form.errors.releaseDate) && (
+                                <Text c="red" ta="center" size="sm">
+                                    Please check all tabs to make sure you have
+                                    filled out the required fields.
+                                </Text>
+                            )}
                             <Tabs.Panel value="general">
                                 <GeneralInfo form={form} />
                             </Tabs.Panel>

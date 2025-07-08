@@ -15,6 +15,7 @@ import Settings from "./pages/Settings";
 import { AuthProvider, useAuth } from "./hooks/AuthContext";
 import { useState } from "react";
 import StudentDashboard from "./pages/StudentDashboard";
+import UserDirectory from "./pages/UserDirectory";
 
 function App() {
     const { user } = useAuth();
@@ -45,6 +46,7 @@ function App() {
                 <Route path="/chapters" element={<Chapters />} />
                 <Route path="/chapters/:order" element={<ChapterProfile />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/directory" element={<UserDirectory />} />
             </Routes>
         </BrowserRouter>
     );

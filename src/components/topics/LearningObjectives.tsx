@@ -37,6 +37,7 @@ const LearningObjectives: React.FC<LearningObjectivesProps> = ({
             </Text>
             <Space h="md" />
             <Flex direction="column" gap="md">
+               
                 {form.errors.learningObjectives && (
                     <Text c="red" ta="center" size="sm">
                         {form.errors.learningObjectives}

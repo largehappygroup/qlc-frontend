@@ -27,7 +27,9 @@ const FacultyProgress: React.FC = () => {
     const handleDownload = async () => {
         try {
             const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/users/download`,
+                `${
+                    import.meta.env.VITE_BACKEND_URL
+                }/users/download?role=student`,
                 { responseType: "blob" }
             );
 

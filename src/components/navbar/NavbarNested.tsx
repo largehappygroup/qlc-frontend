@@ -7,6 +7,7 @@ import {
     IconLock,
     IconNotes,
     IconPresentationAnalytics,
+    IconUsersGroup,
 } from "@tabler/icons-react";
 import { Code, Group, ScrollArea } from "@mantine/core";
 import { LinksGroup } from "./NavbarLinksGroup";
@@ -61,7 +62,13 @@ export function NavbarNested() {
             icon: IconPresentationAnalytics,
             links: "/progress",
         },
-
+        ...(user && ["admin", "faculty", "ta"].includes(user?.role) ? [
+            {
+                label: "Directory",
+                icon: IconUsersGroup,
+                links: "/directory"
+            }
+        ] : []),
         { label: "Settings", icon: IconAdjustments, links: "/settings" },
     ];
 

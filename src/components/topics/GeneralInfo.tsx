@@ -26,6 +26,7 @@ const GeneralInfo: React.FC<GeneralInfoProps> = ({
             </Title>
             <Text c="dimmed">Basic details about the chapter module</Text>
             <Space h="md" />
+           
             <Flex justify="space-between" gap="md">
                 <TextInput
                     flex="1"

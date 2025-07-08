@@ -62,7 +62,7 @@ const Chapters: React.FC = () => {
                 const response = await axios.delete(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters/${id}`
                 );
-                window.location.reload()
+                window.location.reload();
             } catch (err) {
                 console.error(err);
             }
@@ -153,36 +153,25 @@ const Chapters: React.FC = () => {
                                     >
                                         Chapter {item.order}: {item.title}
                                     </Title>
-                                    <HoverCard width={280} shadow="md">
-                                        <HoverCard.Target>
-                                            <Badge>
-                                                {item.assignmentIds
-                                                    ? `${
-                                                          item.assignmentIds
-                                                              .length
-                                                      } Assignment${
-                                                          item.assignmentIds
-                                                              .length === 1
-                                                              ? ""
-                                                              : "s"
-                                                      }`
-                                                    : "0 Assignments"}
-                                            </Badge>
-                                        </HoverCard.Target>
-                                        <HoverCard.Dropdown>
-                                            <Text size="sm">
-                                                Hover card is revealed when user
-                                                hovers over target element, it
-                                                will be hidden once mouse is not
-                                                over both target and dropdown
-                                                elements
-                                            </Text>
-                                        </HoverCard.Dropdown>
-                                    </HoverCard>
+
+                                    <Badge>
+                                        {item.assignmentIds
+                                            ? `${
+                                                  item.assignmentIds.length
+                                              } Assignment${
+                                                  item.assignmentIds.length ===
+                                                  1
+                                                      ? ""
+                                                      : "s"
+                                              }`
+                                            : "0 Assignments"}
+                                    </Badge>
                                 </Flex>
                                 <Flex justify="end" flex="1" gap="xs" py="xs">
                                     <ChapterModal
-                                        onUpdate={() => window.location.reload()}
+                                        onUpdate={() =>
+                                            window.location.reload()
+                                        }
                                         target={
                                             <ActionIcon
                                                 variant="subtle"
