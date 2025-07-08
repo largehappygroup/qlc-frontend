@@ -37,7 +37,7 @@ import { useLocation } from "react-router-dom";
 const Chapters: React.FC = () => {
     const [state, handlers] = useListState<Chapter>([]);
     const [reorderMode, setReorderMode] = useState<boolean>(false);
-
+    const [savedChapter, setSavedChapter] = useState<boolean>(false);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -54,7 +54,7 @@ const Chapters: React.FC = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [savedChapter]);
 
     const deleteChapter = async (id: string | undefined) => {
         if (id) {
@@ -170,7 +170,7 @@ const Chapters: React.FC = () => {
                                 <Flex justify="end" flex="1" gap="xs" py="xs">
                                     <ChapterModal
                                         onUpdate={() =>
-                                            window.location.reload()
+                                            setSavedChapter(!savedChapter)
                                         }
                                         target={
                                             <ActionIcon
