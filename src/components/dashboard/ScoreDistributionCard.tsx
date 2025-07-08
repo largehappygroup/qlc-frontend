@@ -4,7 +4,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { PropsWithUserId } from "../../hooks/AuthContext";
 
-
 const ScoreDistributionCard: React.FC<PropsWithUserId> = ({
     userId,
 }: PropsWithUserId) => {
@@ -40,6 +39,9 @@ const ScoreDistributionCard: React.FC<PropsWithUserId> = ({
                                 ? "Number of Exercises"
                                 : "Number of Students"
                         }
+                        yAxisProps={{allowDecimals: false}}
+                        barProps={{barSize: 50}}
+                        withBarValueLabel
                         dataKey="percentage"
                         series={[
                             {
@@ -47,6 +49,8 @@ const ScoreDistributionCard: React.FC<PropsWithUserId> = ({
                             },
                         ]}
                         tickLine="y"
+                        gridAxis="none"
+                        withTooltip={false}
                     />
                 </Card>
             )}

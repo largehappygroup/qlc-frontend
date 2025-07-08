@@ -5,9 +5,9 @@ import { PropsWithUserId, useAuth } from "../../hooks/AuthContext";
 import { IconClock } from "@tabler/icons-react";
 
 const AverageTimeSpentCard: React.FC<PropsWithUserId> = ({
-    userId
+    userId,
 }: PropsWithUserId) => {
-    const [timeSpent, setTimeSpent] = useState("");
+    const [timeSpent, setTimeSpent] = useState("00:00:00");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -16,34 +16,34 @@ const AverageTimeSpentCard: React.FC<PropsWithUserId> = ({
                     userId ? "?userId=" + userId : ""
                 }`
             );
-            setTimeSpent(response.data);
+            if (response.data) {
+                setTimeSpent(response.data);
+            } else {
+                setTimeSpent("00:00:00");
+            }
         };
         fetchData();
     });
 
     return (
-        <>
-            {timeSpent && (
-                <Card withBorder shadow="sm">
-                    <Flex direction="column" gap="sm">
-                        <Flex justify="space-between" align="center">
-                            <Title c="dimmed" size="sm" order={1}>
-                                Average Time Spent
-                            </Title>
-                            <ThemeIcon c="dimmed" variant="transparent">
-                                <IconClock stroke={1.5} size={25} />
-                            </ThemeIcon>
-                        </Flex>
-                        <Flex direction="column">
-                            <Title order={2}>{timeSpent}</Title>
-                            <Text size="md" c="dimmed">
-                                Per Exercise
-                            </Text>
-                        </Flex>
-                    </Flex>
-                </Card>
-            )}
-        </>
+        <Card withBorder shadow="sm">
+            <Flex direction="column" gap="sm">
+                <Flex justify="space-between" align="center">
+                    <Title c="dimmed" size="sm" order={1}>
+                        Average Time Spent
+                    </Title>
+                    <ThemeIcon c="dimmed" variant="transparent">
+                        <IconClock stroke={1.5} size={25} />
+                    </ThemeIcon>
+                </Flex>
+                <Flex direction="column">
+                    <Title order={2}>{timeSpent}</Title>
+                    <Text size="md" c="dimmed">
+                        Per Exercise
+                    </Text>
+                </Flex>
+            </Flex>
+        </Card>
     );
 };
 

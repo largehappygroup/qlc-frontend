@@ -28,8 +28,6 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
-    const navigate = useNavigate();
-    const location = useLocation();
 
     const { user, login } = useAuth();
 
@@ -80,39 +78,13 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
                             ]}
                             onChange={(value) => login(value ? value : "")}
                         />
-                        <Popover
-                            width={200}
-                            position="bottom-end"
-                            offset={{ mainAxis: 12, crossAxis: 0 }}
-                        >
-                            <Popover.Target>
-                                <UnstyledButton>
-                                    <Avatar
-                                        size={40}
-                                        key={`${user?.firstName} ${user?.lastName}`}
-                                        name={`${user?.firstName} ${user?.lastName}`}
-                                        color="initials"
-                                    />
-                                </UnstyledButton>
-                            </Popover.Target>
-                            <Popover.Dropdown>
-                                <NavLink
-                                    label="Profile"
-                                    onClick={() => navigate("/profile")}
-                                    leftSection={
-                                        <IconUser size={16} stroke={1.5} />
-                                    }
-                                />
-                                <NavLink
-                                    label="Log out"
-                                    c="red"
-                                    onClick={() => navigate("/login")}
-                                    leftSection={
-                                        <IconLogout size={16} stroke={1.5} />
-                                    }
-                                />
-                            </Popover.Dropdown>
-                        </Popover>
+
+                        <Avatar
+                            size={40}
+                            key={`${user?.firstName} ${user?.lastName}`}
+                            name={`${user?.firstName} ${user?.lastName}`}
+                            color="initials"
+                        />
                     </Group>
                 </Group>
             </AppShell.Header>

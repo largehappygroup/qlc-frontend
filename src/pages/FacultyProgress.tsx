@@ -6,6 +6,7 @@ import { User } from "../hooks/AuthContext";
 import axios from "axios";
 import EditStudentModal from "../components/performance/EditStudentModal";
 import Search from "../components/performance/Search";
+import DownloadModal from "../components/performance/DownloadModal";
 
 const FacultyProgress: React.FC = () => {
     const [students, setStudents] = useState<User[]>();
@@ -23,42 +24,6 @@ const FacultyProgress: React.FC = () => {
         };
         fetchData();
     });
-
-    const handleDownload = async () => {
-        try {
-            const response = await axios.get(
-                `${
-                    import.meta.env.VITE_BACKEND_URL
-                }/users/download?role=student`,
-                { responseType: "blob" }
-            );
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", "users.csv");
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            // Use fetch to initiate download as a blob
-            /*const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/exercises/download`,
-                {
-                    responseType: "blob",
-                }
-            );
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", "exercises.csv"); // Set filename
-            document.body.appendChild(link);
-            link.click();
-            link.remove(); */
-        } catch (error) {
-            console.error("Download error:", error);
-        }
-    };
 
     const rows = students?.map((student) => (
         <Table.Tr key={student.vuNetId}>
@@ -92,13 +57,7 @@ const FacultyProgress: React.FC = () => {
         <Layout title="Progress">
             <Flex justify="space-between" gap="md" align="center">
                 <Search />
-                <Button
-                    onClick={handleDownload}
-                    size="xs"
-                    leftSection={<IconDownload size={20} />}
-                >
-                    Download
-                </Button>
+                <DownloadModal />
             </Flex>
             <Space h="md" />
             <Table verticalSpacing="sm">
