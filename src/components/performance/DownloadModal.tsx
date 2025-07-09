@@ -5,10 +5,14 @@ import axios from "axios";
 import UserCsv from "./UserCsv";
 import ExerciseCsv from "./ExerciseCsv";
 
-const DownloadModal: React.FC = () => {
-    const [opened, { open, close }] = useDisclosure(false);
+interface DownloadModalProps {
+    onlyUser: boolean;
+}
 
-   
+const DownloadModal: React.FC<DownloadModalProps> = ({
+    onlyUser,
+}: DownloadModalProps) => {
+    const [opened, { open, close }] = useDisclosure(false);
 
     return (
         <>
@@ -24,30 +28,33 @@ const DownloadModal: React.FC = () => {
                 fullScreen
                 opened={opened}
                 onClose={close}
-                title="Download CSV"
             >
                 <Container>
-                    <Tabs
-                        variant="pills"
-                        orientation="horizontal"
-                        defaultValue="students"
-                    >
-                        <Tabs.List grow>
-                            <Tabs.Tab value="students">
-                                Student Information
-                            </Tabs.Tab>
-                            <Tabs.Tab value="exercises">
-                                Exercise Results
-                            </Tabs.Tab>
-                        </Tabs.List>
-                        <Space h="md" />
-                        <Tabs.Panel value="students">
-                            <UserCsv student />
-                        </Tabs.Panel>
-                        <Tabs.Panel value="exercises">
-                            <ExerciseCsv />
-                        </Tabs.Panel>
-                    </Tabs>
+                    {onlyUser ? (
+                        <UserCsv student={false} />
+                    ) : (
+                        <Tabs
+                            variant="pills"
+                            orientation="horizontal"
+                            defaultValue="students"
+                        >
+                            <Tabs.List grow>
+                                <Tabs.Tab value="students">
+                                    Student Information
+                                </Tabs.Tab>
+                                <Tabs.Tab value="exercises">
+                                    Exercise Results
+                                </Tabs.Tab>
+                            </Tabs.List>
+                            <Space h="md" />
+                            <Tabs.Panel value="students">
+                                <UserCsv student />
+                            </Tabs.Panel>
+                            <Tabs.Panel value="exercises">
+                                <ExerciseCsv />
+                            </Tabs.Panel>
+                        </Tabs>
+                    )}
                 </Container>
             </Modal>
         </>

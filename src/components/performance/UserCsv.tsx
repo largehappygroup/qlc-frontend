@@ -41,9 +41,9 @@ const UserCsv: React.FC<UserCsvProps> = ({ student }: UserCsvProps) => {
         try {
             const response = await axios.get(
                 `${import.meta.env.VITE_BACKEND_URL}/users/download${
-                    student ? "?role=student" : ""
-                }`,
-                { responseType: "blob", ...form.getValues() }
+                    student ? "?role=student&" : "?"
+                }fields=${form.getValues().fields.join(",")}`,
+                { responseType: "blob"}
             );
 
             const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -53,21 +53,6 @@ const UserCsv: React.FC<UserCsvProps> = ({ student }: UserCsvProps) => {
             document.body.appendChild(link);
             link.click();
             link.remove();
-            // Use fetch to initiate download as a blob
-            /*const response = await axios.get(
-                    `${import.meta.env.VITE_BACKEND_URL}/exercises/download`,
-                    {
-                        responseType: "blob",
-                    }
-                );
-    
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement("a");
-                link.href = url;
-                link.setAttribute("download", "exercises.csv"); // Set filename
-                document.body.appendChild(link);
-                link.click();
-                link.remove(); */
         } catch (error) {
             console.error("Download error:", error);
         }
@@ -118,7 +103,11 @@ const UserCsv: React.FC<UserCsvProps> = ({ student }: UserCsvProps) => {
                 />
 
                 <Group justify="flex-end" mt="md">
-                    <Button type="submit" onClick={handleDownload} rightSection={<IconDownload />}>
+                    <Button
+                        type="submit"
+                        onClick={handleDownload}
+                        rightSection={<IconDownload />}
+                    >
                         Download
                     </Button>
                 </Group>

@@ -57,7 +57,7 @@ const FacultyProgress: React.FC = () => {
         <Layout title="Progress">
             <Flex justify="space-between" gap="md" align="center">
                 <Search />
-                <DownloadModal />
+                <DownloadModal onlyUser={false} />
             </Flex>
             <Space h="md" />
             <Table verticalSpacing="sm">
