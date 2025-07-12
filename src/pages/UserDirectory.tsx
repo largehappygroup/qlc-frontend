@@ -6,6 +6,7 @@ import { useAuth, User } from "../hooks/AuthContext";
 import Search from "../components/performance/Search";
 import axios from "axios";
 import DownloadModal from "../components/performance/DownloadModal";
+import UploadModal from "../components/performance/UploadModal";
 
 const UserDirectory: React.FC = () => {
     const [users, setUsers] = useState<User[]>();
@@ -50,7 +51,10 @@ const UserDirectory: React.FC = () => {
         <Layout title="User Directory">
             <Flex justify="space-between">
                 <Search />
-                <DownloadModal onlyUser />
+                <Flex gap="md">
+                    <UploadModal />
+                    <DownloadModal onlyUser />
+                </Flex>
             </Flex>
             <Table verticalSpacing="sm">
                 <Table.Tbody>{rows}</Table.Tbody>

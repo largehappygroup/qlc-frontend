@@ -1,4 +1,12 @@
-import { Text, Avatar, Card, Flex, Title } from "@mantine/core";
+import {
+    Text,
+    Avatar,
+    Card,
+    Flex,
+    Title,
+    Skeleton,
+    Loader,
+} from "@mantine/core";
 import { PropsWithUser } from "../../hooks/AuthContext";
 
 const UserCard: React.FC<PropsWithUser> = ({ user }) => {
@@ -11,13 +19,25 @@ const UserCard: React.FC<PropsWithUser> = ({ user }) => {
             >
                 <Avatar
                     size="xl"
-                    key={`${user?.firstName} ${user?.lastName}`}
-                    name={`${user?.firstName} ${user?.lastName}`}
+                    key={user ? `${user?.firstName} ${user?.lastName}` : null}
+                    name={
+                        user
+                            ? `${user?.firstName} ${user?.lastName}`
+                            : undefined
+                    }
                     color="initials"
                 />
-                <Flex ta={{ base: "center", md: "left" }} direction="column">
-                    <Title size="xl">{`${user?.firstName} ${user?.lastName}`}</Title>
-                    <Text>{user?.email}</Text>
+
+                <Flex
+                    flex="1"
+                    ta={{ base: "center", md: "left" }}
+                    direction="column"
+                    h="100%"
+                >
+                    <Skeleton visible={user ? false : true}>
+                        <Title size="xl">{`${user?.firstName} ${user?.lastName}`}</Title>
+                        <Text>{user?.email}</Text>
+                    </Skeleton>
                 </Flex>
             </Flex>
         </Card>

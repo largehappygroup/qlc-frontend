@@ -3,7 +3,8 @@ import { createRoot } from "react-dom/client";
 
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
-import '@mantine/charts/styles.css';
+import "@mantine/charts/styles.css";
+import "@mantine/dropzone/styles.css";
 import "./index.css";
 
 import theme from "./theme.ts";

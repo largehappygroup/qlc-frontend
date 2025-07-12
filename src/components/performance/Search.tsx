@@ -1,4 +1,4 @@
-import { ActionIcon, Flex, Group, TextInput } from "@mantine/core";
+import { ActionIcon, TextInput } from "@mantine/core";
 import { IconArrowRight, IconSearch } from "@tabler/icons-react";
 import React from "react";
 
