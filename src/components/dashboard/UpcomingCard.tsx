@@ -1,9 +1,4 @@
-import { Badge, Card, Flex, Title, Text, Button } from "@mantine/core";
-
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Exercise } from "../../types/Exercise";
-import { useAuth } from "../../hooks/AuthContext";
+import { Card, Flex, Text } from "@mantine/core";
 import ChapterExercises from "../exercises/ChapterExercises";
 
 interface UpcomingCardProps {
@@ -12,9 +7,6 @@ interface UpcomingCardProps {
 }
 
 const UpcomingCard: React.FC<UpcomingCardProps> = ({}: UpcomingCardProps) => {
-    const [exercise, setExercise] = useState<Exercise>();
-    const { user } = useAuth();
-
     return (
         <Card shadow="sm" withBorder>
             <Flex justify="space-between" gap="sm">

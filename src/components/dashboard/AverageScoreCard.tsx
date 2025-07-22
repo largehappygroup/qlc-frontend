@@ -1,7 +1,7 @@
 import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { PropsWithUserId, useAuth } from "../../hooks/AuthContext";
+import { PropsWithUserId } from "../../hooks/AuthContext";
 import { IconStars } from "@tabler/icons-react";
 
 

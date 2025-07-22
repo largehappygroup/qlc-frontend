@@ -7,18 +7,11 @@ import {
     Modal,
     Pill,
     Space,
-    Tabs,
     Text,
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES, FileWithPath } from "@mantine/dropzone";
 import { useDisclosure } from "@mantine/hooks";
-import {
-    IconExclamationMark,
-    IconInfoCircle,
-    IconPhoto,
-    IconUpload,
-    IconX,
-} from "@tabler/icons-react";
+import { IconInfoCircle, IconUpload, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import { useState } from "react";
 
@@ -37,7 +30,7 @@ const UploadModal: React.FC = () => {
                 `${import.meta.env.VITE_BACKEND_URL}/users/upload`,
                 formData
             );
-            console.log(response.data)
+            console.log(response.data);
         }
     };
 

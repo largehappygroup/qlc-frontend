@@ -1,7 +1,6 @@
 import { Button, Container, Modal, Space, Tabs } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDownload } from "@tabler/icons-react";
-import axios from "axios";
 import UserCsv from "./UserCsv";
 import ExerciseCsv from "./ExerciseCsv";
 

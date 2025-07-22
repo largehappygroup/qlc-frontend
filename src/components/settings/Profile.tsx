@@ -1,16 +1,12 @@
 import {
     Alert,
-    Avatar,
     Button,
     Card,
     Flex,
     Grid,
     Space,
-    Text,
     TextInput,
-    Title,
 } from "@mantine/core";
-import Layout from "../Layout";
 import { useAuth } from "../../hooks/AuthContext";
 import UserCard from "./UserCard";
 

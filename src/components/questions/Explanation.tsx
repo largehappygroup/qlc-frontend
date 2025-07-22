@@ -1,4 +1,4 @@
-import { Flex, ThemeIcon, Title, Text, Code } from "@mantine/core";
+import { Flex, ThemeIcon, Title, Text,  } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
 
 interface ExplanationProps {

@@ -1,18 +1,10 @@
 import {
-    ActionIcon,
-    Card,
-    Flex,
+
     Grid,
-    ScrollArea,
-    Space,
-    Text,
-    Title,
+
 } from "@mantine/core";
 import Layout from "../components/Layout";
-import { BarChart } from "@mantine/charts";
-import { IconRefresh } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
-import axios from "axios";
+
 import TotalStudentsCard from "../components/dashboard/TotalStudentsCard";
 import ScoreDistributionCard from "../components/dashboard/ScoreDistributionCard";
 import AverageScoreCard from "../components/dashboard/AverageScoreCard";

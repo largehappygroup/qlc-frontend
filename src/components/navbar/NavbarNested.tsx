@@ -1,22 +1,16 @@
 import {
     IconAdjustments,
-    IconCalendarStats,
-    IconFileAnalytics,
-    IconGauge,
     IconHome2,
-    IconLock,
     IconNotes,
     IconPresentationAnalytics,
     IconUsersGroup,
 } from "@tabler/icons-react";
-import { Code, Group, ScrollArea } from "@mantine/core";
+import {  ScrollArea } from "@mantine/core";
 import { LinksGroup } from "./NavbarLinksGroup";
 import classes from "./NavbarNested.module.css";
-import { UserButton } from "./UserButton";
 import { Chapter } from "../../types/Chapter";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import WhichAccess from "../WhichAccess";
 import { useAuth } from "../../hooks/AuthContext";
 
 export function NavbarNested() {

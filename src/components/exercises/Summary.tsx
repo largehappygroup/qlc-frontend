@@ -1,9 +1,6 @@
 import {
-    Button,
-    Container,
     Flex,
     Text,
-    Code,
     ThemeIcon,
     Accordion,
     Modal,

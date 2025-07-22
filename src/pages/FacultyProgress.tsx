@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
-import { Button, Flex, Text, Table, Space, Group } from "@mantine/core";
-import { IconDownload } from "@tabler/icons-react";
+import {  Flex, Text, Table, Space, Group } from "@mantine/core";
+
 import { User } from "../hooks/AuthContext";
 import axios from "axios";
 import EditStudentModal from "../components/performance/EditStudentModal";

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Title, Text, Grid, Table, Group, Flex, Button } from "@mantine/core";
+import { Text, Table, Group, Flex,  } from "@mantine/core";
 
 import Layout from "../components/Layout";
-import { useAuth, User } from "../hooks/AuthContext";
+import { User } from "../hooks/AuthContext";
 import Search from "../components/performance/Search";
 import axios from "axios";
 import DownloadModal from "../components/performance/DownloadModal";

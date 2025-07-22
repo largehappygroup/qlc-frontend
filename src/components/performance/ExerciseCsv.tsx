@@ -1,15 +1,4 @@
-import {
-    TextInput,
-    Checkbox,
-    Group,
-    Button,
-    MultiSelect,
-    Radio,
-    Flex,
-    Alert,
-    Text,
-    Container,
-} from "@mantine/core";
+import { Group, Button, MultiSelect, Flex } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconDownload } from "@tabler/icons-react";
 import axios from "axios";

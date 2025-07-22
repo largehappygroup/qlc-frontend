@@ -1,5 +1,4 @@
-import { Button, Flex, Text, Textarea } from "@mantine/core";
-import { useState } from "react";
+import { Flex, Text, Textarea } from "@mantine/core";
 
 interface CodingQuestionProps {
     question?: string;
@@ -8,8 +7,6 @@ interface CodingQuestionProps {
 const CodingQuestion: React.FC<CodingQuestionProps> = ({
     question,
 }: CodingQuestionProps) => {
-    const [selectedAnswer, setSelectedAnswer] = useState(-1);
-
     return (
         <>
             <Text ta="center">{question}</Text>

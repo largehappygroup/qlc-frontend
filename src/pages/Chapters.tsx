@@ -6,9 +6,7 @@ import {
     Button,
     Card,
     Flex,
-    HoverCard,
     List,
-    Menu,
     Text,
     Title,
     Tooltip,
@@ -20,7 +18,6 @@ import ChapterModal from "../components/topics/ChapterModal";
 import {
     IconArrowsUpDown,
     IconDeviceFloppy,
-    IconDots,
     IconGripVertical,
     IconPencil,
     IconPlus,
@@ -32,7 +29,6 @@ import axios from "axios";
 import { useListState } from "@mantine/hooks";
 import classes from "../styles/DndList.module.css";
 import ConfirmPopup from "../components/ConfirmPopup";
-import { useLocation } from "react-router-dom";
 
 const Chapters: React.FC = () => {
     const [state, handlers] = useListState<Chapter>([]);

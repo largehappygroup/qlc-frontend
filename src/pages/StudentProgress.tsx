@@ -1,6 +1,5 @@
 import { Grid } from "@mantine/core";
 import Layout from "../components/Layout";
-import RecentActivityCard from "../components/dashboard/RecentActivityCard";
 import AverageScoreCard from "../components/dashboard/AverageScoreCard";
 import AverageTimeSpentCard from "../components/dashboard/AverageTimeSpentCard";
 import { useAuth } from "../hooks/AuthContext";

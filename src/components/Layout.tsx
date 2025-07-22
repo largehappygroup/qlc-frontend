@@ -2,21 +2,15 @@ import {
     AppShell,
     Avatar,
     Burger,
-    Button,
     Container,
     Flex,
     Group,
-    NavLink,
-    Popover,
     Select,
-    Skeleton,
     Space,
     Text,
-    UnstyledButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconLogout, IconUser } from "@tabler/icons-react";
-import { useLocation, useNavigate } from "react-router-dom";
+
 import { useAuth } from "../hooks/AuthContext";
 import { NavbarNested } from "./navbar/NavbarNested";
 

@@ -5,7 +5,7 @@ import {
     Flex,
     Title,
     Skeleton,
-    Loader,
+
 } from "@mantine/core";
 import { PropsWithUser } from "../../hooks/AuthContext";
 

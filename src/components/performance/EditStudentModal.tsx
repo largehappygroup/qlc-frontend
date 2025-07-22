@@ -1,11 +1,8 @@
 import {
     ActionIcon,
-    Button,
     Flex,
     Modal,
     Switch,
-    TextInput,
-    Tooltip,
     Text,
     Grid,
     Space,
@@ -14,8 +11,8 @@ import {
     Divider,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { PropsWithUser, User } from "../../hooks/AuthContext";
-import { IconEdit, IconPencil } from "@tabler/icons-react";
+import { PropsWithUser } from "../../hooks/AuthContext";
+import { IconPencil } from "@tabler/icons-react";
 import AverageScoreCard from "../dashboard/AverageScoreCard";
 import AverageTimeSpentCard from "../dashboard/AverageTimeSpentCard";
 import ScoreDistributionCard from "../dashboard/ScoreDistributionCard";

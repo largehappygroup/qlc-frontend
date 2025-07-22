@@ -1,15 +1,4 @@
-import {
-    TextInput,
-    Checkbox,
-    Group,
-    Button,
-    MultiSelect,
-    Radio,
-    Flex,
-    Alert,
-    Text,
-    Container,
-} from "@mantine/core";
+import { Group, Button, MultiSelect, Flex, Alert, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconDownload } from "@tabler/icons-react";
 import axios from "axios";
@@ -43,7 +32,7 @@ const UserCsv: React.FC<UserCsvProps> = ({ student }: UserCsvProps) => {
                 `${import.meta.env.VITE_BACKEND_URL}/users/download${
                     student ? "?role=student&" : "?"
                 }fields=${form.getValues().fields.join(",")}`,
-                { responseType: "blob"}
+                { responseType: "blob" }
             );
 
             const url = window.URL.createObjectURL(new Blob([response.data]));

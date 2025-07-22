@@ -1,5 +1,5 @@
 import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
-import { IconStars, IconUsers } from "@tabler/icons-react";
+import { IconUsers } from "@tabler/icons-react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 

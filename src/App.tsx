@@ -1,19 +1,15 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { Divider, MantineProvider } from "@mantine/core";
 import "./App.css";
 
 import FacultyDashboard from "./pages/FacultyDashboard";
 import Chapters from "./pages/Chapters";
 import FacultyProgress from "./pages/FacultyProgress";
-import Profile from "./components/settings/Profile";
 import Login from "./pages/Login";
 import ChapterProfile from "./pages/ChapterProfile";
-import WhichAccess from "./components/WhichAccess";
 import StudentProgress from "./pages/StudentProgress";
 
 import Settings from "./pages/Settings";
-import { AuthProvider, useAuth } from "./hooks/AuthContext";
-import { useState } from "react";
+import { useAuth } from "./hooks/AuthContext";
 import StudentDashboard from "./pages/StudentDashboard";
 import UserDirectory from "./pages/UserDirectory";
 

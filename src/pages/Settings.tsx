@@ -1,24 +1,17 @@
 import {
-    Avatar,
     Button,
-    Divider,
     Flex,
-    Grid,
     Space,
-    Switch,
     Tabs,
-    Text,
     Title,
     useMantineColorScheme,
 } from "@mantine/core";
 import Layout from "../components/Layout";
-import { useAuth } from "../hooks/AuthContext";
 import { IconMoon, IconSun, IconSunMoon } from "@tabler/icons-react";
 import Notifications from "../components/settings/Notifications";
 import Profile from "../components/settings/Profile";
 
 const Settings: React.FC = () => {
-    const { user } = useAuth();
     const { setColorScheme } = useMantineColorScheme();
 
     return (
@@ -37,7 +30,9 @@ const Settings: React.FC = () => {
                 </Tabs.Panel>
 
                 <Tabs.Panel value="theme">
-                    <Title order={1} size="md">Mode</Title>
+                    <Title order={1} size="md">
+                        Mode
+                    </Title>
                     <Space h="md" />
                     <Flex justify="space-between" gap="sm">
                         <Button

@@ -4,7 +4,6 @@ import {
     Card,
     Fieldset,
     Flex,
-    Grid,
     Space,
     Text,
     Textarea,
@@ -15,7 +14,6 @@ import { DateInput } from "@mantine/dates";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import React from "react";
 import { ChapterAssignment } from "../../types/ChapterAssignment";
-import { useHover } from "@mantine/hooks";
 
 interface ChapterAssignmentsProps {
     assignments: ChapterAssignment[];

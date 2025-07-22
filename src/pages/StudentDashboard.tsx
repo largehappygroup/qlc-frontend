@@ -1,29 +1,11 @@
-import { useState } from "react";
-import {
-    Button,
-    Container,
-    Flex,
-    Title,
-    Text,
-    Divider,
-    Grid,
-    ScrollArea,
-} from "@mantine/core";
-import {
-    IconCaretLeft,
-    IconCaretLeftFilled,
-    IconCaretRightFilled,
-} from "@tabler/icons-react";
+import { Title, Grid } from "@mantine/core";
+
 import Layout from "../components/Layout";
-import { DatePicker } from "@mantine/dates";
 import { useAuth } from "../hooks/AuthContext";
-import ProgressCard from "../components/dashboard/ProgressCard";
 import UpcomingCard from "../components/dashboard/UpcomingCard";
-import ScoreDistributionCard from "../components/dashboard/ScoreDistributionCard";
 import RecentActivityCard from "../components/dashboard/RecentActivityCard";
 
 const StudentDashboard: React.FC = () => {
-    const [viewMonth, setViewMonth] = useState("");
     const { user } = useAuth();
 
     return (

@@ -4,12 +4,10 @@ import {
     ActionIcon,
     Button,
     Card,
-    Fieldset,
     Flex,
     Space,
     Text,
     Textarea,
-    TextInput,
     Title,
 } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
