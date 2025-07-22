@@ -1,19 +1,10 @@
-import {
-    Button,
-    Flex,
-    Space,
-    Tabs,
-    Title,
-    useMantineColorScheme,
-} from "@mantine/core";
+import { Tabs } from "@mantine/core";
 import Layout from "../components/Layout";
-import { IconMoon, IconSun, IconSunMoon } from "@tabler/icons-react";
 import Notifications from "../components/settings/Notifications";
 import Profile from "../components/settings/Profile";
+import Theme from "../components/settings/Theme";
 
 const Settings: React.FC = () => {
-    const { setColorScheme } = useMantineColorScheme();
-
     return (
         <Layout title="Settings">
             <Tabs defaultValue="profile">
@@ -30,36 +21,7 @@ const Settings: React.FC = () => {
                 </Tabs.Panel>
 
                 <Tabs.Panel value="theme">
-                    <Title order={1} size="md">
-                        Mode
-                    </Title>
-                    <Space h="md" />
-                    <Flex justify="space-between" gap="sm">
-                        <Button
-                            leftSection={<IconSun size={20} stroke={2} />}
-                            flex="1"
-                            variant="default"
-                            onClick={() => setColorScheme("light")}
-                        >
-                            Light
-                        </Button>
-                        <Button
-                            leftSection={<IconMoon size={20} stroke={2} />}
-                            flex="1"
-                            variant="default"
-                            onClick={() => setColorScheme("dark")}
-                        >
-                            Dark
-                        </Button>
-                        <Button
-                            leftSection={<IconSunMoon size={20} stroke={2} />}
-                            flex="1"
-                            variant="default"
-                            onClick={() => setColorScheme("auto")}
-                        >
-                            System
-                        </Button>
-                    </Flex>
+                    <Theme />
                 </Tabs.Panel>
             </Tabs>
         </Layout>

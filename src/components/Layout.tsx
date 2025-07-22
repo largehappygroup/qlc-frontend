@@ -95,7 +95,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
                 <NavbarNested />
             </AppShell.Navbar>
             <AppShell.Main>
-                <Container>{children}</Container>
+                <Container>{user ? children : null}</Container>
             </AppShell.Main>
         </AppShell>
     );
