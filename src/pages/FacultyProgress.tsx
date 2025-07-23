@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
-import {  Flex, Text, Table, Space, Group } from "@mantine/core";
+import { Flex, Text, Table, Space, Group } from "@mantine/core";
 
 import { User } from "../hooks/AuthContext";
 import axios from "axios";
 import EditStudentModal from "../components/performance/EditStudentModal";
 import Search from "../components/performance/Search";
 import DownloadModal from "../components/performance/DownloadModal";
+import UserCsv from "../components/performance/UserCsv";
 
 const FacultyProgress: React.FC = () => {
     const [students, setStudents] = useState<User[]>();
-
+    const fetchData = async () => {
+        try {
+            const response = await axios.get<User[]>(
+                `${import.meta.env.VITE_BACKEND_URL}/users?role=student`
+            );
+            setStudents(response.data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get<User[]>(
-                    `${import.meta.env.VITE_BACKEND_URL}/users?role=student`
-                );
-                setStudents(response.data);
-            } catch (err) {
-                console.error(err);
-            }
-        };
         fetchData();
-    });
+    }, []);
 
     const rows = students?.map((student) => (
         <Table.Tr key={student.vuNetId}>
@@ -56,13 +56,26 @@ const FacultyProgress: React.FC = () => {
     return (
         <Layout title="Progress">
             <Flex justify="space-between" gap="md" align="center">
-                <Search />
+                <Search
+                    retrieveItems={fetchData}
+                    items={
+                        students?.map((student) => ({
+                            field: `${student.firstName} ${student.lastName}`,
+                            details: student,
+                        })) || []
+                    }
+                    setItems={setStudents}
+                />
                 <DownloadModal onlyUser={false} />
             </Flex>
             <Space h="md" />
-            <Table verticalSpacing="sm">
-                <Table.Tbody>{rows}</Table.Tbody>
-            </Table>
+            {students && students.length > 0 ? (
+                <Table verticalSpacing="sm">
+                    <Table.Tbody>{rows}</Table.Tbody>
+                </Table>
+            ) : (
+                "No Students Found."
+            )}
         </Layout>
     );
 };

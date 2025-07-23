@@ -72,13 +72,14 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
                             ]}
                             onChange={(value) => login(value ? value : "")}
                         />
-
-                        <Avatar
-                            size={40}
-                            key={`${user?.firstName} ${user?.lastName}`}
-                            name={`${user?.firstName} ${user?.lastName}`}
-                            color="initials"
-                        />
+                        {user && (
+                            <Avatar
+                                size={40}
+                                key={`${user.firstName} ${user.lastName}`}
+                                name={`${user.firstName} ${user.lastName}`}
+                                color="initials"
+                            />
+                        )}
                     </Group>
                 </Group>
             </AppShell.Header>

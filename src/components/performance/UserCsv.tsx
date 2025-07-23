@@ -11,7 +11,7 @@ const UserCsv: React.FC<UserCsvProps> = ({ student }: UserCsvProps) => {
     const form = useForm({
         mode: "uncontrolled",
         initialValues: {
-            fields: ["firstName", "lastName", "_id", "vuNetId"],
+            fields: ["firstName", "lastName", "vuNetId"],
             termSeason: "",
             termYear: "",
             studyParticipation: "",
@@ -55,7 +55,7 @@ const UserCsv: React.FC<UserCsvProps> = ({ student }: UserCsvProps) => {
                         Note:{" "}
                     </Text>
                     If you are downloading the .csv to edit and reupload, you
-                    MUST have the "Database ID" field selected along with the
+                    MUST have the "VUNetID" field selected along with the
                     fields you wish to edit.
                 </Text>
             </Alert>
@@ -68,7 +68,6 @@ const UserCsv: React.FC<UserCsvProps> = ({ student }: UserCsvProps) => {
                         { value: "lastName", label: "Last Name" },
                         { value: "vuNetId", label: "VUNetID" },
                         { value: "email", label: "Email" },
-                        { value: "_id", label: "Database ID" },
                         ...(student
                             ? [
                                   { value: "termSeason", label: "Term Season" },
