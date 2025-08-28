@@ -46,14 +46,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get<User>(
-                    `${
-                        import.meta.env.VITE_BACKEND_URL
-                    }/users/${"665abcde1234567890abc001"}`
-                );
-                if (response.data) {
-                    setUser(response.data); // Set user in context state
-                }
+                login();
             } catch (error) {
                 console.error("Failed to fetch user details", error);
             }
@@ -62,30 +55,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         fetchUser();
     }, []);
 
-    const login = async (id: string) => {
-        //async (email: string, password: string) => {
+    const login = async () => {
         try {
-            const response = await axios.get<User>(
-                `${import.meta.env.VITE_BACKEND_URL}/users/${id}`
+            const response = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/users/login`,
+                { id: localStorage.getItem("userID") || "guest" }
             );
-            if (response.data) {
-                setUser(response.data); // Set user in context state
-            }
+            console.log(response.data)
         } catch (error) {
             console.error("Login failed", error);
         }
-        /*try {
-            const response = await axios.post(
-                `${import.meta.env.VITE_BACKEND_URL}/users/login`,
-                { email, password }
-            );
-            if (response.data.user) {
-                localStorage.setItem("userID", response.data.user._id);
-                setUser(response.data.user);
-            }
-        } catch (error) {
-            console.error("Login failed", error);
-        }*/
     };
 
     const logout = () => {
