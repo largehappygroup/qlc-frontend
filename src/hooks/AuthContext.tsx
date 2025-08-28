@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
             const response = await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/users/login`,
-                { id: localStorage.getItem("userID") || "guest" }
+                { id:  "guest" }
             );
             console.log(response.data)
         } catch (error) {
