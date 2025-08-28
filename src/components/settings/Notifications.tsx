@@ -1,6 +1,10 @@
 import { Divider, Flex, Grid, Space, Switch, Title, Text } from "@mantine/core";
 
 const Notifications = () => {
+    const desktopPermission = () => {
+        
+        console.log(Notification.permission == "granted");
+    };
     return (
         <Grid py="lg" gutter="xl">
             <Grid.Col span={6}>
@@ -46,13 +50,15 @@ const Notifications = () => {
                 <Flex direction="column" gap="xs">
                     <Switch
                         size="md"
-                        defaultChecked
+                        onClick={desktopPermission}
+                        checked={Notification.permission == "granted"}
                         description="Receive emails when exercises are due"
                         label="Exercise Due Dates"
                     />
                     <Switch
                         size="md"
-                        defaultChecked
+                        checked={Notification.permission == "granted"}
+                        onClick={desktopPermission}
                         description="Receive emails when exercises become available"
                         label="Exercise Start Dates"
                     />

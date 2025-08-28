@@ -10,15 +10,12 @@ const Settings: React.FC = () => {
             <Tabs defaultValue="profile">
                 <Tabs.List>
                     <Tabs.Tab value="profile">Profile</Tabs.Tab>
-                    <Tabs.Tab value="notifications">Notifications</Tabs.Tab>
                     <Tabs.Tab value="theme">Theme</Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value="profile">
                     <Profile />
                 </Tabs.Panel>
-                <Tabs.Panel value="notifications">
-                    <Notifications />
-                </Tabs.Panel>
+           
 
                 <Tabs.Panel value="theme">
                     <Theme />
