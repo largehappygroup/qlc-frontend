@@ -58,10 +58,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const login = async () => {
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_BACKEND_URL}/users/login`,
-                { id:  "guest" }
+                `${import.meta.env.VITE_BACKEND_URL}/users`,
+                { id: "guest" }
             );
-            console.log(response.data)
+            console.log(response.data);
         } catch (error) {
             console.error("Login failed", error);
         }
