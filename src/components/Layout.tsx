@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
 
     const { user } = useAuth();
 
-    return user ? (
+    return (
         <AppShell
             layout="alt"
             header={{ height: 60 }}
@@ -77,16 +77,9 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
                 <NavbarNested />
             </AppShell.Navbar>
             <AppShell.Main>
-                <Container>{children}</Container>
+                <Container>{user ? children : null}</Container>
             </AppShell.Main>
         </AppShell>
-    ) : (
-        <>
-            <p>
-                Error: Issue with User Login. Please email
-                helen.wu@vanderbilt.edu to resolve.
-            </p>
-        </>
     );
 };
 
