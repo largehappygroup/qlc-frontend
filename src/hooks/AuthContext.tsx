@@ -57,10 +57,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const login = async () => {
         try {
-            const response = await axios.post(
+            const response = await axios.post<User>(
                 `${import.meta.env.VITE_BACKEND_URL}/users`,
                 { role: "admin"}
             );
+            setUser(response.data);
             console.log(response.data);
         } catch (error) {
             console.error("Login failed", error);
@@ -68,7 +69,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     const logout = () => {
-        localStorage.removeItem("userID");
         setUser(null);
     };
 
