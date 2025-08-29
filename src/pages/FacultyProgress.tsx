@@ -7,7 +7,6 @@ import axios from "axios";
 import EditStudentModal from "../components/performance/EditStudentModal";
 import Search from "../components/performance/Search";
 import DownloadModal from "../components/performance/DownloadModal";
-import UserCsv from "../components/performance/UserCsv";
 
 const FacultyProgress: React.FC = () => {
     const [students, setStudents] = useState<User[]>();

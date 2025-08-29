@@ -158,7 +158,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
     const handleSubmit = async (values: Chapter) => {
         try {
             if (chapter) {
-                const response = axios.put(
+                await axios.put(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters/${
                         chapter._id
                     }`,
@@ -169,7 +169,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                 );
             } else {
                 if (chapterAssignments.length > 0) {
-                    const response = axios.post(
+                    await axios.post(
                         `${import.meta.env.VITE_BACKEND_URL}/chapters`,
                         {
                             ...values,
@@ -177,7 +177,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                         }
                     );
                 } else {
-                    const response = axios.post(
+                    await axios.post(
                         `${import.meta.env.VITE_BACKEND_URL}/chapters`,
                         values
                     );

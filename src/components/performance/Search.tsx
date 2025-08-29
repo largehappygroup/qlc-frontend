@@ -1,6 +1,6 @@
 import { ActionIcon, TextInput } from "@mantine/core";
 import { IconArrowRight, IconSearch, IconX } from "@tabler/icons-react";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 
 interface SearchProps {
     items: { field: string; details: any }[];

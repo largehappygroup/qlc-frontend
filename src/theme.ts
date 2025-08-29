@@ -1,4 +1,4 @@
-import { AppShell, Card, createTheme, NavLink, rem } from "@mantine/core";
+import { Card, createTheme, rem } from "@mantine/core";
 
 const theme = createTheme({
     colors: {
@@ -44,7 +44,7 @@ const theme = createTheme({
         },
     },
     components: {
-       /* AppShellNavbar: AppShell.Navbar.extend({
+        /* AppShellNavbar: AppShell.Navbar.extend({
             defaultProps: {
                 bg: "cyan.3",
                 c: "white",
@@ -52,7 +52,6 @@ const theme = createTheme({
             },
         }),*/
 
-     
         Card: Card.extend({
             defaultProps: {},
         }),

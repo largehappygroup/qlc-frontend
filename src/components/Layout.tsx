@@ -5,7 +5,6 @@ import {
     Container,
     Flex,
     Group,
-    Select,
     Space,
     Text,
 } from "@mantine/core";
@@ -23,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 
-    const { user, login } = useAuth();
+    const { user } = useAuth();
 
     return user ? (
         <AppShell
@@ -54,24 +53,6 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
                         {title && <Text size="lg">{title}</Text>}
                     </Group>
                     <Group gap="sm">
-                        <Select
-                            value={user?._id}
-                            data={[
-                                {
-                                    value: "665abcde1234567890abc001",
-                                    label: "Student (John)",
-                                },
-                                {
-                                    value: "665abcde1234567890abc002",
-                                    label: "Student (Alice)",
-                                },
-                                {
-                                    value: "665abcde1234567890abc005",
-                                    label: "Admin",
-                                },
-                            ]}
-                            onChange={(value) => login(value ? value : "")}
-                        />
                         {user && (
                             <Avatar
                                 size={40}
@@ -100,7 +81,12 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
             </AppShell.Main>
         </AppShell>
     ) : (
-        <><p>Error: Issue with User Login. Please email helen.wu@vanderbilt.edu to resolve.</p></>
+        <>
+            <p>
+                Error: Issue with User Login. Please email
+                helen.wu@vanderbilt.edu to resolve.
+            </p>
+        </>
     );
 };
 

@@ -1,6 +1,5 @@
 import { Tabs } from "@mantine/core";
 import Layout from "../components/Layout";
-import Notifications from "../components/settings/Notifications";
 import Profile from "../components/settings/Profile";
 import Theme from "../components/settings/Theme";
 

@@ -55,7 +55,7 @@ const Chapters: React.FC = () => {
     const deleteChapter = async (id: string | undefined) => {
         if (id) {
             try {
-                const response = await axios.delete(
+                await axios.delete(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters/${id}`
                 );
                 window.location.reload();

@@ -30,7 +30,7 @@ export interface PropsWithUserId {
 
 interface AuthContextType {
     user: User | null;
-    login: (id: string) => void; //(email: string, password: string) => void;
+    login: () => void;
     logout: () => void;
 }
 
@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
             const response = await axios.post<User>(
                 `${import.meta.env.VITE_BACKEND_URL}/users`,
-                { role: "admin"}
+                { withCredentials: true }
             );
             setUser(response.data);
             console.log(response.data);
