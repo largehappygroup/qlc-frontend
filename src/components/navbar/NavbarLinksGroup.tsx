@@ -9,6 +9,7 @@ import {
     UnstyledButton,
 } from "@mantine/core";
 import classes from "./NavbarLinksGroup.module.css";
+import { useNavigate } from "react-router-dom";
 
 interface LinksGroupProps {
     icon: React.FC<any>;
@@ -25,13 +26,12 @@ export function LinksGroup({
 }: LinksGroupProps) {
     const hasLinks = Array.isArray(links);
     const [opened, setOpened] = useState(initiallyOpened || false);
-
+    const navigate = useNavigate();
     const items = hasLinks
         ? links.map((link) => (
-              <Text<"a">
-                  component="a"
+              <Text
                   className={classes.link}
-                  href={link.link}
+                  onClick={() => navigate(link.link)}
                   key={link.label}
               >
                   {link.label}
