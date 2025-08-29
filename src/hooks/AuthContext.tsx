@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
             const response = await axios.post<User>(
                 `${import.meta.env.VITE_BACKEND_URL}/users`,
-                { withCredentials: true }
+                { withCredentials: true, role: "admin" }
             );
             setUser(response.data);
             console.log(response.data);
