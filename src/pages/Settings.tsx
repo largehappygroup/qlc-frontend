@@ -1,4 +1,3 @@
-import { Tabs } from "@mantine/core";
 import Layout from "../components/Layout";
 import Profile from "../components/settings/Profile";
 import Theme from "../components/settings/Theme";

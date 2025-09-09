@@ -1,12 +1,4 @@
-import {
-    Alert,
-    Button,
-    Card,
-    Flex,
-    Grid,
-    Space,
-    TextInput,
-} from "@mantine/core";
+import { Alert, Card, Grid } from "@mantine/core";
 import { useAuth } from "../../hooks/AuthContext";
 import UserCard from "./UserCard";
 

@@ -27,7 +27,7 @@ const UploadModal: React.FC = () => {
             } else {
                 const formData = new FormData();
                 formData.append("file", file);
-                const response = await axios.post(
+                await axios.post(
                     `${import.meta.env.VITE_BACKEND_URL}/users/upload`,
                     formData
                 );
