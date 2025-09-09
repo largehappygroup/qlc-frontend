@@ -7,6 +7,7 @@ import axios from "axios";
 import EditStudentModal from "../components/performance/EditStudentModal";
 import Search from "../components/performance/Search";
 import DownloadModal from "../components/performance/DownloadModal";
+import UploadModal from "../components/performance/UploadModal";
 
 const FacultyProgress: React.FC = () => {
     const [students, setStudents] = useState<User[]>();
@@ -65,7 +66,10 @@ const FacultyProgress: React.FC = () => {
                     }
                     setItems={setStudents}
                 />
-                <DownloadModal onlyUser={false} />
+                <Flex gap="md" justify="end">
+                    <UploadModal />
+                    <DownloadModal onlyUser={false} />
+                </Flex>
             </Flex>
             <Space h="md" />
             {students && students.length > 0 ? (
