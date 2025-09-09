@@ -30,7 +30,7 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
             >
                 <Container>
                     {onlyUser ? (
-                        <UserCsv student={false} />
+                        <UserCsv student={false} closeModal={close} />
                     ) : (
                         <Tabs
                             variant="pills"

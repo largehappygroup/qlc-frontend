@@ -3,7 +3,13 @@ import { useForm } from "@mantine/form";
 import { IconDownload } from "@tabler/icons-react";
 import axios from "axios";
 
-const ExerciseCsv: React.FC = () => {
+interface ExerciseCsvProps {
+    closeModal?: () => void;
+}
+
+const ExerciseCsv: React.FC<ExerciseCsvProps> = ({
+    closeModal,
+}: ExerciseCsvProps) => {
     const form = useForm({
         mode: "uncontrolled",
         initialValues: {
@@ -45,6 +51,9 @@ const ExerciseCsv: React.FC = () => {
             document.body.appendChild(link);
             link.click();
             link.remove();
+            if (closeModal) {
+                closeModal();
+            }
         } catch (error) {
             console.error("Download error:", error);
         }

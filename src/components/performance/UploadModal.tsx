@@ -21,16 +21,24 @@ const UploadModal: React.FC = () => {
     const [rejectAlert, setRejectAlert] = useState<string>("");
 
     const handleUpload = async () => {
-        if (!file) {
-            setRejectAlert("You must upload a file!");
-        } else {
-            const formData = new FormData();
-            formData.append("file", file);
-            const response = await axios.post(
-                `${import.meta.env.VITE_BACKEND_URL}/users/upload`,
-                formData
-            );
-            console.log(response.data);
+        try {
+            if (!file) {
+                setRejectAlert("You must upload a file!");
+            } else {
+                const formData = new FormData();
+                formData.append("file", file);
+                const response = await axios.post(
+                    `${import.meta.env.VITE_BACKEND_URL}/users/upload`,
+                    formData
+                );
+                console.log(response.data);
+                close();
+                setFile(undefined);
+                setRejectAlert("");
+            }
+        } catch (error) {
+            console.error("Error uploading file:", error);
+            setRejectAlert("There was an error uploading your file.");
         }
     };
 

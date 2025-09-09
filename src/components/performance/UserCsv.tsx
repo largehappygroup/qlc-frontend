@@ -5,9 +5,10 @@ import axios from "axios";
 
 interface UserCsvProps {
     student: boolean;
+    closeModal?: () => void;
 }
 
-const UserCsv: React.FC<UserCsvProps> = ({ student }: UserCsvProps) => {
+const UserCsv: React.FC<UserCsvProps> = ({ student, closeModal }: UserCsvProps) => {
     const form = useForm({
         mode: "uncontrolled",
         initialValues: {
@@ -42,6 +43,9 @@ const UserCsv: React.FC<UserCsvProps> = ({ student }: UserCsvProps) => {
             document.body.appendChild(link);
             link.click();
             link.remove();
+            if (closeModal) {
+                closeModal();
+            }
         } catch (error) {
             console.error("Download error:", error);
         }
@@ -55,8 +59,8 @@ const UserCsv: React.FC<UserCsvProps> = ({ student }: UserCsvProps) => {
                         Note:{" "}
                     </Text>
                     If you are downloading the .csv to edit and reupload, you
-                    MUST have the "VUNetID" field selected along with the
-                    fields you wish to edit.
+                    MUST have the "VUNetID" field selected along with the fields
+                    you wish to edit.
                 </Text>
             </Alert>
             <Flex direction="column" gap="xs" py="xl">
