@@ -1,5 +1,6 @@
 import {
     Button,
+    Card,
     Flex,
     Space,
     Title,
@@ -12,36 +13,38 @@ const Theme: React.FC = () => {
 
     return (
         <>
-            <Title order={1} size="md">
-                Mode
-            </Title>
-            <Space h="md" />
-            <Flex justify="space-between" gap="sm">
-                <Button
-                    leftSection={<IconSun size={20} stroke={2} />}
-                    flex="1"
-                    variant="default"
-                    onClick={() => setColorScheme("light")}
-                >
-                    Light
-                </Button>
-                <Button
-                    leftSection={<IconMoon size={20} stroke={2} />}
-                    flex="1"
-                    variant="default"
-                    onClick={() => setColorScheme("dark")}
-                >
-                    Dark
-                </Button>
-                <Button
-                    leftSection={<IconSunMoon size={20} stroke={2} />}
-                    flex="1"
-                    variant="default"
-                    onClick={() => setColorScheme("auto")}
-                >
-                    System
-                </Button>
-            </Flex>
+            <Card withBorder shadow="sm">
+                <Title order={1} size="md">
+                    Mode
+                </Title>
+                <Space h="md" />
+                <Flex justify="space-between" gap="sm">
+                    <Button
+                        leftSection={<IconSun size={20} stroke={2} />}
+                        flex="1"
+                        variant="default"
+                        onClick={() => setColorScheme("light")}
+                    >
+                        Light
+                    </Button>
+                    <Button
+                        leftSection={<IconMoon size={20} stroke={2} />}
+                        flex="1"
+                        variant="default"
+                        onClick={() => setColorScheme("dark")}
+                    >
+                        Dark
+                    </Button>
+                    <Button
+                        leftSection={<IconSunMoon size={20} stroke={2} />}
+                        flex="1"
+                        variant="default"
+                        onClick={() => setColorScheme("auto")}
+                    >
+                        System
+                    </Button>
+                </Flex>
+            </Card>
         </>
     );
 };

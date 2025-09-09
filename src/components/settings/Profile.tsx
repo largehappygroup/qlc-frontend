@@ -22,19 +22,12 @@ const Profile: React.FC = () => {
                 <Card withBorder shadow="sm">
                     <Alert>
                         If you wish to change the listed first name and last
-                        name, please contact VUIT to change these details for
-                        your VUNETID account.
+                        name, please contact{" "}
+                        <a href="mailto:helen.wu@vanderbilt.edu">
+                            helen.wu@vanderbilt.edu
+                        </a>
+                        .
                     </Alert>
-                    <Space h="md" />
-                    <Flex justify="space-between" gap="sm">
-                        <TextInput flex="1" label="First Name" disabled />
-                        <TextInput flex="1" label="Last Name" disabled />
-                        <TextInput flex="1" label="Preferred Name" />
-                    </Flex>
-                    <Space h="md" />
-                    <Flex justify="end">
-                        <Button>Save</Button>
-                    </Flex>
                 </Card>
             </Grid.Col>
         </Grid>

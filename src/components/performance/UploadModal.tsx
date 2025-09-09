@@ -31,7 +31,7 @@ const UploadModal: React.FC = () => {
                     `${import.meta.env.VITE_BACKEND_URL}/users/upload`,
                     formData
                 );
-                console.log(response.data);
+                
                 close();
                 setFile(undefined);
                 setRejectAlert("");
