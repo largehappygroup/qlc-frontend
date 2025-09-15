@@ -1,4 +1,4 @@
-import { Alert, Card, Grid } from "@mantine/core";
+import { Alert, Grid } from "@mantine/core";
 import { useAuth } from "../../hooks/AuthContext";
 import UserCard from "./UserCard";
 
@@ -8,19 +8,17 @@ const Profile: React.FC = () => {
     return (
         <Grid gutter="md">
             <Grid.Col>
-                <UserCard user={user} />
+                <Alert>
+                    If you wish to change the listed first name and last name,
+                    please contact{" "}
+                    <a href="mailto:helen.wu@vanderbilt.edu">
+                        helen.wu@vanderbilt.edu
+                    </a>
+                    .
+                </Alert>
             </Grid.Col>
             <Grid.Col>
-                <Card withBorder shadow="sm">
-                    <Alert>
-                        If you wish to change the listed first name and last
-                        name, please contact{" "}
-                        <a href="mailto:helen.wu@vanderbilt.edu">
-                            helen.wu@vanderbilt.edu
-                        </a>
-                        .
-                    </Alert>
-                </Card>
+                <UserCard user={user} />
             </Grid.Col>
         </Grid>
     );

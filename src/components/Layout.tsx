@@ -2,6 +2,7 @@ import {
     AppShell,
     Avatar,
     Burger,
+    Button,
     Container,
     Flex,
     Group,
@@ -12,6 +13,7 @@ import { useDisclosure } from "@mantine/hooks";
 
 import { useAuth } from "../hooks/AuthContext";
 import { NavbarNested } from "./navbar/NavbarNested";
+import Quiz from "./exercises/Quiz";
 
 interface LayoutProps {
     children?: React.ReactNode;
@@ -77,7 +79,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
                 <NavbarNested />
             </AppShell.Navbar>
             <AppShell.Main>
-                <Container>{user ? children : null}</Container>
+                <Container><><Quiz><Button>click</Button></Quiz></>{user ? children : null}</Container>
             </AppShell.Main>
         </AppShell>
     );
