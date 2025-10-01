@@ -20,16 +20,15 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     const { user } = useAuth();
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get<Exercise[]>(
-                `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
-                    user?._id
-                }&assignmentId=${assignment._id}`
-            );
-
-            if (response.data.length === 1) {
-                setExercise(response.data[0]);
-            } else {
-                setExercise(undefined);
+            try {
+                const response = await axios.post<Exercise>(
+                    `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
+                        user?._id
+                    }&assignmentId=${assignment._id}`
+                );
+                setExercise(response.data);
+            } catch (error) {
+                console.error("Error fetching exercise:", error);
             }
         };
         if (user) {

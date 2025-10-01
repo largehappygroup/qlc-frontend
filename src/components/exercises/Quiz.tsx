@@ -62,6 +62,10 @@ const Quiz: React.FC<QuizProps> = ({
         }
     }, [timePaused, timeStopped]);
 
+    /**
+     * Check the selected answer with the backend and get whether it is correct.
+     * If correct, stop the timer and show the explanation.
+     */
     const checkAnswer = async () => {
         if (selectedAnswer !== "") {
             setTimePaused(true);
@@ -80,6 +84,11 @@ const Quiz: React.FC<QuizProps> = ({
         }
     };
 
+    /**
+     * If the answer is correct, move to the next question or close the modal if it is the last question.
+     * If not correct, do nothing.
+     * Fetch the updated exercise from the backend to get the latest progress.
+     */
     const handleContinue = async () => {
         if (correct) {
             if (questionIndex + 1 === exercise?.questions.length) {

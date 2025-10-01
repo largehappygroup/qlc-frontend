@@ -14,6 +14,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useAuth } from "../hooks/AuthContext";
 import { NavbarNested } from "./navbar/NavbarNested";
 import Quiz from "./exercises/Quiz";
+import Feedback from "./exercises/Feedback";
 
 interface LayoutProps {
     children?: React.ReactNode;
@@ -79,7 +80,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
                 <NavbarNested />
             </AppShell.Navbar>
             <AppShell.Main>
-                <Container><><Quiz><Button>click</Button></Quiz></>{user ? children : null}</Container>
+                <Container>{user ? children : null}</Container>
             </AppShell.Main>
         </AppShell>
     );
