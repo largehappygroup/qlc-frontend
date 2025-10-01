@@ -2,7 +2,6 @@ import {
     AppShell,
     Avatar,
     Burger,
-    Button,
     Container,
     Flex,
     Group,
@@ -13,9 +12,6 @@ import { useDisclosure } from "@mantine/hooks";
 
 import { useAuth } from "../hooks/AuthContext";
 import { NavbarNested } from "./navbar/NavbarNested";
-import Quiz from "./exercises/Quiz";
-import Feedback from "./exercises/Feedback";
-
 interface LayoutProps {
     children?: React.ReactNode;
     title?: string;
