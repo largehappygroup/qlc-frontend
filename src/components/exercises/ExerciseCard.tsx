@@ -21,12 +21,12 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get<Exercise>( //todo: switch back to post
+                const response = await axios.get<Exercise[]>( //todo: switch back to post
                     `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
                         user?._id
                     }&assignmentId=${assignment._id}`
                 );
-                setExercise(response.data);
+                setExercise(response.data[0]);
             } catch (error) {
                 console.error("Error fetching exercise:", error);
             }
@@ -45,7 +45,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                         {new Date(assignment.dueDate).toLocaleDateString()}
                     </Badge>
                     <Badge variant="default" size="md">
-                        {exercise ? exercise?.status : "Not Started"}
+                        {exercise ? exercise.status : "Not Started"}
                     </Badge>
                 </Flex>
                 <Flex
@@ -61,7 +61,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                         {exercise && (
                             <Text size="sm" c="dimmed">
                                 {exercise.completedQuestions}/
-                                {exercise.questions.length} Questions Completed
+                                {exercise.questions?.length} Questions Completed
                             </Text>
                         )}
                     </Flex>
