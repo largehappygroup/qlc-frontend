@@ -21,7 +21,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.post<Exercise>(
+                const response = await axios.get<Exercise>( //todo: switch back to post
                     `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
                         user?._id
                     }&assignmentId=${assignment._id}`
