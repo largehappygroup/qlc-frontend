@@ -61,6 +61,14 @@ const Quiz: React.FC<QuizProps> = ({
         }
     }, [timePaused, timeStopped]);
 
+    const submitRatings = async () => {
+        const questionId = exercise?.questions[questionIndex]._id;
+        await axios.put(
+            `${import.meta.env.VITE_BACKEND_URL}/exercises/${exercise?._id}/ratings`,
+            { questionId, ratings }
+        );
+    };
+
     /**
      * Check the selected answer with the backend and get whether it is correct.
      * If correct, stop the timer and show the explanation.
@@ -90,12 +98,15 @@ const Quiz: React.FC<QuizProps> = ({
      */
     const handleContinue = async () => {
         if (correct) {
+            await submitRatings();
+
             if (questionIndex + 1 === exercise?.questions.length) {
                 hideModal();
             } else {
                 setQuestionIndex(questionIndex + 1);
                 setCorrect(false);
                 setTimeStopped(false);
+                setRatings({});
             }
 
             if (setExercise) {
