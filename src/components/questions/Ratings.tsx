@@ -13,6 +13,11 @@ const questions = [
 
 const Ratings: React.FC<RatingsProps> = ({ value, onChange }) => {
     useEffect(() => {
+        if (!value && onChange) {
+            onChange(questions.map(q => q.preface).reduce((acc, preface) => ({ ...acc, [preface]: 3 }), {}));
+        }
+    }, []);
+    useEffect(() => {
         console.log("Ratings value changed:", value);
     }, [value]);
     return questions.map((question) => {
