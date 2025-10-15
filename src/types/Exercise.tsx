@@ -7,7 +7,7 @@ export interface Exercise {
     questions: {
         _id: string;
         query: string;
-        flagged: boolean;
+        ratings: { [key: string]: number };
         type: string;
         hints?: string[];
         difficulty: string;

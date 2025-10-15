@@ -62,7 +62,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 { withCredentials: true }
             );
             setUser(response.data);
-            console.log(response.data);
         } catch (error) {
             console.error("Login failed", error);
         }

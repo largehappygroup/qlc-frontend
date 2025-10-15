@@ -27,7 +27,6 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
             } else if (date) {
                 query += `?date=${date}`;
             }
-            console.log(query);
             const response = await axios.get<ChapterAssignment[]>(
                 `${import.meta.env.VITE_BACKEND_URL}/assignments${query}`
             );

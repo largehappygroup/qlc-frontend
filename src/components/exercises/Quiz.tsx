@@ -8,7 +8,6 @@ import {
     Box,
     Modal,
     ScrollArea,
-    ActionIcon,
 } from "@mantine/core";
 import MultipleChoiceQuestion from "../questions/MultipleChoiceQuestion";
 
@@ -17,7 +16,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Exercise } from "../../types/Exercise";
 import Explanation from "../questions/Explanation";
-import { IconFlag, IconFlagFilled } from "@tabler/icons-react";
+import Ratings from "../questions/Ratings";
 
 interface QuizProps {
     children?: React.ReactNode;
@@ -38,8 +37,8 @@ const Quiz: React.FC<QuizProps> = ({
     const [submitted, setSubmitted] = useState(false);
     const [correct, setCorrect] = useState(false);
 
-    const [flagged, setFlagged] = useState(
-        exercise ? exercise?.questions[questionIndex].flagged : false
+    const [ratings, setRatings] = useState<{ [key: string]: number }>(
+        exercise ? exercise?.questions[questionIndex].ratings : {}
     );
 
     const [timePaused, setTimePaused] = useState(false);
@@ -74,7 +73,7 @@ const Quiz: React.FC<QuizProps> = ({
                 `${import.meta.env.VITE_BACKEND_URL}/exercises/${
                     exercise?._id
                 }/check?questionId=${questionId}`,
-                { userAnswer: selectedAnswer, timeSpent, flagged }
+                { userAnswer: selectedAnswer, timeSpent, ratings }
             );
             if (response.data.result) {
                 setTimeStopped(true);
@@ -153,16 +152,7 @@ const Quiz: React.FC<QuizProps> = ({
                                 striped
                                 animated
                             />
-                            <ActionIcon
-                                variant="light"
-                                onClick={() => setFlagged(true)}
-                            >
-                                {flagged ? (
-                                    <IconFlagFilled size={24} />
-                                ) : (
-                                    <IconFlag size={24} />
-                                )}
-                            </ActionIcon>
+                         
                             <CloseButton onClick={hideModal} />
                         </Flex>
                         <MultipleChoiceQuestion
@@ -176,13 +166,21 @@ const Quiz: React.FC<QuizProps> = ({
                         />
                         <Divider />
                         {submitted && (
-                            <Explanation
+                            <>
+
+                              <Explanation
                                 correct={correct}
                                 explanation={
                                     exercise?.questions[questionIndex]
                                         .explanation
                                 }
                             />
+                            <Ratings
+                                value={ratings}
+                                onChange={setRatings}
+                            />
+                            </>
+                          
                         )}
                         <Flex justify="end">
                             {submitted ? (
