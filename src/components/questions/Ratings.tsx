@@ -8,14 +8,16 @@ interface RatingsProps {
 
 const questions = [
     {
-        preface: "Regarding the clarity of the question...",
-        1: "I did not understand what the question was asking.",
-        5: "It was very easy to understand what the question was asking.",
+        preface: "Regarding the clarity of the question, it was",
+        value: "clarity",
+        1: "Very hard to understand",
+        5: "Very easy to understand",
     },
     {
-        preface: "Regarding the helpfulness of the question...",
-        1: "Not helpful at helping me understand coding concepts.",
-        5: "Helpful at helping me understand coding concepts.",
+        preface: "Regarding the helpfulness of the question, it was",
+        value: "helpfulness",
+        1: "Not helpful for understanding coding concepts.",
+        5: "Very helpful for understanding coding concepts.",
     },
 ];
 
@@ -24,8 +26,8 @@ const Ratings: React.FC<RatingsProps> = ({ value, onChange }) => {
         if (!value && onChange) {
             onChange(
                 questions
-                    .map((q) => q.preface)
-                    .reduce((acc, preface) => ({ ...acc, [preface]: 3 }), {})
+                    .map((q) => q.value)
+                    .reduce((acc, value) => ({ ...acc, [value]: 3 }), {})
             );
         }
     }, []);
@@ -33,16 +35,15 @@ const Ratings: React.FC<RatingsProps> = ({ value, onChange }) => {
         console.log("Ratings value changed:", value);
     }, [value]);
     return questions.map((question) => {
-        const key = question.preface;
         return (
             <>
-                <Text>{question.preface}</Text>
                 <Flex justify="center" align="center" gap="md">
+                    <Text>{question.preface}</Text>
                     <Text size="sm">{question[1]}</Text>
                     <Rating
-                        value={value ? value[key] : 3}
+                        value={value ? value[question.value] : 3}
                         onChange={(val) => {
-                            const newValue = { ...value, [key]: val };
+                            const newValue = { ...value, [question.value]: val };
                             onChange && onChange(newValue);
                         }}
                         count={5}
