@@ -39,7 +39,7 @@ const Ratings: React.FC<RatingsProps> = ({ value, onChange }) => {
             <>
                 <Flex justify="space-between" align="center" gap="md">
                     <Text>{question.preface}</Text>
-                    <Flex justify="space-between" align="center" gap="md">
+                    <Flex justify="center" align="center" gap="md">
                         <Text size="sm">{question[1]}</Text>
                         <Rating
                             value={value ? value[question.value] : 3}

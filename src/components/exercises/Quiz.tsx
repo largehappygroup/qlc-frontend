@@ -156,6 +156,7 @@ const Quiz: React.FC<QuizProps> = ({
                             <CloseButton onClick={hideModal} />
                         </Flex>
                         <MultipleChoiceQuestion
+                            submitted={submitted}
                             value={selectedAnswer}
                             onChange={setSelectedAnswer}
                             query={exercise?.questions[questionIndex].query}

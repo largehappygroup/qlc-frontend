@@ -1,6 +1,7 @@
 import { Button, Flex, Grid, Text } from "@mantine/core";
 
 interface MultipleChoiceQuestionProps {
+    submitted?: boolean;
     query: string | undefined;
     availableAnswers: string[] | undefined;
     value?: string;
@@ -8,6 +9,7 @@ interface MultipleChoiceQuestionProps {
 }
 
 const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
+    submitted,
     query,
     availableAnswers,
     value,
@@ -35,6 +37,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
                             py="sm"
                             style={{ whiteSpace: "normal" }}
                             onClick={() => selectAnswer(answer)}
+                            disabled={submitted}
                         >
                             <Text style={{ whiteSpace: "normal" }}>
                                 {answer}
