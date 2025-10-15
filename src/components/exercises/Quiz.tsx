@@ -81,7 +81,7 @@ const Quiz: React.FC<QuizProps> = ({
                 `${import.meta.env.VITE_BACKEND_URL}/exercises/${
                     exercise?._id
                 }/check?questionId=${questionId}`,
-                { userAnswer: selectedAnswer, timeSpent, ratings }
+                { userAnswer: selectedAnswer, timeSpent}
             );
             if (response.data.result) {
                 setTimeStopped(true);
