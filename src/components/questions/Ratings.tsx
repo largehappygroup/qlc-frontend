@@ -31,6 +31,7 @@ const Ratings: React.FC<RatingsProps> = ({ value, onChange }) => {
             );
         }
     }, []);
+    
     useEffect(() => {
         console.log("Ratings value changed:", value);
     }, [value]);
