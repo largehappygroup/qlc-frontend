@@ -16,7 +16,7 @@ const Ratings: React.FC<RatingsProps> = ({ value, onChange }) => {
         console.log("Ratings value changed:", value);
     }, [value]);
     return questions.map((question) => {
-        const key = Object.keys(question)[0];
+        const key = question.preface;
         return (
             <>
             <Text>{question.preface}</Text>
