@@ -152,7 +152,7 @@ const Quiz: React.FC<QuizProps> = ({
                                 striped
                                 animated
                             />
-                         
+
                             <CloseButton onClick={hideModal} />
                         </Flex>
                         <MultipleChoiceQuestion
@@ -167,20 +167,20 @@ const Quiz: React.FC<QuizProps> = ({
                         <Divider />
                         {submitted && (
                             <>
-
-                              <Explanation
-                                correct={correct}
-                                explanation={
-                                    exercise?.questions[questionIndex]
-                                        .explanation
-                                }
-                            />
-                            <Ratings
-                                value={ratings}
-                                onChange={setRatings}
-                            />
+                                <Explanation
+                                    correct={correct}
+                                    explanation={
+                                        exercise?.questions[questionIndex]
+                                            .explanation
+                                    }
+                                />
+                                {correct && (
+                                    <Ratings
+                                        value={ratings}
+                                        onChange={setRatings}
+                                    />
+                                )}
                             </>
-                          
                         )}
                         <Flex justify="end">
                             {submitted ? (

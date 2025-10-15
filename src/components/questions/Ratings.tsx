@@ -37,18 +37,23 @@ const Ratings: React.FC<RatingsProps> = ({ value, onChange }) => {
     return questions.map((question) => {
         return (
             <>
-                <Flex justify="center" align="center" gap="md">
+                <Flex justify="space-between" align="center" gap="md">
                     <Text>{question.preface}</Text>
-                    <Text size="sm">{question[1]}</Text>
-                    <Rating
-                        value={value ? value[question.value] : 3}
-                        onChange={(val) => {
-                            const newValue = { ...value, [question.value]: val };
-                            onChange && onChange(newValue);
-                        }}
-                        count={5}
-                    />
-                    <Text size="sm">{question[5]}</Text>
+                    <Flex justify="space-between" align="center" gap="md">
+                        <Text size="sm">{question[1]}</Text>
+                        <Rating
+                            value={value ? value[question.value] : 3}
+                            onChange={(val) => {
+                                const newValue = {
+                                    ...value,
+                                    [question.value]: val,
+                                };
+                                onChange && onChange(newValue);
+                            }}
+                            count={5}
+                        />
+                        <Text size="sm">{question[5]}</Text>
+                    </Flex>
                 </Flex>
             </>
         );
