@@ -67,7 +67,6 @@ const Quiz: React.FC<QuizProps> = ({
      */
     const checkAnswer = async () => {
         if (selectedAnswer !== "") {
-            console.log(ratings);
             setTimePaused(true);
             const questionId = exercise?.questions[questionIndex]._id;
             const response = await axios.post(
