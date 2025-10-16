@@ -1,6 +1,7 @@
 import {
     Box,
     Container,
+    Divider,
     Flex,
     InputLabel,
     Modal,
@@ -47,7 +48,7 @@ const FeedbackSliders: React.FC<FeedbackProps> = ({ children }) => {
                 <Container>
                     <Flex direction="column" gap="xl">
                         {questions.map((question) => (
-                            <Flex direction="column" gap="sm" key={question.id}>
+                            <Flex direction="column" gap="md" key={question.id}>
                                 <InputLabel required>
                                     {question.text}
                                 </InputLabel>
@@ -55,6 +56,7 @@ const FeedbackSliders: React.FC<FeedbackProps> = ({ children }) => {
                                     min={1}
                                     max={5}
                                     step={1}
+                                    showLabelOnHover={false}
                                     defaultValue={3}
                                     marks={[
                                         {
@@ -67,6 +69,7 @@ const FeedbackSliders: React.FC<FeedbackProps> = ({ children }) => {
                                         { value: 5, label: "Strongly Agree" },
                                     ]}
                                 />
+                                <Divider size="sm" />
                             </Flex>
                         ))}
                         <Flex direction="column" gap="sm">
