@@ -1,5 +1,4 @@
 import { Flex, Rating, Text } from "@mantine/core";
-import { useEffect } from "react";
 
 interface RatingsProps {
     value?: { [key: string]: number };
@@ -22,19 +21,7 @@ const questions = [
 ];
 
 const Ratings: React.FC<RatingsProps> = ({ value, onChange }) => {
-    useEffect(() => {
-        if (!value && onChange) {
-            onChange(
-                questions
-                    .map((q) => q.value)
-                    .reduce((acc, value) => ({ ...acc, [value]: 3 }), {})
-            );
-        }
-    }, []);
-    
-    useEffect(() => {
-        console.log("Ratings value changed:", value);
-    }, [value]);
+
     return questions.map((question) => {
         return (
             <>

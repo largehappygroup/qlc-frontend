@@ -24,7 +24,7 @@ const ScoreDistributionCard: React.FC<PropsWithUserId> = ({
     }, []);
     return (
         <>
-            {averageScoreDistribution && (
+            {averageScoreDistribution && averageScoreDistribution.length > 0 && (
                 <Card shadow="sm" withBorder>
                     <Title order={1} size="sm" c="dimmed">
                         Average Score Distribution
