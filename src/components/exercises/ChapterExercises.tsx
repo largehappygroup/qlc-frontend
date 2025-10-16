@@ -3,6 +3,7 @@ import axios from "axios";
 import { ChapterAssignment } from "../../types/ChapterAssignment";
 import { Flex, Skeleton, Text } from "@mantine/core";
 import ExerciseCard from "./ExerciseCard";
+import FeedbackCard from "./FeedbackCard";
 
 interface ChapterExercisesProps {
     chapterId?: string;
@@ -44,7 +45,11 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
     return (
         <Flex direction="column" gap="xs" pt="sm">
             <Skeleton visible={isLoading}>
-                {items?.length === 0 && <Text>No Assignments Found.</Text>}
+                {items?.length === 0 ? (
+                    <Text>No Assignments Found.</Text>
+                ) : (
+                    <FeedbackCard />
+                )}
                 {items}
             </Skeleton>
         </Flex>
