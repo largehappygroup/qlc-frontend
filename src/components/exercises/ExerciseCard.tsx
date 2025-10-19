@@ -21,12 +21,12 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get<Exercise[]>( //todo: switch back to post
+                const response = await axios.post<Exercise>( //todo: switch back to post
                     `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
                         user?._id
                     }&assignmentId=${assignment._id}`
                 );
-                setExercise(response.data[0]);
+                setExercise(response.data);
             } catch (error) {
                 console.error("Error fetching exercise:", error);
             }

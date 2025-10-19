@@ -48,7 +48,7 @@ const FeedbackSliders: React.FC<FeedbackProps> = ({ children }) => {
                 <Container>
                     <Flex direction="column" gap="xl">
                         {questions.map((question) => (
-                            <Flex direction="column" gap="md" key={question.id}>
+                            <Flex direction="column" gap="xl" key={question.id}>
                                 <InputLabel required>
                                     {question.text}
                                 </InputLabel>
@@ -69,7 +69,7 @@ const FeedbackSliders: React.FC<FeedbackProps> = ({ children }) => {
                                         { value: 5, label: "Strongly Agree" },
                                     ]}
                                 />
-                                <Divider size="sm" />
+                                <Divider size="sm" my="md" />
                             </Flex>
                         ))}
                         <Flex direction="column" gap="sm">
