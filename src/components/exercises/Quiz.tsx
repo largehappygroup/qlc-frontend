@@ -232,7 +232,7 @@ const Quiz: React.FC<QuizProps> = ({
                                 </Flex>
                             </Tabs.Panel>
                             <Tabs.Panel value="studentCode" pt="xs">
-                                <Code>{studentCode}</Code>
+                                <Code block>{studentCode}</Code>
                             </Tabs.Panel>
                         </Tabs>
                     </Flex>
