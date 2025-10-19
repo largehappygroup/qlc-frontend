@@ -30,7 +30,7 @@ const Ratings: React.FC<RatingsProps> = ({ value, onChange }) => {
                     <Flex justify="center" align="center" gap="md">
                         <Text size="sm">{question[1]}</Text>
                         <Rating
-                            value={value ? value[question.value] : 3}
+                            value={value ? value[question.value] : undefined}
                             onChange={(val) => {
                                 const newValue = {
                                     ...value,

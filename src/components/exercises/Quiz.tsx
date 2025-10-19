@@ -180,55 +180,58 @@ const Quiz: React.FC<QuizProps> = ({
                                 </Tabs.Tab>
                             </Tabs.List>
                             <Tabs.Panel value="question" pt="xs">
-                                <MultipleChoiceQuestion
-                                    submitted={submitted}
-                                    value={selectedAnswer}
-                                    onChange={setSelectedAnswer}
-                                    query={
-                                        exercise?.questions[questionIndex].query
-                                    }
-                                    availableAnswers={
-                                        exercise?.questions[questionIndex]
-                                            .availableAnswers
-                                    }
-                                />
-                                <Divider />
-                                {submitted && (
-                                    <>
-                                        <Explanation
-                                            correct={correct}
-                                            explanation={
-                                                exercise?.questions[
-                                                    questionIndex
-                                                ].explanation
-                                            }
-                                        />
-                                        {correct && (
-                                            <Ratings
-                                                value={ratings}
-                                                onChange={setRatings}
+                                <Flex direction="column" gap="md" mb="md">
+                                    <MultipleChoiceQuestion
+                                        submitted={submitted}
+                                        value={selectedAnswer}
+                                        onChange={setSelectedAnswer}
+                                        query={
+                                            exercise?.questions[questionIndex]
+                                                .query
+                                        }
+                                        availableAnswers={
+                                            exercise?.questions[questionIndex]
+                                                .availableAnswers
+                                        }
+                                    />
+                                    <Divider />
+                                    {submitted && (
+                                        <>
+                                            <Explanation
+                                                correct={correct}
+                                                explanation={
+                                                    exercise?.questions[
+                                                        questionIndex
+                                                    ].explanation
+                                                }
                                             />
-                                        )}
-                                    </>
-                                )}
-                                <Flex justify="end">
-                                    {submitted ? (
-                                        <Button
-                                            onClick={handleContinue}
-                                            radius="xl"
-                                            w={{ base: "100%", md: "auto" }}
-                                        >
-                                            Continue
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            onClick={checkAnswer}
-                                            radius="xl"
-                                            w={{ base: "100%", md: "auto" }}
-                                        >
-                                            Submit
-                                        </Button>
+                                            {correct && (
+                                                <Ratings
+                                                    value={ratings}
+                                                    onChange={setRatings}
+                                                />
+                                            )}
+                                        </>
                                     )}
+                                    <Flex justify="end">
+                                        {submitted ? (
+                                            <Button
+                                                onClick={handleContinue}
+                                                radius="xl"
+                                                w={{ base: "100%", md: "auto" }}
+                                            >
+                                                Continue
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                onClick={checkAnswer}
+                                                radius="xl"
+                                                w={{ base: "100%", md: "auto" }}
+                                            >
+                                                Submit
+                                            </Button>
+                                        )}
+                                    </Flex>
                                 </Flex>
                             </Tabs.Panel>
                             <Tabs.Panel value="studentCode" pt="xs">
