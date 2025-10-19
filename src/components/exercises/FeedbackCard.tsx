@@ -1,4 +1,4 @@
-import { Flex, Text, Badge, Button } from "@mantine/core";
+import { Flex, Text, Badge, Button, Divider } from "@mantine/core";
 import FeedbackSliders from "./FeedbackSliders";
 
 const FeedbackCard: React.FC = () => {
@@ -29,6 +29,7 @@ const FeedbackCard: React.FC = () => {
                         Give Feedback
                     </Button>
                 </FeedbackSliders>
+                <Divider my="sm" />
             
             </Flex>
         </>

@@ -30,6 +30,10 @@ export function NavbarNested() {
         fetchData();
     }, []);
 
+    const sortedChapters = [...chapters].sort(
+        (a, b) => (a.order ?? 0) - (b.order ?? 0)
+    );
+
     const pages = [
         { label: "Dashboard", icon: IconHome2, links: "/" },
         ...(user && ["admin", "faculty", "ta"].includes(user?.role)
@@ -45,7 +49,7 @@ export function NavbarNested() {
                       label: "Chapters",
                       icon: IconNotes,
                       initiallyOpened: false,
-                      links: chapters.map((chapter) => ({
+                      links: sortedChapters.map((chapter) => ({
                           label: `Chapter ${chapter.order}`,
                           link: `/chapters/${chapter.order}`,
                       })),
@@ -60,7 +64,7 @@ export function NavbarNested() {
             {
                 label: "Directory",
                 icon: IconUsersGroup,
-                links: "/directory"
+                links: "/directory",
             }
         ] : []),
         { label: "Settings", icon: IconAdjustments, links: "/settings" },

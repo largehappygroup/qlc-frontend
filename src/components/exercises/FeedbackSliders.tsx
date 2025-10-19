@@ -1,5 +1,6 @@
 import {
     Box,
+    Button,
     Container,
     Divider,
     Flex,
@@ -77,8 +78,14 @@ const FeedbackSliders: React.FC<FeedbackProps> = ({ children }) => {
                                 Please give any additional feedback you have
                                 about the exercises.
                             </InputLabel>
-                            <Textarea placeholder="Your feedback" minRows={3} />
+                            <Textarea placeholder="Your feedback" minRows={6} />
                         </Flex>
+                        <Flex justify="flex-end">
+                            <Button variant="outline" onClick={close}>
+                                Submit Feedback
+                            </Button>
+                        </Flex>
+
                     </Flex>
                 </Container>
             </Modal>

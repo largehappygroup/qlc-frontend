@@ -11,7 +11,7 @@ const UpcomingCard: React.FC<UpcomingCardProps> = ({}: UpcomingCardProps) => {
         <Card shadow="sm" withBorder>
             <Flex justify="space-between" gap="sm">
                 <Text size="xs" c="dimmed" fw="bold" tt="uppercase">
-                    Exercises This Week
+                    To Do This Week
                 </Text>
             </Flex>
             <ChapterExercises date={new Date()} />
