@@ -8,6 +8,8 @@ import {
     Box,
     Modal,
     ScrollArea,
+    Tabs,
+    Code,
 } from "@mantine/core";
 import MultipleChoiceQuestion from "../questions/MultipleChoiceQuestion";
 
@@ -21,12 +23,14 @@ import Ratings from "../questions/Ratings";
 interface QuizProps {
     children?: React.ReactNode;
     exercise?: Exercise;
+    studentCode?: string;
     setExercise?: (exercise: Exercise) => void;
 }
 
 const Quiz: React.FC<QuizProps> = ({
     children,
     exercise,
+    studentCode,
     setExercise,
 }: QuizProps) => {
     const [opened, { open, close }] = useDisclosure(false);
@@ -64,7 +68,9 @@ const Quiz: React.FC<QuizProps> = ({
     const submitRatings = async () => {
         const questionId = exercise?.questions[questionIndex]._id;
         await axios.put(
-            `${import.meta.env.VITE_BACKEND_URL}/exercises/${exercise?._id}/ratings`,
+            `${import.meta.env.VITE_BACKEND_URL}/exercises/${
+                exercise?._id
+            }/ratings`,
             { questionId, ratings }
         );
     };
@@ -81,7 +87,7 @@ const Quiz: React.FC<QuizProps> = ({
                 `${import.meta.env.VITE_BACKEND_URL}/exercises/${
                     exercise?._id
                 }/check?questionId=${questionId}`,
-                { userAnswer: selectedAnswer, timeSpent}
+                { userAnswer: selectedAnswer, timeSpent }
             );
             if (response.data.result) {
                 setTimeStopped(true);
@@ -166,53 +172,69 @@ const Quiz: React.FC<QuizProps> = ({
 
                             <CloseButton onClick={hideModal} />
                         </Flex>
-                        <MultipleChoiceQuestion
-                            submitted={submitted}
-                            value={selectedAnswer}
-                            onChange={setSelectedAnswer}
-                            query={exercise?.questions[questionIndex].query}
-                            availableAnswers={
-                                exercise?.questions[questionIndex]
-                                    .availableAnswers
-                            }
-                        />
-                        <Divider />
-                        {submitted && (
-                            <>
-                                <Explanation
-                                    correct={correct}
-                                    explanation={
+                        <Tabs defaultValue="question">
+                            <Tabs.List>
+                                <Tabs.Tab value="question">Question</Tabs.Tab>
+                                <Tabs.Tab value="studentCode">
+                                    Student Code
+                                </Tabs.Tab>
+                            </Tabs.List>
+                            <Tabs.Panel value="question" pt="xs">
+                                <MultipleChoiceQuestion
+                                    submitted={submitted}
+                                    value={selectedAnswer}
+                                    onChange={setSelectedAnswer}
+                                    query={
+                                        exercise?.questions[questionIndex].query
+                                    }
+                                    availableAnswers={
                                         exercise?.questions[questionIndex]
-                                            .explanation
+                                            .availableAnswers
                                     }
                                 />
-                                {correct && (
-                                    <Ratings
-                                        value={ratings}
-                                        onChange={setRatings}
-                                    />
+                                <Divider />
+                                {submitted && (
+                                    <>
+                                        <Explanation
+                                            correct={correct}
+                                            explanation={
+                                                exercise?.questions[
+                                                    questionIndex
+                                                ].explanation
+                                            }
+                                        />
+                                        {correct && (
+                                            <Ratings
+                                                value={ratings}
+                                                onChange={setRatings}
+                                            />
+                                        )}
+                                    </>
                                 )}
-                            </>
-                        )}
-                        <Flex justify="end">
-                            {submitted ? (
-                                <Button
-                                    onClick={handleContinue}
-                                    radius="xl"
-                                    w={{ base: "100%", md: "auto" }}
-                                >
-                                    Continue
-                                </Button>
-                            ) : (
-                                <Button
-                                    onClick={checkAnswer}
-                                    radius="xl"
-                                    w={{ base: "100%", md: "auto" }}
-                                >
-                                    Submit
-                                </Button>
-                            )}
-                        </Flex>
+                                <Flex justify="end">
+                                    {submitted ? (
+                                        <Button
+                                            onClick={handleContinue}
+                                            radius="xl"
+                                            w={{ base: "100%", md: "auto" }}
+                                        >
+                                            Continue
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            onClick={checkAnswer}
+                                            radius="xl"
+                                            w={{ base: "100%", md: "auto" }}
+                                        >
+                                            Submit
+                                        </Button>
+                                    )}
+                                </Flex>
+                            </Tabs.Panel>
+                            <Tabs.Panel value="studentCode" pt="xs">
+                                <Code>{studentCode}</Code>
+                            </Tabs.Panel>
+                        </Tabs>
                     </Flex>
                 </Container>
             </Modal>
