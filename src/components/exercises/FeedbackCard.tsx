@@ -2,6 +2,7 @@ import { Flex, Text, Badge, Button, Card } from "@mantine/core";
 import FeedbackSliders from "./FeedbackSliders";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../../hooks/AuthContext";
 
 interface FeedbackCardProps {
     chapterId?: string;
@@ -9,12 +10,13 @@ interface FeedbackCardProps {
 
 const FeedbackCard: React.FC<FeedbackCardProps> = ({ chapterId }) => {
     const [exists, setExists] = useState(false);
+    const {user} = useAuth();
     useEffect(() => {
         const fetchData = async () => {
         try {
             const response = await axios.get(
                 `${import.meta.env.VITE_BACKEND_URL}/feedback/exists`,
-                { params: { chapterId } }
+                { params: { chapterId, userId: user?._id } }
             );
             setExists(response.data.exists);
         } catch (error) {
