@@ -12,7 +12,7 @@ import {
 import { IconRefresh } from "@tabler/icons-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { PropsWithUserId} from "../../hooks/AuthContext";
+import { WithUserId } from "../../types/User";
 
 interface Response {
     userName: string;
@@ -24,9 +24,7 @@ interface Response {
     score: string;
 }
 
-const RecentActivityCard: React.FC<PropsWithUserId> = ({
-    userId,
-}: PropsWithUserId) => {
+const RecentActivityCard: React.FC<WithUserId> = ({ userId }) => {
     const [activities, setActivities] = useState<Response[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 

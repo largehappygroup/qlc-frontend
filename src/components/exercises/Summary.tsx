@@ -10,14 +10,12 @@ import {
     RingProgress,
 } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { Exercise } from "../../types/Exercise";
+import { WithExercise } from "../../types/Exercise";
 
-interface SummaryProps {
+interface SummaryProps extends PropsWithChildren<WithExercise> {
     date?: Date;
-    exercise?: Exercise;
-    children?: React.ReactNode;
 }
 
 const Summary: React.FC<SummaryProps> = ({

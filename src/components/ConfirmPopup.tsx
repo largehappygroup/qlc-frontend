@@ -1,9 +1,8 @@
 import { Box, Button, Flex, Modal, Space } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React from "react";
+import { PropsWithChildren } from "react";
 
-interface ConfirmPopupProps {
-    children?: React.ReactNode;
+interface ConfirmPopupProps extends PropsWithChildren {
     prompt?: string;
     action?: () => void;
 }
@@ -12,7 +11,7 @@ const ConfirmPopup: React.FC<ConfirmPopupProps> = ({
     children,
     prompt,
     action,
-}: ConfirmPopupProps) => {
+}) => {
     const [opened, { open, close }] = useDisclosure(false);
     return (
         <>

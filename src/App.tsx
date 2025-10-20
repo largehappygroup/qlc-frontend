@@ -1,17 +1,18 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { useAuth } from "./hooks/AuthContext";
+
 import "./App.css";
 
 import FacultyDashboard from "./pages/FacultyDashboard";
 import Chapters from "./pages/Chapters";
 import FacultyProgress from "./pages/FacultyProgress";
 import Login from "./pages/Login";
-import ChapterProfile from "./pages/ChapterProfile";
 import StudentProgress from "./pages/StudentProgress";
 
 import Settings from "./pages/Settings";
-import { useAuth } from "./hooks/AuthContext";
 import StudentDashboard from "./pages/StudentDashboard";
 import UserDirectory from "./pages/UserDirectory";
+import ChapterPage from "./pages/ChapterPage";
 
 function App() {
     const { user } = useAuth();
@@ -40,7 +41,7 @@ function App() {
                     }
                 />
                 <Route path="/chapters" element={<Chapters />} />
-                <Route path="/chapters/:order" element={<ChapterProfile />} />
+                <Route path="/chapters/:order" element={<ChapterPage />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/directory" element={<UserDirectory />} />
             </Routes>

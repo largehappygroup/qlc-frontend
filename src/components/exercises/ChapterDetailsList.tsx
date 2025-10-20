@@ -4,17 +4,16 @@ import { Assignment } from "../../types/Assignment";
 import { Flex, Skeleton, Text } from "@mantine/core";
 import ExerciseCard from "./ExerciseCard";
 import FeedbackCard from "./FeedbackCard";
-import { Chapter } from "../../types/Chapter";
+import { WithChapter } from "../../types/Chapter";
 
-interface ChapterExercisesProps {
-    chapter?: Chapter;
+interface ChapterDetailsListProps extends WithChapter {
     date?: Date;
 }
 
-const ChapterExercises: React.FC<ChapterExercisesProps> = ({
+const ChapterDetailsList: React.FC<ChapterDetailsListProps> = ({
     chapter,
     date,
-}: ChapterExercisesProps) => {
+}: ChapterDetailsListProps) => {
     const [chapterAssignments, setChapterAssignments] =
         useState<Assignment[]>();
     const [isLoading, setIsLoading] = useState(true);
@@ -59,4 +58,4 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
     );
 };
 
-export default ChapterExercises;
+export default ChapterDetailsList;

@@ -1,9 +1,12 @@
-import { Badge, Divider, Flex, Text, Button } from "@mantine/core";
-import { Assignment } from "../../types/Assignment";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/AuthContext";
 import axios from "axios";
+
+import { Badge, Divider, Flex, Text, Button } from "@mantine/core";
+
 import { Exercise } from "../../types/Exercise";
+import { Assignment } from "../../types/Assignment";
+
 import Quiz from "./Quiz";
 import Summary from "./Summary";
 
