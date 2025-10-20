@@ -6,4 +6,5 @@ export interface Chapter {
     title: string;
     description: string;
     releaseDate: Date;
+    requestFeedback: boolean;
 }

@@ -4,14 +4,15 @@ import { ChapterAssignment } from "../../types/ChapterAssignment";
 import { Flex, Skeleton, Text } from "@mantine/core";
 import ExerciseCard from "./ExerciseCard";
 import FeedbackCard from "./FeedbackCard";
+import { Chapter } from "../../types/Chapter";
 
 interface ChapterExercisesProps {
-    chapterId?: string;
+    chapter?: Chapter;
     date?: Date;
 }
 
 const ChapterExercises: React.FC<ChapterExercisesProps> = ({
-    chapterId,
+    chapter,
     date,
 }: ChapterExercisesProps) => {
     const [chapterAssignments, setChapterAssignments] =
@@ -21,10 +22,10 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
     useEffect(() => {
         const fetchData = async () => {
             let query = "";
-            if (chapterId && date) {
-                query += `?chapterId=${chapterId}&date=${date}`;
-            } else if (chapterId) {
-                query += `?chapterId=${chapterId}`;
+            if (chapter && date) {
+                query += `?chapterId=${chapter._id}&date=${date}`;
+            } else if (chapter) {
+                query += `?chapterId=${chapter._id}`;
             } else if (date) {
                 query += `?date=${date}`;
             }
@@ -36,7 +37,7 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
         };
 
         fetchData();
-    }, [chapterId, date]);
+    }, [chapter, date]);
 
     const items = chapterAssignments?.map((assignment, index) => (
         <ExerciseCard index={index} assignment={assignment} />
@@ -48,7 +49,9 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
                 {items?.length === 0 ? (
                     <Text>No Assignments Found.</Text>
                 ) : (
-                    <FeedbackCard chapterId={chapterId} />
+                    chapter?.requestFeedback && (
+                        <FeedbackCard chapterId={chapter?._id} />
+                    )
                 )}
                 {items}
             </Skeleton>

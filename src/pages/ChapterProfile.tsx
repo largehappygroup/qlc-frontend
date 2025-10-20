@@ -36,7 +36,7 @@ const ChapterProfile: React.FC = () => {
 
     return (
         <Layout title={`Chapter ${order}`}>
-            <ChapterExercises chapterId={chapter?._id} />
+            <ChapterExercises chapter={chapter} />
         </Layout>
     );
 };

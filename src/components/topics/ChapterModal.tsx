@@ -73,6 +73,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                   assignments: [] as string[],
                   description: "",
                   releaseDate: new Date(),
+                  requestFeedback: false,
               },
         validate: {
             learningObjectives: (value) =>

@@ -6,6 +6,7 @@ import {
     Title,
     Space,
     Flex,
+    Checkbox,
 } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { Chapter } from "../../types/Chapter";
@@ -44,6 +45,11 @@ const GeneralInfo: React.FC<GeneralInfoProps> = ({
                         {...form.getInputProps("releaseDate")}
                     />
                 </Flex>
+                <Checkbox
+                    label="Request Feedback"
+                    key={form.key("requestFeedback")}
+                    {...form.getInputProps("requestFeedback", { type: "checkbox" })}
+                />
             </Flex>
 
             <Space h="md" />
