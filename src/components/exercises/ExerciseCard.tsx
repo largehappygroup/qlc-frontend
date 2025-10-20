@@ -33,12 +33,12 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                         user?._id
                     }&assignmentId=${assignment._id}`
                 );
-                setIsLoading(false);
                 setExercise(response.data.exercise);
                 setStudentCode(response.data.studentCode);
             } catch (error) {
                 console.error("Error fetching exercise:", error);
             }
+            setIsLoading(false);
         };
         if (user) {
             fetchData();
