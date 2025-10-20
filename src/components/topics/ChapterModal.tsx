@@ -13,7 +13,7 @@ import { Chapter } from "../../types/Chapter";
 import { useForm } from "@mantine/form";
 import axios from "axios";
 import ChapterAssignments from "./ChapterAssignments";
-import { ChapterAssignment } from "../../types/ChapterAssignment";
+import { Assignment } from "../../types/Assignment";
 import { useEffect, useState } from "react";
 import GeneralInfo from "./GeneralInfo";
 import LearningObjectives from "./LearningObjectives";
@@ -30,15 +30,15 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
 }: ChapterModalProps) => {
     const [opened, { open, close }] = useDisclosure(false);
     const [chapterAssignments, setChapterAssignments] = useState<
-        ChapterAssignment[]
+        Assignment[]
     >([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let assignmentDetails: ChapterAssignment[] = [];
+                let assignmentDetails: Assignment[] = [];
                 for (const assignmentId of chapter?.assignmentIds || []) {
-                    const response = await axios.get<ChapterAssignment>(
+                    const response = await axios.get<Assignment>(
                         `${
                             import.meta.env.VITE_BACKEND_URL
                         }/assignments/${assignmentId}`

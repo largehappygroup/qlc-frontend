@@ -1,5 +1,5 @@
 import { Badge, Divider, Flex, Text, Button } from "@mantine/core";
-import { ChapterAssignment } from "../../types/ChapterAssignment";
+import { Assignment } from "../../types/Assignment";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/AuthContext";
 import axios from "axios";
@@ -9,7 +9,7 @@ import Summary from "./Summary";
 
 interface ExerciseCardProps {
     index: number;
-    assignment: ChapterAssignment;
+    assignment: Assignment;
 }
 
 const ExerciseCard: React.FC<ExerciseCardProps> = ({

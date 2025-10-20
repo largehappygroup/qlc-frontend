@@ -13,10 +13,10 @@ import {
 import { DateInput } from "@mantine/dates";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import React from "react";
-import { ChapterAssignment } from "../../types/ChapterAssignment";
+import { Assignment } from "../../types/Assignment";
 
 interface ChapterAssignmentsProps {
-    assignments: ChapterAssignment[];
+    assignments: Assignment[];
     handleAddAssignment: () => void;
     handleDeleteAssignment: (index: number) => void;
     handleUpdateAssignment: (index: number, field: string, value: any) => void;

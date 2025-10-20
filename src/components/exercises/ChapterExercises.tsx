@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { ChapterAssignment } from "../../types/ChapterAssignment";
+import { Assignment } from "../../types/Assignment";
 import { Flex, Skeleton, Text } from "@mantine/core";
 import ExerciseCard from "./ExerciseCard";
 import FeedbackCard from "./FeedbackCard";
@@ -16,7 +16,7 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
     date,
 }: ChapterExercisesProps) => {
     const [chapterAssignments, setChapterAssignments] =
-        useState<ChapterAssignment[]>();
+        useState<Assignment[]>();
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
             } else if (date) {
                 query += `?date=${date}`;
             }
-            const response = await axios.get<ChapterAssignment[]>(
+            const response = await axios.get<Assignment[]>(
                 `${import.meta.env.VITE_BACKEND_URL}/assignments${query}`
             );
             setChapterAssignments(response.data);

@@ -1,4 +1,4 @@
-export interface ChapterAssignment {
+export interface Assignment {
     uuid: string;
     chapterId?: string;
     title: string;
