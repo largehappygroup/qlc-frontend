@@ -19,14 +19,21 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     const [exercise, setExercise] = useState<Exercise>();
     const [studentCode, setStudentCode] = useState<string>();
     const { user } = useAuth();
+
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
+        setIsLoading(true);
         const fetchData = async () => {
             try {
-                const response = await axios.post<{exercise: Exercise, studentCode: string}>( //todo: switch back to post
+                const response = await axios.post<{
+                    exercise: Exercise;
+                    studentCode: string;
+                }>(
                     `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
                         user?._id
                     }&assignmentId=${assignment._id}`
                 );
+                setIsLoading(false);
                 setExercise(response.data.exercise);
                 setStudentCode(response.data.studentCode);
             } catch (error) {
@@ -67,6 +74,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                             </Text>
                         )}
                     </Flex>
+
                     {exercise ? (
                         exercise.status === "Complete" ? (
                             <Summary exercise={exercise}>
@@ -74,16 +82,22 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                                     radius="xl"
                                     size="sm"
                                     w={{ base: "100%", lg: "auto" }}
+                                    loading={isLoading}
                                 >
                                     View Results
                                 </Button>
                             </Summary>
                         ) : (
-                            <Quiz studentCode={studentCode} exercise={exercise} setExercise={setExercise}>
+                            <Quiz
+                                studentCode={studentCode}
+                                exercise={exercise}
+                                setExercise={setExercise}
+                            >
                                 <Button
                                     radius="xl"
                                     size="sm"
                                     w={{ base: "100%", lg: "auto" }}
+                                    loading={isLoading}
                                 >
                                     {exercise.status === "Not Started"
                                         ? "Start"
@@ -97,6 +111,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                             size="sm"
                             w={{ base: "100%", lg: "auto" }}
                             disabled
+                            loading={isLoading}
                         >
                             Locked
                         </Button>
