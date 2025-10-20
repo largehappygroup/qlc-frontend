@@ -18,7 +18,7 @@ const StudentDashboard: React.FC = () => {
                     <UpcomingCard />
                 </Grid.Col>
                 <Grid.Col>
-                    <RecentActivityCard userId={user?._id} />
+                    <RecentActivityCard userId={user?.vuNetId} />
                 </Grid.Col>
             </Grid>
         </Layout>

@@ -14,7 +14,7 @@ const FeedbackCard: React.FC<WithChapterId> = ({ chapterId }) => {
         try {
             const response = await axios.get(
                 `${import.meta.env.VITE_BACKEND_URL}/feedback/exists`,
-                { params: { chapterId, userId: user?._id } }
+                { params: { chapterId, userId: user?.vuNetId } }
             );
             setExists(response.data.exists);
         } catch (error) {

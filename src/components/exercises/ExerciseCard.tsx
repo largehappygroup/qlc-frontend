@@ -5,14 +5,14 @@ import axios from "axios";
 import { Badge, Divider, Flex, Text, Button } from "@mantine/core";
 
 import { Exercise } from "../../types/Exercise";
-import { ChapterAssignment } from "../../types/ChapterAssignment";
+import { Assignment } from "../../types/Assignment";
 
 import Quiz from "./Quiz";
 import Summary from "./Summary";
 
 interface ExerciseCardProps {
     index: number;
-    assignment: ChapterAssignment;
+    assignment: Assignment;
 }
 
 const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -33,8 +33,8 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                     studentCode: string;
                 }>(
                     `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
-                        user?._id
-                    }&assignmentId=${assignment._id}`
+                        user?.vuNetId
+                    }&assignmentId=${assignment.uuid}`
                 );
                 setExercise(response.data.exercise);
                 setStudentCode(response.data.studentCode);

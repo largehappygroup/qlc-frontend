@@ -1,5 +1,5 @@
-export interface ChapterAssignment {
-    _id?: string;
+export interface Assignment {
+    uuid?: string;
     chapterId?: string;
     title: string;
     identifier: string;
@@ -9,5 +9,5 @@ export interface ChapterAssignment {
 }
 
 export interface WithAssignment {
-    assignment?: ChapterAssignment;
+    assignment?: Assignment;
 }

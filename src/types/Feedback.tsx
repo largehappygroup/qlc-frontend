@@ -1,5 +1,5 @@
 export interface Feedback {
-    _id: string;
+    uuid: string;
     chapterId: string;
     userId: string;
     date: Date;

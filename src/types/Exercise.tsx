@@ -1,11 +1,12 @@
 export interface Exercise {
-    _id: string;
+    uuid?: string;
+    assignmentId: string;
     userId: string;
     date: Date;
     completedQuestions: number;
     completedTimestamp?: Date;
     questions: {
-        _id: string;
+        uuid: string;
         query: string;
         ratings: { [key: string]: number };
         type: string;
