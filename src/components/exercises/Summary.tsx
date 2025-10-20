@@ -12,7 +12,7 @@ import {
 import { IconCheck, IconX } from "@tabler/icons-react";
 import React, { PropsWithChildren } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import {  WithExercise } from "../../types/Exercise";
+import { WithExercise } from "../../types/Exercise";
 
 interface SummaryProps extends PropsWithChildren<WithExercise> {
     date?: Date;

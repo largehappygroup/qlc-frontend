@@ -2,7 +2,7 @@ import { BarChart } from "@mantine/charts";
 import { Card, Space, Title } from "@mantine/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { WithUserId } from "../../hooks/AuthContext";
+import { WithUserId } from "../../types/User";
 
 const ScoreDistributionCard: React.FC<WithUserId> = ({ userId }) => {
     const [averageScoreDistribution, setAverageScoreDistribution] = useState(

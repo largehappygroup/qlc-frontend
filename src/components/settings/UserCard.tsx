@@ -1,5 +1,5 @@
 import { Text, Avatar, Card, Flex, Title, Skeleton } from "@mantine/core";
-import { WithUser } from "../../hooks/AuthContext";
+import { WithUser } from "../../types/User";
 
 const UserCard: React.FC<WithUser> = ({ user }) => {
     return (

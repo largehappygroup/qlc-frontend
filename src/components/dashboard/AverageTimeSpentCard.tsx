@@ -1,7 +1,7 @@
 import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { WithUserId } from "../../hooks/AuthContext";
+import { WithUserId } from "../../types/User";
 import { IconClock } from "@tabler/icons-react";
 
 const AverageTimeSpentCard: React.FC<WithUserId> = ({ userId }) => {

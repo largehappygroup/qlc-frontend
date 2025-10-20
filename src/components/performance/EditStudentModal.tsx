@@ -11,7 +11,7 @@ import {
     Divider,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { WithUser } from "../../hooks/AuthContext";
+import { WithUser } from "../../types/User";
 import { IconPencil } from "@tabler/icons-react";
 import AverageScoreCard from "../dashboard/AverageScoreCard";
 import AverageTimeSpentCard from "../dashboard/AverageTimeSpentCard";

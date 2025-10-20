@@ -12,7 +12,7 @@ import {
 import { IconRefresh } from "@tabler/icons-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { WithUserId } from "../../hooks/AuthContext";
+import { WithUserId } from "../../types/User";
 
 interface Response {
     userName: string;
