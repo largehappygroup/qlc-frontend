@@ -9,23 +9,22 @@ import {
     Text,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Chapter } from "../../types/Chapter";
+import { Chapter, WithChapter } from "../../types/Chapter";
 import { useForm } from "@mantine/form";
 import axios from "axios";
 import ChapterAssignments from "./ChapterAssignments";
 import { ChapterAssignment } from "../../types/ChapterAssignment";
-import { useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import GeneralInfo from "./GeneralInfo";
 import LearningObjectives from "./LearningObjectives";
-interface ChapterModalProps {
-    chapter?: Chapter;
-    target: React.ReactNode;
+
+interface ChapterModalProps extends PropsWithChildren<WithChapter> {
     onUpdate: () => void;
 }
 
 const ChapterModal: React.FC<ChapterModalProps> = ({
     chapter,
-    target,
+    children,
     onUpdate,
 }: ChapterModalProps) => {
     const [opened, { open, close }] = useDisclosure(false);
@@ -271,7 +270,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                     </Container>
                 </form>
             </Modal>
-            <Box onClick={showModal}>{target}</Box>
+            <Box onClick={showModal}>{children}</Box>
         </>
     );
 };

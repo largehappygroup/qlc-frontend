@@ -11,7 +11,7 @@ import {
     Divider,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { PropsWithUser } from "../../hooks/AuthContext";
+import { WithUser } from "../../hooks/AuthContext";
 import { IconPencil } from "@tabler/icons-react";
 import AverageScoreCard from "../dashboard/AverageScoreCard";
 import AverageTimeSpentCard from "../dashboard/AverageTimeSpentCard";
@@ -19,7 +19,7 @@ import ScoreDistributionCard from "../dashboard/ScoreDistributionCard";
 import RecentActivityCard from "../dashboard/RecentActivityCard";
 import UserCard from "../settings/UserCard";
 
-const EdituserModal: React.FC<PropsWithUser> = ({ user }: PropsWithUser) => {
+const EditUserModal: React.FC<WithUser> = ({ user }) => {
     const [opened, { open, close }] = useDisclosure(false);
 
     return (
@@ -88,4 +88,4 @@ const EdituserModal: React.FC<PropsWithUser> = ({ user }: PropsWithUser) => {
     );
 };
 
-export default EdituserModal;
+export default EditUserModal;

@@ -8,3 +8,11 @@ export interface Chapter {
     releaseDate: Date;
     requestFeedback: boolean;
 }
+
+export interface WithChapter {
+    chapter?: Chapter;
+}
+
+export interface WithChapterId {
+    chapterId?: string;
+}

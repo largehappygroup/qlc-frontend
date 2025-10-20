@@ -20,11 +20,11 @@ export interface User {
     studyGroup?: string;
 }
 
-export interface PropsWithUser {
+export interface WithUser {
     user?: User | null;
 }
 
-export interface PropsWithUserId {
+export interface WithUserId {
     userId?: string;
 }
 

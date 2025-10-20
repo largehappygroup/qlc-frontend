@@ -12,12 +12,13 @@ import { useDisclosure } from "@mantine/hooks";
 
 import { useAuth } from "../hooks/AuthContext";
 import { NavbarNested } from "./navbar/NavbarNested";
-interface LayoutProps {
-    children?: React.ReactNode;
+import { PropsWithChildren } from "react";
+
+interface LayoutProps extends PropsWithChildren {
     title?: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, title }: LayoutProps) => {
+const Layout: React.FC<LayoutProps> = ({ children, title }) => {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 

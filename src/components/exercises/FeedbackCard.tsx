@@ -1,14 +1,12 @@
-import { Flex, Text, Badge, Button, Card } from "@mantine/core";
-import FeedbackSliders from "./FeedbackSliders";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../hooks/AuthContext";
 
-interface FeedbackCardProps {
-    chapterId?: string;
-}
+import { Flex, Text, Badge, Button, Card } from "@mantine/core";
+import FeedbackSliders from "./FeedbackSliders";
+import { WithChapterId } from "../../types/Chapter";
 
-const FeedbackCard: React.FC<FeedbackCardProps> = ({ chapterId }) => {
+const FeedbackCard: React.FC<WithChapterId> = ({ chapterId }) => {
     const [exists, setExists] = useState(false);
     const {user} = useAuth();
     useEffect(() => {

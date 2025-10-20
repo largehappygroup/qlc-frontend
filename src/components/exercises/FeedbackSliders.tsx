@@ -11,15 +11,16 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import axios from "axios";
-import { useState } from "react";
+import { PropsWithChildren, useState } from "react";
 import { useAuth } from "../../hooks/AuthContext";
+import { WithChapterId } from "../../types/Chapter";
 
-interface FeedbackProps {
-    children?: React.ReactNode;
-    chapterId?: string;
-}
+type FeedbackSlidersProps = PropsWithChildren<WithChapterId>;
 
-const FeedbackSliders: React.FC<FeedbackProps> = ({ children, chapterId }) => {
+const FeedbackSliders: React.FC<FeedbackSlidersProps> = ({
+    children,
+    chapterId,
+}) => {
     const [opened, { open, close }] = useDisclosure(false);
     const [easeOfUnderstanding, setEaseOfUnderstanding] = useState(3);
     const [reasonableQuestions, setReasonableQuestions] = useState(3);

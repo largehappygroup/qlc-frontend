@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Chapter } from "../types/Chapter";
-import ChapterExercises from "../components/exercises/ChapterExercises";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import Layout from "../components/Layout";
 
-const ChapterProfile: React.FC = () => {
+import Layout from "../components/Layout";
+import ChapterDetailsList from "../components/exercises/ChapterDetailsList";
+
+import { Chapter } from "../types/Chapter";
+
+const ChapterPage: React.FC = () => {
     const { order } = useParams();
     const [chapter, setChapter] = useState<Chapter>();
     const navigate = useNavigate();
@@ -36,9 +38,9 @@ const ChapterProfile: React.FC = () => {
 
     return (
         <Layout title={`Chapter ${order}`}>
-            <ChapterExercises chapter={chapter} />
+            <ChapterDetailsList chapter={chapter} />
         </Layout>
     );
 };
 
-export default ChapterProfile;
+export default ChapterPage;

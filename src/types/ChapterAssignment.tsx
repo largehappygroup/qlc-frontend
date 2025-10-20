@@ -7,3 +7,7 @@ export interface ChapterAssignment {
     startDate: Date;
     dueDate: Date;
 }
+
+export interface WithAssignment {
+    assignment?: ChapterAssignment;
+}

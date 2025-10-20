@@ -1,3 +1,9 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useListState } from "@mantine/hooks";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import cx from "clsx";
+
 import {
     Accordion,
     ActionIcon,
@@ -11,10 +17,6 @@ import {
     Title,
     Tooltip,
 } from "@mantine/core";
-import Layout from "../components/Layout";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import cx from "clsx";
-import ChapterModal from "../components/topics/ChapterModal";
 import {
     IconArrowsUpDown,
     IconDeviceFloppy,
@@ -23,17 +25,19 @@ import {
     IconPlus,
     IconTrash,
 } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
-import { Chapter } from "../types/Chapter";
-import axios from "axios";
-import { useListState } from "@mantine/hooks";
-import classes from "../styles/DndList.module.css";
+
+import Layout from "../components/Layout";
 import ConfirmPopup from "../components/ConfirmPopup";
+import ChapterModal from "../components/topics/ChapterModal";
+
+import { Chapter } from "../types/Chapter";
+import classes from "../styles/DndList.module.css";
 
 const Chapters: React.FC = () => {
     const [state, handlers] = useListState<Chapter>([]);
     const [reorderMode, setReorderMode] = useState<boolean>(false);
     const [savedChapter, setSavedChapter] = useState<boolean>(false);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -52,6 +56,10 @@ const Chapters: React.FC = () => {
         fetchData();
     }, [savedChapter]);
 
+    /**
+     * deletes a chapter by id
+     * @param id - the uuid of the chapter to delete
+     */
     const deleteChapter = async (id: string | undefined) => {
         if (id) {
             try {
@@ -65,6 +73,11 @@ const Chapters: React.FC = () => {
         }
     };
 
+    /**
+     * Handles the end of a drag event to reorder chapters
+     * @param param0 - contains source and destination information
+     * @returns void
+     */
     const handleDragEnd = ({ destination, source }: any) => {
         if (!destination) return; // If dropped outside a droppable area, do nothing
 
@@ -82,6 +95,9 @@ const Chapters: React.FC = () => {
         handlers.setState(reorderedChapters);
     };
 
+    /**
+     * Saves the new order of chapters to the backend
+     */
     const handleSaveOrder = async () => {
         try {
             await axios.put(`${import.meta.env.VITE_BACKEND_URL}/chapters`, {
@@ -168,19 +184,18 @@ const Chapters: React.FC = () => {
                                         onUpdate={() =>
                                             setSavedChapter(!savedChapter)
                                         }
-                                        target={
-                                            <ActionIcon
-                                                variant="subtle"
-                                                color="gray"
-                                            >
-                                                <IconPencil
-                                                    size={16}
-                                                    stroke={1.5}
-                                                />
-                                            </ActionIcon>
-                                        }
                                         chapter={item}
-                                    />
+                                    >
+                                        <ActionIcon
+                                            variant="subtle"
+                                            color="gray"
+                                        >
+                                            <IconPencil
+                                                size={16}
+                                                stroke={1.5}
+                                            />
+                                        </ActionIcon>
+                                    </ChapterModal>
                                     <ConfirmPopup
                                         action={() => deleteChapter(item._id)}
                                         prompt="Are you sure you want to delete this chapter?"
@@ -267,16 +282,13 @@ const Chapters: React.FC = () => {
                 </DragDropContext>
             </Flex>
             <Affix position={{ bottom: 50, right: 25 }}>
-                <ChapterModal
-                    onUpdate={() => window.location.reload()}
-                    target={
-                        <Tooltip label="Add a new chapter" position="right">
-                            <ActionIcon size="xl" radius="xl" variant="filled">
-                                <IconPlus size={20} stroke={2} />
-                            </ActionIcon>
-                        </Tooltip>
-                    }
-                />
+                <ChapterModal onUpdate={() => window.location.reload()}>
+                    <Tooltip label="Add a new chapter" position="right">
+                        <ActionIcon size="xl" radius="xl" variant="filled">
+                            <IconPlus size={20} stroke={2} />
+                        </ActionIcon>
+                    </Tooltip>
+                </ChapterModal>
             </Affix>
         </Layout>
     );

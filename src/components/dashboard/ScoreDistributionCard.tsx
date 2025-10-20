@@ -2,11 +2,9 @@ import { BarChart } from "@mantine/charts";
 import { Card, Space, Title } from "@mantine/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { PropsWithUserId } from "../../hooks/AuthContext";
+import { WithUserId } from "../../hooks/AuthContext";
 
-const ScoreDistributionCard: React.FC<PropsWithUserId> = ({
-    userId,
-}: PropsWithUserId) => {
+const ScoreDistributionCard: React.FC<WithUserId> = ({ userId }) => {
     const [averageScoreDistribution, setAverageScoreDistribution] = useState(
         []
     );
@@ -24,36 +22,37 @@ const ScoreDistributionCard: React.FC<PropsWithUserId> = ({
     }, []);
     return (
         <>
-            {averageScoreDistribution && averageScoreDistribution.length > 0 && (
-                <Card shadow="sm" withBorder>
-                    <Title order={1} size="sm" c="dimmed">
-                        Average Score Distribution
-                    </Title>
-                    <Space h="md" />
-                    <BarChart
-                        h={300}
-                        data={averageScoreDistribution}
-                        xAxisLabel="Average Score as a Percentage"
-                        yAxisLabel={
-                            userId
-                                ? "Number of Exercises"
-                                : "Number of Students"
-                        }
-                        yAxisProps={{allowDecimals: false}}
-                        barProps={{barSize: 50}}
-                        withBarValueLabel
-                        dataKey="percentage"
-                        series={[
-                            {
-                                name: "data",
-                            },
-                        ]}
-                        tickLine="y"
-                        gridAxis="none"
-                        withTooltip={false}
-                    />
-                </Card>
-            )}
+            {averageScoreDistribution &&
+                averageScoreDistribution.length > 0 && (
+                    <Card shadow="sm" withBorder>
+                        <Title order={1} size="sm" c="dimmed">
+                            Average Score Distribution
+                        </Title>
+                        <Space h="md" />
+                        <BarChart
+                            h={300}
+                            data={averageScoreDistribution}
+                            xAxisLabel="Average Score as a Percentage"
+                            yAxisLabel={
+                                userId
+                                    ? "Number of Exercises"
+                                    : "Number of Students"
+                            }
+                            yAxisProps={{ allowDecimals: false }}
+                            barProps={{ barSize: 50 }}
+                            withBarValueLabel
+                            dataKey="percentage"
+                            series={[
+                                {
+                                    name: "data",
+                                },
+                            ]}
+                            tickLine="y"
+                            gridAxis="none"
+                            withTooltip={false}
+                        />
+                    </Card>
+                )}
         </>
     );
 };

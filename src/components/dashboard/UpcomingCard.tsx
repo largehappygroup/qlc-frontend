@@ -1,5 +1,5 @@
 import { Card, Flex, Text } from "@mantine/core";
-import ChapterExercises from "../exercises/ChapterExercises";
+import ChapterDetailsList from "../exercises/ChapterDetailsList";
 
 interface UpcomingCardProps {
     status?: string;
@@ -14,7 +14,7 @@ const UpcomingCard: React.FC<UpcomingCardProps> = ({}: UpcomingCardProps) => {
                     To Do This Week
                 </Text>
             </Flex>
-            <ChapterExercises date={new Date()} />
+            <ChapterDetailsList date={new Date()} />
         </Card>
     );
 };

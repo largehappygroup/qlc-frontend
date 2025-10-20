@@ -14,17 +14,14 @@ import {
 import MultipleChoiceQuestion from "../questions/MultipleChoiceQuestion";
 
 import { useDisclosure } from "@mantine/hooks";
-import { useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import axios from "axios";
-import { Exercise } from "../../types/Exercise";
+import { Exercise, WithExerciseAndSetExercise } from "../../types/Exercise";
 import Explanation from "../questions/Explanation";
 import Ratings from "../questions/Ratings";
 
-interface QuizProps {
-    children?: React.ReactNode;
-    exercise?: Exercise;
+interface QuizProps extends PropsWithChildren<WithExerciseAndSetExercise> {
     studentCode?: string;
-    setExercise?: (exercise: Exercise) => void;
 }
 
 const Quiz: React.FC<QuizProps> = ({
