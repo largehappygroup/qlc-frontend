@@ -31,7 +31,7 @@ const FeedbackSliders: React.FC<FeedbackProps> = ({ children, chapterId }) => {
         try {
             await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/feedback?userId=${
-                    user?._id
+                    user?.vuNetId
                 }&chapterId=${chapterId}`,
                 {
                     easeOfUnderstanding,

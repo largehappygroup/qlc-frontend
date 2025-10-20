@@ -161,7 +161,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
             if (chapter) {
                 await axios.put(
                     `${import.meta.env.VITE_BACKEND_URL}/chapters/${
-                        chapter._id
+                        chapter.uuid
                     }`,
                     {
                         ...values,

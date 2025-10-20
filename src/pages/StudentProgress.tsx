@@ -11,13 +11,13 @@ const StudentProgress: React.FC = () => {
         <Layout title="Progress">
             <Grid>
                 <Grid.Col span={6}>
-                    <AverageScoreCard userId={user?._id} />
+                    <AverageScoreCard userId={user?.vuNetId} />
                 </Grid.Col>
                 <Grid.Col span={6}>
-                    <AverageTimeSpentCard userId={user?._id} />
+                    <AverageTimeSpentCard userId={user?.vuNetId} />
                 </Grid.Col>
                 <Grid.Col>
-                    <ScoreDistributionCard userId={user?._id} />
+                    <ScoreDistributionCard userId={user?.vuNetId} />
                 </Grid.Col>
             </Grid>
         </Layout>

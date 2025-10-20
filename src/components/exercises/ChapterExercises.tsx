@@ -23,9 +23,9 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
         const fetchData = async () => {
             let query = "";
             if (chapter && date) {
-                query += `?chapterId=${chapter._id}&date=${date}`;
+                query += `?chapterId=${chapter.uuid}&date=${date}`;
             } else if (chapter) {
-                query += `?chapterId=${chapter._id}`;
+                query += `?chapterId=${chapter.uuid}`;
             } else if (date) {
                 query += `?date=${date}`;
             }
@@ -50,7 +50,7 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
                     <Text>No Assignments Found.</Text>
                 ) : (
                     chapter?.requestFeedback && (
-                        <FeedbackCard chapterId={chapter?._id} />
+                        <FeedbackCard chapterId={chapter?.uuid} />
                     )
                 )}
                 {items}

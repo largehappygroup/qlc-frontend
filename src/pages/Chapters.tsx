@@ -98,9 +98,9 @@ const Chapters: React.FC = () => {
 
     const items = state.map((item, index) => (
         <Draggable
-            key={item._id}
+            key={item.uuid}
             index={index}
-            draggableId={item._id ? item._id : item.title}
+            draggableId={item.uuid ? item.uuid : item.title}
             isDragDisabled={!reorderMode}
         >
             {(provided, snapshot) => (
@@ -182,7 +182,7 @@ const Chapters: React.FC = () => {
                                         chapter={item}
                                     />
                                     <ConfirmPopup
-                                        action={() => deleteChapter(item._id)}
+                                        action={() => deleteChapter(item.uuid)}
                                         prompt="Are you sure you want to delete this chapter?"
                                     >
                                         <ActionIcon

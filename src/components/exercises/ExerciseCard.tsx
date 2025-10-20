@@ -30,8 +30,8 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                     studentCode: string;
                 }>(
                     `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
-                        user?._id
-                    }&assignmentId=${assignment._id}`
+                        user?.vuNetId
+                    }&assignmentId=${assignment.uuid}`
                 );
                 setExercise(response.data.exercise);
                 setStudentCode(response.data.studentCode);

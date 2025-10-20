@@ -66,10 +66,10 @@ const Quiz: React.FC<QuizProps> = ({
     }, [timePaused, timeStopped]);
 
     const submitRatings = async () => {
-        const questionId = exercise?.questions[questionIndex]._id;
+        const questionId = exercise?.questions[questionIndex].uuid;
         await axios.put(
             `${import.meta.env.VITE_BACKEND_URL}/exercises/${
-                exercise?._id
+                exercise?.uuid
             }/ratings`,
             { questionId, ratings }
         );
@@ -82,10 +82,10 @@ const Quiz: React.FC<QuizProps> = ({
     const checkAnswer = async () => {
         if (selectedAnswer !== "") {
             setTimePaused(true);
-            const questionId = exercise?.questions[questionIndex]._id;
+            const questionId = exercise?.questions[questionIndex].uuid;
             const response = await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/exercises/${
-                    exercise?._id
+                    exercise?.uuid
                 }/check?questionId=${questionId}`,
                 { userAnswer: selectedAnswer, timeSpent }
             );
@@ -118,7 +118,7 @@ const Quiz: React.FC<QuizProps> = ({
             if (setExercise) {
                 const refreshExercise = await axios.get<Exercise>(
                     `${import.meta.env.VITE_BACKEND_URL}/exercises/${
-                        exercise?._id
+                        exercise?.uuid
                     }`
                 );
                 setExercise(refreshExercise.data);

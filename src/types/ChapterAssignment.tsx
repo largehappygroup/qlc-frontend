@@ -1,5 +1,5 @@
 export interface ChapterAssignment {
-    _id?: string;
+    uuid: string;
     chapterId?: string;
     title: string;
     identifier: string;

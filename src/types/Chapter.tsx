@@ -1,5 +1,5 @@
 export interface Chapter {
-    _id?: string;
+    uuid: string;
     order?: number;
     assignmentIds?: string[];
     learningObjectives: string[];

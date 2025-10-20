@@ -14,7 +14,7 @@ const ExerciseCsv: React.FC<ExerciseCsvProps> = ({
         mode: "uncontrolled",
         initialValues: {
             fields: [
-                "_id",
+                "uuid",
                 "userId",
                 "authorId",
                 "assignmentId",
@@ -73,7 +73,7 @@ const ExerciseCsv: React.FC<ExerciseCsvProps> = ({
                             label: "Assignment Database ID",
                         },
                         { value: "questions", label: "Questions" },
-                        { value: "_id", label: "Database ID" },
+                        { value: "uuid", label: "Database ID" },
                         { value: "status", label: "Status" },
                         {
                             value: "completedTimestamp",
