@@ -1,11 +1,33 @@
 import { Flex, Text, Badge, Button, Card } from "@mantine/core";
 import FeedbackSliders from "./FeedbackSliders";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface FeedbackCardProps {
     chapterId?: string;
 }
 
 const FeedbackCard: React.FC<FeedbackCardProps> = ({ chapterId }) => {
+    const [exists, setExists] = useState(false);
+    useEffect(() => {
+        const fetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_BACKEND_URL}/feedback/exists`,
+                { params: { chapterId } }
+            );
+            setExists(response.data.exists);
+        } catch (error) {
+            console.error("Error checking feedback status:", error);
+        }
+    }
+    fetchData();
+    }, [chapterId]);
+
+    if (exists) {
+        return null;
+    }
+    
     return (
         <Card bg="cyan" c="white">
             <Flex
