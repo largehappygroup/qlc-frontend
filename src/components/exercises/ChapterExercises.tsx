@@ -48,7 +48,7 @@ const ChapterExercises: React.FC<ChapterExercisesProps> = ({
                 {items?.length === 0 ? (
                     <Text>No Assignments Found.</Text>
                 ) : (
-                    <FeedbackCard />
+                    <FeedbackCard chapterId={chapterId} />
                 )}
                 {items}
             </Skeleton>

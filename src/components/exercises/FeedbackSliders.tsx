@@ -10,34 +10,68 @@ import {
     Textarea,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-
+import axios from "axios";
+import { useState } from "react";
+import { useAuth } from "../../hooks/AuthContext";
 
 interface FeedbackProps {
     children?: React.ReactNode;
+    chapterId?: string;
 }
 
-const questions = [
-    {
-        id: "easeOfUnderstanding",
-        text: "The exercises are easy to understand.",
-    },
-    {
-        id: "reasonableQuestions",
-        text: "The exercises are asking reasonable questions.",
-    },
-    {
-        id: "helpsUnderstandCode",
-        text: "The exercises are helping me better understand the programming assignment code they are based on.",
-    },
-    {
-        id: "helpsUnderstandJava",
-        text: "The exercises are overall helping me better understand the Java programming language.",
-    },
-];
-
-const FeedbackSliders: React.FC<FeedbackProps> = ({ children }) => {
+const FeedbackSliders: React.FC<FeedbackProps> = ({ children, chapterId }) => {
     const [opened, { open, close }] = useDisclosure(false);
-
+    const [easeOfUnderstanding, setEaseOfUnderstanding] = useState(3);
+    const [reasonableQuestions, setReasonableQuestions] = useState(3);
+    const [helpsUnderstandCode, setHelpsUnderstandCode] = useState(3);
+    const [helpsUnderstandJava, setHelpsUnderstandJava] = useState(3);
+    const [comments, setComments] = useState("");
+    const { user } = useAuth();
+    const handleSubmit = async () => {
+        try {
+            await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/feedback?userId=${
+                    user?._id
+                }&chapterId=${chapterId}`,
+                {
+                    easeOfUnderstanding,
+                    reasonableQuestions,
+                    helpsUnderstandCode,
+                    helpsUnderstandJava,
+                    comments,
+                }
+            );
+        } catch (error) {
+            console.error("Error submitting feedback:", error);
+        }
+        close();
+    };
+    const questions = [
+        {
+            id: "easeOfUnderstanding",
+            text: "The exercises are easy to understand.",
+            value: easeOfUnderstanding,
+            onChange: setEaseOfUnderstanding,
+        },
+        {
+            id: "reasonableQuestions",
+            text: "The exercises are asking reasonable questions.",
+            value: reasonableQuestions,
+            onChange: setReasonableQuestions,
+        },
+        {
+            id: "helpsUnderstandCode",
+            text: "The exercises are helping me better understand the programming assignment code they are based on.",
+            value: helpsUnderstandCode,
+            onChange: setHelpsUnderstandCode,
+        },
+        {
+            id: "helpsUnderstandJava",
+            text: "The exercises are overall helping me better understand the Java programming language.",
+            value: helpsUnderstandJava,
+            onChange: setHelpsUnderstandJava,
+        },
+    ];
     return (
         <>
             <Modal
@@ -49,7 +83,7 @@ const FeedbackSliders: React.FC<FeedbackProps> = ({ children }) => {
                 <Container>
                     <Flex direction="column" gap="xl">
                         {questions.map((question) => (
-                            <Flex direction="column" gap="xl" key={question.id}>
+                            <Flex direction="column" gap="lg" key={question.id}>
                                 <InputLabel required>
                                     {question.text}
                                 </InputLabel>
@@ -57,6 +91,8 @@ const FeedbackSliders: React.FC<FeedbackProps> = ({ children }) => {
                                     min={1}
                                     max={5}
                                     step={1}
+                                    value={question.value}
+                                    onChange={question.onChange}
                                     showLabelOnHover={false}
                                     defaultValue={3}
                                     marks={[
@@ -78,14 +114,21 @@ const FeedbackSliders: React.FC<FeedbackProps> = ({ children }) => {
                                 Please give any additional feedback you have
                                 about the exercises.
                             </InputLabel>
-                            <Textarea placeholder="Your feedback" minRows={6} />
+                            <Textarea
+                                placeholder="Your feedback"
+                                minRows={6}
+                                maxRows={6}
+                                value={comments}
+                                onChange={(event) =>
+                                    setComments(event.currentTarget.value)
+                                }
+                            />
                         </Flex>
                         <Flex justify="flex-end">
-                            <Button variant="outline" onClick={close}>
+                            <Button variant="outline" onClick={handleSubmit}>
                                 Submit Feedback
                             </Button>
                         </Flex>
-
                     </Flex>
                 </Container>
             </Modal>
