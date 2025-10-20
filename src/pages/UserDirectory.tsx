@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Text, Table, Group, Flex, Skeleton, Space } from "@mantine/core";
 
 import Layout from "../components/Layout";
-import { User } from "../hooks/AuthContext";
-import Search from "../components/performance/Search";
+import { User } from "../types/User";
+import Search from "../components/progress/Search";
 import axios from "axios";
-import DownloadModal from "../components/performance/DownloadModal";
-import UploadModal from "../components/performance/UploadModal";
+import DownloadModal from "../components/progress/DownloadModal";
+import UploadModal from "../components/progress/UploadModal";
 
 const UserDirectory: React.FC = () => {
     const [users, setUsers] = useState<User[]>();

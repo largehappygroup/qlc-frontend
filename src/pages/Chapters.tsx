@@ -28,7 +28,7 @@ import {
 
 import Layout from "../components/Layout";
 import ConfirmPopup from "../components/ConfirmPopup";
-import ChapterModal from "../components/topics/ChapterModal";
+import ChapterModal from "../components/chapters/ChapterModal";
 
 import { Chapter } from "../types/Chapter";
 import classes from "../styles/DndList.module.css";

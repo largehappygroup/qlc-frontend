@@ -8,6 +8,7 @@ import {
     ThemeIcon,
     UnstyledButton,
 } from "@mantine/core";
+
 import classes from "./NavbarLinksGroup.module.css";
 
 interface LinksGroupProps {

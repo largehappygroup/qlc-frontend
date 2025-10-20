@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { Flex, Text, Table, Space, Group } from "@mantine/core";
 
-import { User } from "../hooks/AuthContext";
+import { User } from "../types/User";
 import axios from "axios";
-import EditStudentModal from "../components/performance/EditStudentModal";
-import Search from "../components/performance/Search";
-import DownloadModal from "../components/performance/DownloadModal";
-import UploadModal from "../components/performance/UploadModal";
+import EditStudentModal from "../components/progress/EditStudentModal";
+import Search from "../components/progress/Search";
+import DownloadModal from "../components/progress/DownloadModal";
+import UploadModal from "../components/progress/UploadModal";
 
 const FacultyProgress: React.FC = () => {
     const [students, setStudents] = useState<User[]>();
