@@ -1,3 +1,5 @@
+import { PropsWithChildren, useState } from "react";
+
 import {
     Box,
     Button,
@@ -11,7 +13,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import axios from "axios";
-import { PropsWithChildren, useState } from "react";
+
 import { useAuth } from "../../hooks/AuthContext";
 import { WithChapterId } from "../../types/Chapter";
 
