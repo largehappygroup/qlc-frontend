@@ -12,7 +12,7 @@ const ScoreDistributionCard: React.FC<WithUserId> = ({ userId }) => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/users/distribution${
+                `${import.meta.env.VITE_BACKEND_URL}/exercises/distribution${
                     userId ? "?userId=" + userId : ""
                 }`
             );

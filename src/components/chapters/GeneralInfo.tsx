@@ -7,6 +7,7 @@ import {
     Space,
     Flex,
     Checkbox,
+    Input,
 } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { Chapter } from "../../types/Chapter";
@@ -26,7 +27,7 @@ const GeneralInfo: React.FC<GeneralInfoProps> = ({
             </Title>
             <Text c="dimmed">Basic details about the chapter module</Text>
             <Space h="md" />
-           
+
             <Flex justify="space-between" gap="md">
                 <TextInput
                     flex="1"
@@ -36,20 +37,23 @@ const GeneralInfo: React.FC<GeneralInfoProps> = ({
                     key={form.key("title")}
                     {...form.getInputProps("title")}
                 />
-                <Flex flex="1" gap="md">
-                    <DateInput
-                        withAsterisk
-                        flex="1"
-                        label="Release Date"
-                        key={form.key("releaseDate")}
-                        {...form.getInputProps("releaseDate")}
+                <DateInput
+                    withAsterisk
+                    flex="1"
+                    label="Release Date"
+                    key={form.key("releaseDate")}
+                    {...form.getInputProps("releaseDate")}
+                />
+
+                <Flex direction="column" gap="md">
+                    <Input.Label>Request Feedback</Input.Label>
+                    <Checkbox
+                        key={form.key("requestFeedback")}
+                        {...form.getInputProps("requestFeedback", {
+                            type: "checkbox",
+                        })}
                     />
                 </Flex>
-                <Checkbox
-                    label="Request Feedback"
-                    key={form.key("requestFeedback")}
-                    {...form.getInputProps("requestFeedback", { type: "checkbox" })}
-                />
             </Flex>
 
             <Space h="md" />
