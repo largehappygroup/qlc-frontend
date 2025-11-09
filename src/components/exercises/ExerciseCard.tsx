@@ -20,7 +20,6 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     assignment,
 }: ExerciseCardProps) => {
     const [exercise, setExercise] = useState<Exercise>();
-    const [studentCode, setStudentCode] = useState<string>();
     const { user } = useAuth();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -30,14 +29,12 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
             try {
                 const response = await axios.post<{
                     exercise: Exercise;
-                    studentCode: string;
                 }>(
                     `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
                         user?.vuNetId
                     }&assignmentId=${assignment.uuid}`
                 );
                 setExercise(response.data.exercise);
-                setStudentCode(response.data.studentCode);
             } catch (error) {
                 console.error("Error fetching exercise:", error);
             }
@@ -92,7 +89,6 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                             </Summary>
                         ) : (
                             <Quiz
-                                studentCode={studentCode}
                                 exercise={exercise}
                                 setExercise={setExercise}
                             >

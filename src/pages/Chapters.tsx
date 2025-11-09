@@ -5,20 +5,19 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import cx from "clsx";
 
 import {
-    Accordion,
     ActionIcon,
     Affix,
     Badge,
     Button,
     Card,
     Flex,
-    List,
     Text,
     Title,
     Tooltip,
 } from "@mantine/core";
 import {
     IconArrowsUpDown,
+    IconClock,
     IconDeviceFloppy,
     IconGripVertical,
     IconPencil,
@@ -55,6 +54,18 @@ const Chapters: React.FC = () => {
         };
         fetchData();
     }, [savedChapter]);
+
+    const generateExercises = async (chapterId: string | undefined) => {
+        try {
+            await axios.post(
+                `${
+                    import.meta.env.VITE_BACKEND_URL
+                }/exercises/batch?chapterId=${chapterId}`
+            );
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     /**
      * deletes a chapter by id
@@ -180,6 +191,15 @@ const Chapters: React.FC = () => {
                                     </Badge>
                                 </Flex>
                                 <Flex justify="end" flex="1" gap="xs" py="xs">
+                                    <ActionIcon
+                                        variant="subtle"
+                                        color="gray"
+                                        onClick={() =>
+                                            generateExercises(item.uuid)
+                                        }
+                                    >
+                                        <IconClock size={16} stroke={1.5} />
+                                    </ActionIcon>
                                     <ChapterModal
                                         onUpdate={() =>
                                             setSavedChapter(!savedChapter)
@@ -209,30 +229,6 @@ const Chapters: React.FC = () => {
                                     </ConfirmPopup>
                                 </Flex>
                             </Flex>
-
-                            <Accordion variant="filled">
-                                <Accordion.Item
-                                    value="learningObjectives"
-                                    key="learningObjectives"
-                                >
-                                    <Accordion.Control>
-                                        <Text size="sm">
-                                            Learning Objectives
-                                        </Text>
-                                    </Accordion.Control>
-                                    <Accordion.Panel>
-                                        <List size="sm">
-                                            {item.learningObjectives.map(
-                                                (objective) => (
-                                                    <List.Item>
-                                                        {objective}
-                                                    </List.Item>
-                                                )
-                                            )}
-                                        </List>
-                                    </Accordion.Panel>
-                                </Accordion.Item>
-                            </Accordion>
                         </Flex>
                     </Flex>
                 </Card>

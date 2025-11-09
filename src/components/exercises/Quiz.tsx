@@ -20,16 +20,11 @@ import { Exercise, WithExerciseAndSetExercise } from "../../types/Exercise";
 import Explanation from "../questions/Explanation";
 import Ratings from "../questions/Ratings";
 
-interface QuizProps extends PropsWithChildren<WithExerciseAndSetExercise> {
-    studentCode?: string;
-}
-
-const Quiz: React.FC<QuizProps> = ({
+const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
     children,
     exercise,
-    studentCode,
     setExercise,
-}: QuizProps) => {
+}: PropsWithChildren<WithExerciseAndSetExercise>) => {
     const [opened, { open, close }] = useDisclosure(false);
     const [questionIndex, setQuestionIndex] = useState(
         exercise ? exercise.completedQuestions : 0
@@ -232,7 +227,7 @@ const Quiz: React.FC<QuizProps> = ({
                                 </Flex>
                             </Tabs.Panel>
                             <Tabs.Panel value="studentCode" pt="xs">
-                                <Code block>{studentCode}</Code>
+                                <Code block>{exercise?.studentCode}</Code>
                             </Tabs.Panel>
                         </Tabs>
                     </Flex>
