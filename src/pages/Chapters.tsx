@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
@@ -36,6 +36,8 @@ const Chapters: React.FC = () => {
     const [state, handlers] = useListState<Chapter>([]);
     const [reorderMode, setReorderMode] = useState<boolean>(false);
     const [savedChapter, setSavedChapter] = useState<boolean>(false);
+    const [jobStatuses, setJobStatuses] = useState<Record<string, { jobId?: string; progress?: number; state?: string; statusUrl?: string }>>({});
+    const pollingRefs = useRef<Record<string, number>>({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,15 +57,77 @@ const Chapters: React.FC = () => {
         fetchData();
     }, [savedChapter]);
 
+    // cleanup polling on unmount
+    useEffect(() => {
+        return () => {
+            Object.values(pollingRefs.current).forEach((id) => window.clearInterval(id));
+            pollingRefs.current = {};
+        };
+    }, []);
+
     const generateExercises = async (chapterId: string | undefined) => {
+        if (!chapterId) return;
+
+        // prevent duplicate requests for the same chapter while a job is active
+        const existing = jobStatuses[chapterId];
+        if (existing && existing.state !== "completed" && existing.state !== "failed") {
+            return;
+        }
+
         try {
-            await axios.post(
-                `${
-                    import.meta.env.VITE_BACKEND_URL
-                }/exercises/batch?chapterId=${chapterId}`
+            const resp = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/exercises/batch?chapterId=${chapterId}`
             );
+
+            const { jobId, statusUrl } = resp.data;
+            const fullStatusUrl = statusUrl.startsWith("http")
+                ? statusUrl
+                : `${import.meta.env.VITE_BACKEND_URL}${statusUrl}`;
+
+            // initialize job status
+            setJobStatuses((s) => ({
+                ...s,
+                [chapterId]: { jobId, progress: 0, state: "waiting", statusUrl: fullStatusUrl },
+            }));
+
+            // start polling
+            const poll = async () => {
+                try {
+                    const r = await axios.get(fullStatusUrl);
+                    const { state, progress } = r.data;
+                    setJobStatuses((s) => ({
+                        ...s,
+                        [chapterId]: {
+                            ...(s[chapterId] || {}),
+                            jobId,
+                            state,
+                            progress: typeof progress === "number" ? progress : s[chapterId]?.progress ?? 0,
+                        },
+                    }));
+
+                    if (state === "completed" || state === "failed") {
+                        const id = pollingRefs.current[chapterId];
+                        if (id) {
+                            window.clearInterval(id);
+                            delete pollingRefs.current[chapterId];
+                        }
+                    }
+                } catch (err) {
+                    console.error("Polling job status error:", err);
+                    // stop polling on repeated errors could be added here
+                }
+            };
+
+            // poll immediately then set interval
+            await poll();
+            const intervalId = window.setInterval(poll, 3000);
+            pollingRefs.current[chapterId] = intervalId;
         } catch (err) {
             console.error(err);
+            setJobStatuses((s) => ({
+                ...s,
+                [chapterId]: { ...(s[chapterId] || {}), state: "failed" },
+            }));
         }
     };
 
@@ -123,118 +187,135 @@ const Chapters: React.FC = () => {
         }
     };
 
-    const items = state.map((item, index) => (
-        <Draggable
-            key={item.uuid}
-            index={index}
-            draggableId={item.uuid ? item.uuid : item.title}
-            isDragDisabled={!reorderMode}
-        >
-            {(provided, snapshot) => (
-                <Card
-                    withBorder
-                    shadow="sm"
-                    className={cx(classes.item, {
-                        [classes.itemDragging]: snapshot.isDragging,
-                    })}
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                >
-                    <Flex gap="sm" justify="space-between">
-                        {reorderMode && (
-                            <Flex
-                                align="center"
-                                {...provided.dragHandleProps}
-                                className={classes.dragHandle}
-                            >
-                                <ActionIcon variant="transparent">
-                                    <IconGripVertical size={35} stroke={1.5} />
-                                </ActionIcon>
-                            </Flex>
-                        )}
-                        <Flex direction="column" flex="1" gap="xs">
-                            <Flex
-                                justify="space-between"
-                                gap="xs"
-                                align={{ base: "start", md: "center" }}
-                            >
+    const items = state.map((item, index) => {
+            const status = item.uuid ? jobStatuses[item.uuid] : undefined;
+            return (
+            <Draggable
+                key={item.uuid}
+                index={index}
+                draggableId={item.uuid ? item.uuid : item.title}
+                isDragDisabled={!reorderMode}
+            >
+                {(provided, snapshot) => (
+                    <Card
+                        withBorder
+                        shadow="sm"
+                        className={cx(classes.item, {
+                            [classes.itemDragging]: snapshot.isDragging,
+                        })}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                    >
+                        <Flex gap="sm" justify="space-between">
+                            {reorderMode && (
                                 <Flex
-                                    gap={{ base: "xs", md: "sm" }}
-                                    direction={{ base: "column", md: "row" }}
-                                    align={{ base: "start", md: "center" }}
-                                    py="xs"
-                                    px="sm"
+                                    align="center"
+                                    {...provided.dragHandleProps}
+                                    className={classes.dragHandle}
                                 >
-                                    <Title
-                                        size="lg"
-                                        order={3}
-                                        style={{
-                                            textTransform: "capitalize",
-                                            wordBreak: "break-all",
-                                            hyphens: "auto",
-                                        }}
-                                    >
-                                        Chapter {item.order}: {item.title}
-                                    </Title>
-
-                                    <Badge>
-                                        {item.assignmentIds
-                                            ? `${
-                                                  item.assignmentIds.length
-                                              } Assignment${
-                                                  item.assignmentIds.length ===
-                                                  1
-                                                      ? ""
-                                                      : "s"
-                                              }`
-                                            : "0 Assignments"}
-                                    </Badge>
-                                </Flex>
-                                <Flex justify="end" flex="1" gap="xs" py="xs">
-                                    <ActionIcon
-                                        variant="subtle"
-                                        color="gray"
-                                        onClick={() =>
-                                            generateExercises(item.uuid)
-                                        }
-                                    >
-                                        <IconClock size={16} stroke={1.5} />
+                                    <ActionIcon variant="transparent">
+                                        <IconGripVertical size={35} stroke={1.5} />
                                     </ActionIcon>
-                                    <ChapterModal
-                                        onUpdate={() =>
-                                            setSavedChapter(!savedChapter)
-                                        }
-                                        chapter={item}
+                                </Flex>
+                            )}
+                            <Flex direction="column" flex="1" gap="xs">
+                                <Flex
+                                    justify="space-between"
+                                    gap="xs"
+                                    align={{ base: "start", md: "center" }}
+                                >
+                                    <Flex
+                                        gap={{ base: "xs", md: "sm" }}
+                                        direction={{ base: "column", md: "row" }}
+                                        align={{ base: "start", md: "center" }}
+                                        py="xs"
+                                        px="sm"
                                     >
-                                        <ActionIcon
-                                            variant="subtle"
-                                            color="gray"
+                                        <Title
+                                            size="lg"
+                                            order={3}
+                                            style={{
+                                                textTransform: "capitalize",
+                                                wordBreak: "break-all",
+                                                hyphens: "auto",
+                                            }}
                                         >
-                                            <IconPencil
-                                                size={16}
-                                                stroke={1.5}
-                                            />
-                                        </ActionIcon>
-                                    </ChapterModal>
-                                    <ConfirmPopup
-                                        action={() => deleteChapter(item.uuid)}
-                                        prompt="Are you sure you want to delete this chapter?"
-                                    >
-                                        <ActionIcon
-                                            color="red"
-                                            variant="subtle"
+                                            Chapter {item.order}: {item.title}
+                                        </Title>
+    
+                                        <Badge>
+                                            {item.assignmentIds
+                                                ? `${
+                                                      item.assignmentIds.length
+                                                  } Assignment${
+                                                      item.assignmentIds.length ===
+                                                      1
+                                                          ? ""
+                                                          : "s"
+                                                  }`
+                                                : "0 Assignments"}
+                                        </Badge>
+                                    </Flex>
+                                    <Flex justify="end" flex="1" gap="xs" py="xs">
+                                            <Flex align="center" gap="xs">
+                                                <ActionIcon
+                                                    variant="subtle"
+                                                    color="gray"
+                                                    onClick={() => generateExercises(item.uuid)}
+                                                    disabled={
+                                                        status &&
+                                                        status.state !== "completed" &&
+                                                        status.state !== "failed"
+                                                    }
+                                                >
+                                                    <IconClock size={16} stroke={1.5} />
+                                                </ActionIcon>
+    
+                                                {status && (
+                                                    <Badge variant="outline">
+                                                        {status.state === "completed"
+                                                            ? "Done"
+                                                            : status.state === "failed"
+                                                            ? "Failed"
+                                                            : `${status.progress ?? 0}%`}
+                                                    </Badge>
+                                                )}
+                                            </Flex>
+                                        <ChapterModal
+                                            onUpdate={() =>
+                                                setSavedChapter(!savedChapter)
+                                            }
+                                            chapter={item}
                                         >
-                                            <IconTrash size={16} stroke={1.5} />
-                                        </ActionIcon>
-                                    </ConfirmPopup>
+                                            <ActionIcon
+                                                variant="subtle"
+                                                color="gray"
+                                            >
+                                                <IconPencil
+                                                    size={16}
+                                                    stroke={1.5}
+                                                />
+                                            </ActionIcon>
+                                        </ChapterModal>
+                                        <ConfirmPopup
+                                            action={() => deleteChapter(item.uuid)}
+                                            prompt="Are you sure you want to delete this chapter?"
+                                        >
+                                            <ActionIcon
+                                                color="red"
+                                                variant="subtle"
+                                            >
+                                                <IconTrash size={16} stroke={1.5} />
+                                            </ActionIcon>
+                                        </ConfirmPopup>
+                                    </Flex>
                                 </Flex>
                             </Flex>
                         </Flex>
-                    </Flex>
-                </Card>
-            )}
-        </Draggable>
-    ));
+                    </Card>
+                )}
+            </Draggable>
+        )});
 
     return (
         <Layout title="Chapters">
