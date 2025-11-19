@@ -50,6 +50,54 @@ const Chapters: React.FC = () => {
                         a.order && b.order ? a.order - b.order : -1
                     )
                 );
+                // For each chapter, check if there is an active job (so clock remains disabled on refresh)
+                response.data.forEach(async (ch) => {
+                    if (!ch.uuid) return;
+                    try {
+                        const r = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/jobs/by-chapter/${ch.uuid}`);
+                        const data = r.data;
+                        // normalize `status` -> `state` to match existing client usage
+                        const state = data.state || data.status;
+                        const progress = typeof data.progress === "number" ? data.progress : 0;
+                        setJobStatuses((s) => ({
+                            ...s,
+                            [ch.uuid!]: { jobId: data.id, state, progress, statusUrl: `${import.meta.env.VITE_BACKEND_URL}/jobs/${data.id}` },
+                        }));
+                        // start polling for this job so UI shows live progress
+                        if (state === "pending" || state === "in-progress") {
+                            const poll = async () => {
+                                try {
+                                    const r2 = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/jobs/${data.id}`);
+                                    const { state: s2, progress: p2 } = r2.data;
+                                    setJobStatuses((s) => ({
+                                        ...s,
+                                        [ch.uuid!]: {
+                                            ...(s[ch.uuid!] || {}),
+                                            jobId: data.id,
+                                            state: s2 || s[ch.uuid!]?.state,
+                                            progress: typeof p2 === "number" ? p2 : s[ch.uuid!]?.progress ?? 0,
+                                        },
+                                    }));
+
+                                    if (s2 === "completed" || s2 === "failed") {
+                                        const id = pollingRefs.current[ch.uuid!];
+                                        if (id) {
+                                            window.clearInterval(id);
+                                            delete pollingRefs.current[ch.uuid!];
+                                        }
+                                    }
+                                } catch (err) {
+                                    console.error("Polling job status error:", err);
+                                }
+                            };
+                            await poll();
+                            const intervalId = window.setInterval(poll, 3000);
+                            pollingRefs.current[ch.uuid] = intervalId;
+                        }
+                    } catch (err) {
+                        // no active job is fine
+                    }
+                });
             } catch (err) {
                 console.error(err);
             }
