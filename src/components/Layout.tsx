@@ -2,7 +2,6 @@ import {
     AppShell,
     Avatar,
     Burger,
-    Container,
     Flex,
     Group,
     Space,
@@ -29,7 +28,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             layout="alt"
             header={{ height: 60 }}
             navbar={{
-                width: 250,
+                width: 200,
                 breakpoint: "sm",
                 collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
             }}
@@ -77,7 +76,8 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                 <NavbarNested />
             </AppShell.Navbar>
             <AppShell.Main>
-                <Container>{user ? children : null}</Container>
+                {user ? children : null}
+              
             </AppShell.Main>
         </AppShell>
     );

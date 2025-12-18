@@ -33,22 +33,28 @@ const RecentActivityCard: React.FC<WithUserId> = ({ userId }) => {
     }, [userId]);
 
     const fetchData = async () => {
-        setIsLoading(true);
-        const response = await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/exercises/recent-activity${
-                userId ? "?userId=" + userId : ""
-            }`
-        );
-        setActivities(response.data);
-        setIsLoading(false);
+        try {
+            setIsLoading(true);
+
+            const response = await axios.get(
+                `${import.meta.env.VITE_BACKEND_URL}/exercises/recent-activity${
+                    userId ? "?userId=" + userId : ""
+                }`
+            );
+            setActivities(response.data);
+        } catch (error) {
+            console.error("Error fetching recent activity:", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
     return (
         <Card withBorder shadow="sm">
             <Flex justify="space-between" align="center">
-                <Title c="dimmed" size="sm" order={1}>
+                <Title c="dimmed" size="xs" tt="uppercase" order={1}>
                     Recent Activity
                 </Title>
-                <ActionIcon onClick={fetchData} variant="default" c="gray">
+                <ActionIcon onClick={fetchData} variant="filled" color="cyan">
                     <IconRefresh size={20} stroke={2} />
                 </ActionIcon>
             </Flex>

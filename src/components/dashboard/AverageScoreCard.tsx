@@ -25,16 +25,16 @@ const AverageScoreCard: React.FC<WithUserId> = ({
         <Card withBorder shadow="sm">
             <Flex direction="column" gap="sm">
                 <Flex justify="space-between" align="center">
-                    <Title c="dimmed" size="sm" order={1}>
+                    <Title c="dimmed" size="xs" tt="uppercase" order={1}>
                         Average Score
                     </Title>
                     <ThemeIcon c="dimmed" variant="transparent">
-                        <IconStars stroke={1.5} size={25} />
+                        <IconStars stroke={1.5} size={16} />
                     </ThemeIcon>
                 </Flex>
                 <Flex direction="column">
-                    <Title order={2}>{average}%</Title>
-                    <Text size="md" c="dimmed">
+                    <Title order={2} c="cyan">{average}%</Title>
+                    <Text size="sm" c="dimmed">
                         Per Exercise
                     </Text>
                 </Flex>

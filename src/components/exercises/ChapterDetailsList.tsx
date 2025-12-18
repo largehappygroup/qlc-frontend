@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Assignment } from "../../types/Assignment";
-import { Flex, Skeleton, Text } from "@mantine/core";
+import { Flex, Text } from "@mantine/core";
 import ExerciseCard from "./ExerciseCard";
 import FeedbackCard from "./FeedbackCard";
 import { WithChapter } from "../../types/Chapter";
@@ -20,19 +20,25 @@ const ChapterDetailsList: React.FC<ChapterDetailsListProps> = ({
 
     useEffect(() => {
         const fetchData = async () => {
-            let query = "";
-            if (chapter && date) {
-                query += `?chapterId=${chapter.uuid}&date=${date}`;
-            } else if (chapter) {
-                query += `?chapterId=${chapter.uuid}`;
-            } else if (date) {
-                query += `?date=${date}`;
+            try {
+                setIsLoading(true);
+                let query = "";
+                if (chapter && date) {
+                    query += `?chapterId=${chapter.uuid}&date=${date}`;
+                } else if (chapter) {
+                    query += `?chapterId=${chapter.uuid}`;
+                } else if (date) {
+                    query += `?date=${date}`;
+                }
+                const response = await axios.get<Assignment[]>(
+                    `${import.meta.env.VITE_BACKEND_URL}/assignments${query}`
+                );
+                setChapterAssignments(response.data);
+            } catch (error) {
+                console.error("Error fetching chapter assignments:", error);
+            } finally {
+                setIsLoading(false);
             }
-            const response = await axios.get<Assignment[]>(
-                `${import.meta.env.VITE_BACKEND_URL}/assignments${query}`
-            );
-            setChapterAssignments(response.data);
-            setIsLoading(false);
         };
 
         fetchData();
@@ -44,16 +50,16 @@ const ChapterDetailsList: React.FC<ChapterDetailsListProps> = ({
 
     return (
         <Flex direction="column" gap="xs" pt="sm">
-            <Skeleton visible={isLoading}>
-                {items?.length === 0 ? (
-                    <Text>No Assignments Found.</Text>
-                ) : (
-                    chapter?.requestFeedback && (
-                        <FeedbackCard chapterId={chapter?.uuid} />
-                    )
-                )}
-                {items}
-            </Skeleton>
+            {isLoading ? (
+                <Text>Loading...</Text>
+            ) : !items || items?.length === 0 ? (
+                <Text>No exercises found.</Text>
+            ) : (
+                chapter?.requestFeedback && (
+                    <FeedbackCard chapterId={chapter?.uuid} />
+                )
+            )}
+            {items}
         </Flex>
     );
 };

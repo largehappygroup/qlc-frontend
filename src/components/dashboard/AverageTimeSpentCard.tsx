@@ -27,16 +27,16 @@ const AverageTimeSpentCard: React.FC<WithUserId> = ({ userId }) => {
         <Card withBorder shadow="sm">
             <Flex direction="column" gap="sm">
                 <Flex justify="space-between" align="center">
-                    <Title c="dimmed" size="sm" order={1}>
+                    <Title c="dimmed" size="xs" tt="uppercase" order={1}>
                         Average Time Spent
                     </Title>
                     <ThemeIcon c="dimmed" variant="transparent">
-                        <IconClock stroke={1.5} size={25} />
+                        <IconClock stroke={1.5} size={16} />
                     </ThemeIcon>
                 </Flex>
                 <Flex direction="column">
-                    <Title order={2}>{timeSpent}</Title>
-                    <Text size="md" c="dimmed">
+                    <Title order={2} c="cyan">{timeSpent}</Title>
+                    <Text size="sm" c="dimmed">
                         Per Exercise
                     </Text>
                 </Flex>
