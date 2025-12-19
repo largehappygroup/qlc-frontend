@@ -4,7 +4,7 @@ import { useAuth } from "./hooks/AuthContext";
 import "./App.css";
 
 import FacultyDashboard from "./pages/FacultyDashboard";
-import Chapters from "./pages/Chapters";
+import FacultyChapters from "./pages/FacultyChapters";
 import FacultyProgress from "./pages/FacultyProgress";
 import Login from "./pages/Login";
 import StudentProgress from "./pages/StudentProgress";
@@ -15,7 +15,7 @@ import UserDirectory from "./pages/UserDirectory";
 import StudentChapters from "./pages/StudentChapters";
 
 function App() {
-    const { user } = useAuth();
+    const { user, viewAsStudent } = useAuth();
     return (
         <BrowserRouter>
             <Routes>
@@ -23,7 +23,7 @@ function App() {
                 <Route
                     index
                     element={
-                        user?.role === "student" ? (
+                        user?.role === "student" || viewAsStudent ? (
                             <StudentDashboard />
                         ) : (
                             <FacultyDashboard />
@@ -33,7 +33,7 @@ function App() {
                 <Route
                     path="/progress"
                     element={
-                        user?.role === "student" ? (
+                        user?.role === "student" || viewAsStudent ? (
                             <StudentProgress />
                         ) : (
                             <FacultyProgress />
@@ -43,10 +43,10 @@ function App() {
                 <Route
                     path="/chapters"
                     element={
-                        user?.role === "student" ? (
+                        user?.role === "student" || viewAsStudent ? (
                             <StudentChapters />
                         ) : (
-                            <Chapters />
+                            <FacultyChapters />
                         )
                     }
                 />

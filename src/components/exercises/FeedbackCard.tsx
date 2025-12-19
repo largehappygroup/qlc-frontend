@@ -30,7 +30,7 @@ const FeedbackCard: React.FC<WithChapterId> = ({ chapterId }) => {
                 gap="md"
                 direction={{ base: "column", sm: "row" }}
                 justify="space-between"
-                align="center"
+                align={{ base: "start", sm: "end" }}
             >
                 <Flex direction="column" gap="md">
                     <Badge variant="default" size="md">
@@ -41,7 +41,10 @@ const FeedbackCard: React.FC<WithChapterId> = ({ chapterId }) => {
                     </Text>
                 </Flex>
                 {!exists && (
-                    <FeedbackSliders chapterId={chapterId} setExists={setExists}>
+                    <FeedbackSliders
+                        chapterId={chapterId}
+                        setExists={setExists}
+                    >
                         <Button
                             radius="xl"
                             size="sm"

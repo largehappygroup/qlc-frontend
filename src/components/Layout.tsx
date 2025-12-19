@@ -2,6 +2,7 @@ import {
     AppShell,
     Avatar,
     Burger,
+    Button,
     Flex,
     Group,
     Space,
@@ -21,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 
-    const { user } = useAuth();
+    const { user, viewAsStudent, setViewAsStudent } = useAuth();
 
     return (
         <AppShell
@@ -52,6 +53,11 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                         {title && <Text size="lg">{title}</Text>}
                     </Group>
                     <Group gap="sm">
+                        {user && ["admin", "faculty"].includes(user.role) && (
+                            <Button onClick={() => setViewAsStudent(!viewAsStudent)}>
+                                View as Student
+                            </Button>
+                        )}
                         {user && (
                             <Avatar
                                 size={40}

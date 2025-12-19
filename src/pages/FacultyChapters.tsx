@@ -32,7 +32,7 @@ import ChapterModal from "../components/chapters/ChapterModal";
 import { Chapter } from "../types/Chapter";
 import classes from "../styles/DndList.module.css";
 
-const Chapters: React.FC = () => {
+const FacultyChapters: React.FC = () => {
     const [state, handlers] = useListState<Chapter>([]);
     const [reorderMode, setReorderMode] = useState<boolean>(false);
     const [savedChapter, setSavedChapter] = useState<boolean>(false);
@@ -419,4 +419,4 @@ const Chapters: React.FC = () => {
     );
 };
 
-export default Chapters;
+export default FacultyChapters;

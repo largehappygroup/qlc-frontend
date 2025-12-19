@@ -10,6 +10,8 @@ import { User } from "../types/User";
 
 interface AuthContextType {
     user: User | null;
+    viewAsStudent: boolean;
+    setViewAsStudent: (viewAsStudent: boolean) => void;
     login: () => void;
     logout: () => void;
 }
@@ -22,6 +24,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [viewAsStudent, setViewAsStudent] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -52,7 +55,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, viewAsStudent, setViewAsStudent }}>
             {children}
         </AuthContext.Provider>
     );
