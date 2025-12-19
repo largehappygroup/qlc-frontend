@@ -12,7 +12,7 @@ import StudentProgress from "./pages/StudentProgress";
 import Settings from "./pages/Settings";
 import StudentDashboard from "./pages/StudentDashboard";
 import UserDirectory from "./pages/UserDirectory";
-import ChapterPage from "./pages/ChapterPage";
+import StudentChapters from "./pages/StudentChapters";
 
 function App() {
     const { user } = useAuth();
@@ -40,8 +40,16 @@ function App() {
                         )
                     }
                 />
-                <Route path="/chapters" element={<Chapters />} />
-                <Route path="/chapters/:order" element={<ChapterPage />} />
+                <Route
+                    path="/chapters"
+                    element={
+                        user?.role === "student" ? (
+                            <StudentChapters />
+                        ) : (
+                            <Chapters />
+                        )
+                    }
+                />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/directory" element={<UserDirectory />} />
             </Routes>

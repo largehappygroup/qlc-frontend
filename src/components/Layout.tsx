@@ -10,7 +10,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 
 import { useAuth } from "../hooks/AuthContext";
-import { NavbarNested } from "./navbar/NavbarNested";
+import NavbarNested from "./navbar/NavbarNested";
 import { PropsWithChildren } from "react";
 
 interface LayoutProps extends PropsWithChildren {
@@ -75,10 +75,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                 </Flex>
                 <NavbarNested />
             </AppShell.Navbar>
-            <AppShell.Main>
-                {user ? children : null}
-              
-            </AppShell.Main>
+            <AppShell.Main>{user ? children : null}</AppShell.Main>
         </AppShell>
     );
 };
