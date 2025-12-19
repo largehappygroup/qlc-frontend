@@ -50,11 +50,11 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
             <Flex py="sm" gap="sm" direction="column">
                 {index !== 0 && <Divider pb="sm" />}
                 <Flex justify="space-between" gap="md">
-                    <Badge size="md" variant="light">
-                        {new Date(assignment.dueDate).toLocaleDateString()}
-                    </Badge>
                     <Badge variant="default" size="md">
                         {exercise ? exercise.status : "Not Started"}
+                    </Badge>
+                    <Badge size="md" variant="light">
+                        {new Date(assignment.dueDate).toLocaleDateString()}
                     </Badge>
                 </Flex>
                 <Flex
@@ -88,10 +88,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                                 </Button>
                             </Summary>
                         ) : (
-                            <Quiz
-                                exercise={exercise}
-                                setExercise={setExercise}
-                            >
+                            <Quiz exercise={exercise} setExercise={setExercise}>
                                 <Button
                                     radius="xl"
                                     size="sm"

@@ -25,7 +25,7 @@ const FeedbackCard: React.FC<WithChapterId> = ({ chapterId }) => {
     }, [chapterId]);
 
     return (
-        <Card bg="cyan" c="white">
+        <Card bg="cyan" c="white" bdrs={10}>
             <Flex
                 gap="md"
                 direction={{ base: "column", sm: "row" }}

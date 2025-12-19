@@ -51,7 +51,7 @@ const StudentChapters: React.FC = () => {
                         {chapters &&
                             chapters.map((chapter) => (
                                 <>
-                                    <Box p="md" bg="cyan.1" bdrs={10}>
+                                    <Box p="sm" bg="cyan.1" bdrs={10}>
                                         <Title
                                             id={`chapter-${chapter.order}`}
                                             order={3}
