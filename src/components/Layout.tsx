@@ -2,10 +2,10 @@ import {
     AppShell,
     Avatar,
     Burger,
-    Button,
     Flex,
     Group,
     Space,
+    Switch,
     Text,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -54,9 +54,14 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                     </Group>
                     <Group gap="sm">
                         {user && ["admin", "faculty"].includes(user.role) && (
-                            <Button onClick={() => setViewAsStudent(!viewAsStudent)}>
-                                View as Student
-                            </Button>
+                            <Switch
+                                onLabel="On"
+                                offLabel="Off"
+                                label="View as Student"
+                                labelPosition="left"
+                                checked={viewAsStudent}
+                                onClick={() => setViewAsStudent(!viewAsStudent)}
+                            />
                         )}
                         {user && (
                             <Avatar
