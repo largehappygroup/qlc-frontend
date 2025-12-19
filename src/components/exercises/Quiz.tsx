@@ -126,7 +126,7 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
     };
 
     const showModal = () => {
-        setShowStart(true)
+        setShowStart(true);
         setTimePaused(true);
         setTimeStopped(true);
         open();
@@ -136,14 +136,13 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
         setTimeStopped(false);
         setTimePaused(true);
         close();
-        setShowStart(true)
     };
 
     const startQuiz = () => {
         setShowStart(false);
         setTimePaused(false);
         setTimeStopped(false);
-    }
+    };
 
     return (
         <>
@@ -159,28 +158,31 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
                 fullScreen
             >
                 <Container>
-                    {showStart ? (
-                        <StartQuiz exercise={exercise} startQuiz={startQuiz} />
-                    ) : showEnd ? (
-                        <CompleteQuiz />
-                    ) : (
-                        <Flex direction="column" gap="xl">
-                            <Flex align="center" gap="md">
-                                <Progress
-                                    flex="1"
-                                    radius="xl"
-                                    size="lg"
-                                    value={
-                                        100 *
-                                        (questionIndex /
-                                            (exercise?.questions.length || 1))
-                                    }
-                                    striped
-                                    animated
-                                />
+                    <Flex direction="column" gap="xl">
+                        <Flex align="center" gap="md">
+                            <Progress
+                                flex="1"
+                                radius="xl"
+                                size="lg"
+                                value={
+                                    100 *
+                                    (questionIndex /
+                                        (exercise?.questions.length || 1))
+                                }
+                                striped
+                                animated
+                            />
 
-                                <CloseButton onClick={hideModal} />
-                            </Flex>
+                            <CloseButton onClick={hideModal} />
+                        </Flex>
+                        {showStart ? (
+                            <StartQuiz
+                                exercise={exercise}
+                                startQuiz={startQuiz}
+                            />
+                        ) : showEnd ? (
+                            <CompleteQuiz />
+                        ) : (
                             <Tabs defaultValue="question">
                                 <Tabs.List>
                                     <Tabs.Tab value="question">
@@ -257,8 +259,8 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
                                     <Code block>{exercise?.studentCode}</Code>
                                 </Tabs.Panel>
                             </Tabs>
-                        </Flex>
-                    )}
+                        )}
+                    </Flex>
                 </Container>
             </Modal>
         </>
