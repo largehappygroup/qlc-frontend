@@ -19,6 +19,8 @@ import axios from "axios";
 import { Exercise, WithExerciseAndSetExercise } from "../../types/Exercise";
 import Explanation from "../questions/Explanation";
 import Ratings from "../questions/Ratings";
+import StartQuiz from "./StartQuiz";
+import CompleteQuiz from "./CompleteQuiz";
 
 const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
     children,
@@ -26,6 +28,8 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
     setExercise,
 }: PropsWithChildren<WithExerciseAndSetExercise>) => {
     const [opened, { open, close }] = useDisclosure(false);
+    const [showStart, setShowStart] = useState(true);
+    const [showEnd, setShowEnd] = useState(false);
     const [questionIndex, setQuestionIndex] = useState(
         exercise ? exercise.completedQuestions : 0
     );
@@ -37,7 +41,7 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
         exercise ? exercise?.questions[questionIndex].ratings : {}
     );
 
-    const [timePaused, setTimePaused] = useState(false);
+    const [timePaused, setTimePaused] = useState(true);
     const [timeStopped, setTimeStopped] = useState(true);
     const [timeSpent, setTimeSpent] = useState(0);
 
@@ -99,7 +103,7 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
             await submitRatings();
 
             if (questionIndex + 1 === exercise?.questions.length) {
-                hideModal();
+                setShowEnd(true);
             } else {
                 setQuestionIndex(questionIndex + 1);
                 setCorrect(false);
@@ -122,8 +126,9 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
     };
 
     const showModal = () => {
-        setTimePaused(false);
-        setTimeStopped(false);
+        setShowStart(true)
+        setTimePaused(true);
+        setTimeStopped(true);
         open();
     };
 
@@ -131,7 +136,14 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
         setTimeStopped(false);
         setTimePaused(true);
         close();
+        setShowStart(true)
     };
+
+    const startQuiz = () => {
+        setShowStart(false);
+        setTimePaused(false);
+        setTimeStopped(false);
+    }
 
     return (
         <>
@@ -147,90 +159,106 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
                 fullScreen
             >
                 <Container>
-                    <Flex direction="column" gap="xl">
-                        <Flex align="center" gap="md">
-                            <Progress
-                                flex="1"
-                                radius="xl"
-                                size="lg"
-                                value={
-                                    100 *
-                                    (questionIndex /
-                                        (exercise?.questions.length || 1))
-                                }
-                                striped
-                                animated
-                            />
+                    {showStart ? (
+                        <StartQuiz exercise={exercise} startQuiz={startQuiz} />
+                    ) : showEnd ? (
+                        <CompleteQuiz />
+                    ) : (
+                        <Flex direction="column" gap="xl">
+                            <Flex align="center" gap="md">
+                                <Progress
+                                    flex="1"
+                                    radius="xl"
+                                    size="lg"
+                                    value={
+                                        100 *
+                                        (questionIndex /
+                                            (exercise?.questions.length || 1))
+                                    }
+                                    striped
+                                    animated
+                                />
 
-                            <CloseButton onClick={hideModal} />
-                        </Flex>
-                        <Tabs defaultValue="question">
-                            <Tabs.List>
-                                <Tabs.Tab value="question">Question</Tabs.Tab>
-                                <Tabs.Tab value="studentCode">
-                                    Student Code
-                                </Tabs.Tab>
-                            </Tabs.List>
-                            <Tabs.Panel value="question" pt="xs">
-                                <Flex direction="column" gap="md" mb="md">
-                                    <MultipleChoiceQuestion
-                                        submitted={submitted}
-                                        value={selectedAnswer}
-                                        onChange={setSelectedAnswer}
-                                        query={
-                                            exercise?.questions[questionIndex]
-                                                .query
-                                        }
-                                        availableAnswers={
-                                            exercise?.questions[questionIndex]
-                                                .availableAnswers
-                                        }
-                                    />
-                                    <Divider />
-                                    {submitted && (
-                                        <>
-                                            <Explanation
-                                                correct={correct}
-                                                explanation={
-                                                    exercise?.questions[
-                                                        questionIndex
-                                                    ].explanation
-                                                }
-                                            />
-                                            {correct && (
-                                                <Ratings
-                                                    value={ratings}
-                                                    onChange={setRatings}
+                                <CloseButton onClick={hideModal} />
+                            </Flex>
+                            <Tabs defaultValue="question">
+                                <Tabs.List>
+                                    <Tabs.Tab value="question">
+                                        Question
+                                    </Tabs.Tab>
+                                    <Tabs.Tab value="studentCode">
+                                        Student Code
+                                    </Tabs.Tab>
+                                </Tabs.List>
+                                <Tabs.Panel value="question" pt="xs">
+                                    <Flex direction="column" gap="md" mb="md">
+                                        <MultipleChoiceQuestion
+                                            submitted={submitted}
+                                            value={selectedAnswer}
+                                            onChange={setSelectedAnswer}
+                                            query={
+                                                exercise?.questions[
+                                                    questionIndex
+                                                ].query
+                                            }
+                                            availableAnswers={
+                                                exercise?.questions[
+                                                    questionIndex
+                                                ].availableAnswers
+                                            }
+                                        />
+                                        <Divider />
+                                        {submitted && (
+                                            <>
+                                                <Explanation
+                                                    correct={correct}
+                                                    explanation={
+                                                        exercise?.questions[
+                                                            questionIndex
+                                                        ].explanation
+                                                    }
                                                 />
-                                            )}
-                                        </>
-                                    )}
-                                    <Flex justify="end">
-                                        {submitted ? (
-                                            <Button
-                                                onClick={handleContinue}
-                                                radius="xl"
-                                                w={{ base: "100%", md: "auto" }}
-                                            >
-                                                Continue
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                                onClick={checkAnswer}
-                                                radius="xl"
-                                                w={{ base: "100%", md: "auto" }}
-                                            >
-                                                Submit
-                                            </Button>
+                                                {correct && (
+                                                    <Ratings
+                                                        value={ratings}
+                                                        onChange={setRatings}
+                                                    />
+                                                )}
+                                            </>
                                         )}
+                                        <Flex justify="end">
+                                            {submitted ? (
+                                                <Button
+                                                    onClick={handleContinue}
+                                                    radius="xl"
+                                                    w={{
+                                                        base: "100%",
+                                                        md: "auto",
+                                                    }}
+                                                >
+                                                    Continue
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    onClick={checkAnswer}
+                                                    radius="xl"
+                                                    w={{
+                                                        base: "100%",
+                                                        md: "auto",
+                                                    }}
+                                                >
+                                                    Submit
+                                                </Button>
+                                            )}
+                                        </Flex>
                                     </Flex>
-                                </Flex>
-                            </Tabs.Panel>
-                            <Tabs.Panel value="studentCode" pt="xs">
-                                <Code block>{exercise?.studentCode}</Code>
-                            </Tabs.Panel>
-                        </Tabs>
-                    </Flex>
+                                </Tabs.Panel>
+                                <Tabs.Panel value="studentCode" pt="xs">
+                                    <Code block>{exercise?.studentCode}</Code>
+                                </Tabs.Panel>
+                            </Tabs>
+                        </Flex>
+                    )}
                 </Container>
             </Modal>
         </>
