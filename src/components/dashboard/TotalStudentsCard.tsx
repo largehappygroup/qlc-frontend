@@ -20,7 +20,7 @@ const TotalStudentsCard: React.FC = () => {
         <Card withBorder shadow="sm">
             <Flex direction="column" gap="sm">
                 <Flex justify="space-between" align="center">
-                    <Title c="dimmed" size="sm" order={1}>
+                    <Title c="dimmed" size="xs" tt="uppercase" order={1}>
                         Students
                     </Title>
                     <ThemeIcon c="dimmed" variant="transparent">
@@ -28,8 +28,10 @@ const TotalStudentsCard: React.FC = () => {
                     </ThemeIcon>
                 </Flex>
                 <Flex direction="column">
-                    <Title order={2}>{totalStudents}</Title>
-                    <Text size="md" c="dimmed">
+                    <Title order={2} c="cyan">
+                        {totalStudents}
+                    </Title>
+                    <Text size="sm" c="dimmed">
                         Enrolled
                     </Text>
                 </Flex>
