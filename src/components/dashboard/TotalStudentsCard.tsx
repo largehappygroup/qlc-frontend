@@ -24,7 +24,7 @@ const TotalStudentsCard: React.FC = () => {
                         Students
                     </Title>
                     <ThemeIcon c="dimmed" variant="transparent">
-                        <IconUsers stroke={2} size={25} />
+                        <IconUsers stroke={2} size={16} />
                     </ThemeIcon>
                 </Flex>
                 <Flex direction="column">

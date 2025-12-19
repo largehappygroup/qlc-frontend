@@ -6,7 +6,7 @@ import Layout from "../components/Layout";
 import ChapterDetailsList from "../components/exercises/ChapterDetailsList";
 
 import { Chapter } from "../types/Chapter";
-import { Anchor, Grid, Title, Text } from "@mantine/core";
+import { Anchor, Grid, Title, Text, Flex } from "@mantine/core";
 
 const StudentChapters: React.FC = () => {
     const [chapters, setChapters] = useState<Chapter[]>();
@@ -33,39 +33,41 @@ const StudentChapters: React.FC = () => {
 
     return (
         <Layout title="Chapters">
-{
-    chapters ?  <Grid>
-
-                <Grid.Col span={2}>
-                    {chapters?.map((chapter) => (
-                        <Anchor
-                            key={chapter.uuid}
-                            href={`#chapter-${chapter.order}`}
-                        >
-                            {chapter.title}
-                        </Anchor>
-                    ))}
-                </Grid.Col>
-                <Grid.Col span={10}>
-                    {chapters &&
-                        chapters.map((chapter) => (
-                            <>
-                                <Title
-                                    id={`chapter-${chapter.order}`}
-                                    order={3}
+            {chapters ? (
+                <Grid>
+                    <Grid.Col span={2}>
+                        <Flex direction="column" gap="sm" align="start">
+                            {chapters?.map((chapter) => (
+                                <Anchor
+                                    key={chapter.uuid}
+                                    href={`#chapter-${chapter.order}`}
                                 >
                                     {chapter.title}
-                                </Title>
-                                <ChapterDetailsList
-                                    key={chapter.uuid}
-                                    chapter={chapter}
-                                />
-                            </>
-                        ))}
-                </Grid.Col>
-            </Grid> : <Text>No chapters available.</Text>
-}
-           
+                                </Anchor>
+                            ))}
+                        </Flex>
+                    </Grid.Col>
+                    <Grid.Col span={10}>
+                        {chapters &&
+                            chapters.map((chapter) => (
+                                <>
+                                    <Title
+                                        id={`chapter-${chapter.order}`}
+                                        order={3}
+                                    >
+                                        {chapter.title}
+                                    </Title>
+                                    <ChapterDetailsList
+                                        key={chapter.uuid}
+                                        chapter={chapter}
+                                    />
+                                </>
+                            ))}
+                    </Grid.Col>
+                </Grid>
+            ) : (
+                <Text>No chapters available.</Text>
+            )}
         </Layout>
     );
 };
