@@ -6,7 +6,7 @@ import Layout from "../components/Layout";
 import ChapterDetailsList from "../components/exercises/ChapterDetailsList";
 
 import { Chapter } from "../types/Chapter";
-import { Anchor, Grid, Title, Text, Flex } from "@mantine/core";
+import { Anchor, Grid, Title, Text, Flex, Box } from "@mantine/core";
 
 const StudentChapters: React.FC = () => {
     const [chapters, setChapters] = useState<Chapter[]>();
@@ -51,12 +51,17 @@ const StudentChapters: React.FC = () => {
                         {chapters &&
                             chapters.map((chapter) => (
                                 <>
-                                    <Title
-                                        id={`chapter-${chapter.order}`}
-                                        order={3}
-                                    >
-                                        {chapter.title}
-                                    </Title>
+                                    <Box p="md" bg="cyan.1" bdrs={10}>
+                                        <Title
+                                            id={`chapter-${chapter.order}`}
+                                            order={3}
+                                            size="sm"
+                                            c="cyan"
+                                        >
+                                            {chapter.title}
+                                        </Title>
+                                    </Box>
+
                                     <ChapterDetailsList
                                         key={chapter.uuid}
                                         chapter={chapter}
