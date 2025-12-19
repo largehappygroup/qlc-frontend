@@ -40,8 +40,8 @@ const FeedbackCard: React.FC<WithChapterId> = ({ chapterId }) => {
                         Please Provide Feedback
                     </Text>
                 </Flex>
-                {exists && (
-                    <FeedbackSliders chapterId={chapterId}>
+                {!exists && (
+                    <FeedbackSliders chapterId={chapterId} setExists={setExists}>
                         <Button
                             radius="xl"
                             size="sm"

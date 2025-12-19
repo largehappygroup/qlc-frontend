@@ -17,11 +17,14 @@ import axios from "axios";
 import { useAuth } from "../../hooks/AuthContext";
 import { WithChapterId } from "../../types/Chapter";
 
-type FeedbackSlidersProps = PropsWithChildren<WithChapterId>;
+type FeedbackSlidersProps = PropsWithChildren<
+    WithChapterId & { setExists: (exists: boolean) => void }
+>;
 
 const FeedbackSliders: React.FC<FeedbackSlidersProps> = ({
     children,
     chapterId,
+    setExists
 }) => {
     const [opened, { open, close }] = useDisclosure(false);
     const [easeOfUnderstanding, setEaseOfUnderstanding] = useState(3);
@@ -44,6 +47,7 @@ const FeedbackSliders: React.FC<FeedbackSlidersProps> = ({
                     comments,
                 }
             );
+            setExists(true);
         } catch (error) {
             console.error("Error submitting feedback:", error);
         }
