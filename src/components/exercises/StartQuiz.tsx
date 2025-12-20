@@ -41,10 +41,10 @@ const StartQuiz: React.FC<StartQuizProps> = ({ startQuiz, exercise }) => {
             {assignment?.dueDate && assignment?.dueDate < new Date() ? (
                 <Alert color="red">
                     This exercise was due on{" "}
-                    {assignment?.dueDate.toLocaleDateString()}. Though you can
-                    finish this exercise as a way to review the material, we
-                    cannot accept past due exercises towards the extra credit
-                    opportunity.
+                    {new Date(assignment?.dueDate).toLocaleDateString()}. Though
+                    you can finish this exercise as a way to review the
+                    material, we cannot accept past due exercises towards the
+                    extra credit opportunity.
                 </Alert>
             ) : (
                 <Text>
