@@ -4,6 +4,7 @@ import {
     Card,
     Fieldset,
     Flex,
+    Select,
     Space,
     Text,
     Textarea,
@@ -13,7 +14,7 @@ import {
 import { DateInput } from "@mantine/dates";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import React from "react";
-import { Assignment } from "../../types/Assignment";
+import { Assignment, assignmentIdentifiers } from "../../types/Assignment";
 
 interface ChapterAssignmentsProps {
     assignments: Assignment[];
@@ -52,18 +53,18 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
                                 }
                                 value={assignment.title}
                             />
-                            <TextInput
+                            <Select
                                 withAsterisk
                                 flex="1"
                                 label="Identifier"
-                                onChange={(e) =>
+                                onChange={(val) =>
                                     handleUpdateAssignment(
                                         index,
                                         "identifier",
-                                        e.target.value
+                                        val
                                     )
                                 }
-                                value={assignment.identifier}
+                                data={assignmentIdentifiers}
                             />
                             <ActionIcon
                                 color="red"
