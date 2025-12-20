@@ -56,6 +56,7 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
                             <Select
                                 withAsterisk
                                 flex="1"
+                                value={assignment.identifier}
                                 label="Identifier"
                                 onChange={(val) =>
                                     handleUpdateAssignment(

@@ -31,6 +31,7 @@ export const assignmentIdentifiers = [
     "PA05-A",
     "PA05-B",
     "PA05-W",
+    "PA06-A",
     "PA06-B",
     "PA06-W",
     "PA07-A",
