@@ -1,9 +1,8 @@
-import { Flex, Title, Alert, Button, Text} from "@mantine/core";
+import { Flex, Title, Button } from "@mantine/core";
 import React from "react";
 
 interface CompleteQuizProps {
     endQuiz: () => void;
-
 }
 
 const CompleteQuiz: React.FC<CompleteQuizProps> = ({ endQuiz }) => {
@@ -16,11 +15,8 @@ const CompleteQuiz: React.FC<CompleteQuizProps> = ({ endQuiz }) => {
             align="center"
             ta="center"
         >
-            <Title order={1}>
-                Congratulations on completing the exercise!
-            </Title>
-           
-          
+            <Title order={1}>Congratulations on completing the exercise!</Title>
+
             <Button onClick={endQuiz}>Exit</Button>
         </Flex>
     );
