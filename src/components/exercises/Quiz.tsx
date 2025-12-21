@@ -8,8 +8,8 @@ import {
     Box,
     Modal,
     ScrollArea,
-    Tabs,
     Code,
+    Grid,
 } from "@mantine/core";
 import MultipleChoiceQuestion from "../questions/MultipleChoiceQuestion";
 
@@ -181,18 +181,17 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
                                 startQuiz={startQuiz}
                             />
                         ) : showEnd ? (
-                            <CompleteQuiz />
+                            <CompleteQuiz endQuiz={hideModal} />
                         ) : (
-                            <Tabs defaultValue="question">
-                                <Tabs.List>
-                                    <Tabs.Tab value="question">
-                                        Question
-                                    </Tabs.Tab>
-                                    <Tabs.Tab value="studentCode">
-                                        Student Code
-                                    </Tabs.Tab>
-                                </Tabs.List>
-                                <Tabs.Panel value="question" pt="xs">
+                            <Grid>
+                                <Grid.Col span={{ base: 12, sm: 6 }}>
+                                    <Code block>
+                                        <ScrollArea h={300}>
+                                            {exercise?.studentCode}
+                                        </ScrollArea>
+                                    </Code>
+                                </Grid.Col>
+                                <Grid.Col span={{ base: 12, sm: 6 }}>
                                     <Flex direction="column" gap="md" mb="md">
                                         <MultipleChoiceQuestion
                                             submitted={submitted}
@@ -254,11 +253,8 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
                                             )}
                                         </Flex>
                                     </Flex>
-                                </Tabs.Panel>
-                                <Tabs.Panel value="studentCode" pt="xs">
-                                    <Code block>{exercise?.studentCode}</Code>
-                                </Tabs.Panel>
-                            </Tabs>
+                                </Grid.Col>
+                            </Grid>
                         )}
                     </Flex>
                 </Container>

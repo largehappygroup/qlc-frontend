@@ -11,7 +11,7 @@ import classes from "./NavbarNested.module.css";
 import { useAuth } from "../../hooks/AuthContext";
 
 const NavbarNested: React.FC = () => {
-    const { user } = useAuth();
+    const { user, viewAsStudent } = useAuth();
 
     const pages = [
         { label: "Dashboard", icon: IconHome2, links: "/" },
@@ -25,7 +25,7 @@ const NavbarNested: React.FC = () => {
             icon: IconPresentationAnalytics,
             links: "/progress",
         },
-        ...(user && ["admin", "faculty", "ta"].includes(user?.role)
+        ...(user && ["admin", "faculty", "ta"].includes(user?.role) && !viewAsStudent
             ? [
                   {
                       label: "Directory",

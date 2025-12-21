@@ -13,6 +13,7 @@ import Settings from "./pages/Settings";
 import StudentDashboard from "./pages/StudentDashboard";
 import UserDirectory from "./pages/UserDirectory";
 import StudentChapters from "./pages/StudentChapters";
+import FacultyExercises from "./pages/FacultyExercises";
 
 function App() {
     const { user, viewAsStudent } = useAuth();
@@ -50,6 +51,7 @@ function App() {
                         )
                     }
                 />
+                <Route path="/exercises" element={<FacultyExercises />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/directory" element={<UserDirectory />} />
             </Routes>
