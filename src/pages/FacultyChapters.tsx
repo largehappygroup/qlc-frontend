@@ -67,7 +67,7 @@ const FacultyChapters: React.FC = () => {
                         if (state === "pending" || state === "in-progress") {
                             const poll = async () => {
                                 try {
-                                    const r2 = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/jobs/${data.id}`);
+                                    const r2 = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/jobs/${data.uuid}`);
                                     const { state: s2, progress: p2 } = r2.data;
                                     setJobStatuses((s) => ({
                                         ...s,
