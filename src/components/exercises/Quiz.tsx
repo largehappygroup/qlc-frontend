@@ -186,7 +186,7 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
                             <Grid>
                                 <Grid.Col span={{ base: 12, sm: 6 }}>
                                     <Code block>
-                                        <ScrollArea h={300}>
+                                        <ScrollArea h={550}>
                                             {exercise?.studentCode}
                                         </ScrollArea>
                                     </Code>

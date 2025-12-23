@@ -61,7 +61,7 @@ const FacultyChapters: React.FC = () => {
                         const progress = typeof data.progress === "number" ? data.progress : 0;
                         setJobStatuses((s) => ({
                             ...s,
-                            [ch.uuid!]: { jobId: data.id, state, progress, statusUrl: `${import.meta.env.VITE_BACKEND_URL}/jobs/${data.id}` },
+                            [ch.uuid!]: { jobId: data.uuid, state, progress, statusUrl: `${import.meta.env.VITE_BACKEND_URL}/jobs/${data.uuid}` },
                         }));
                         // start polling for this job so UI shows live progress
                         if (state === "pending" || state === "in-progress") {
@@ -73,12 +73,11 @@ const FacultyChapters: React.FC = () => {
                                         ...s,
                                         [ch.uuid!]: {
                                             ...(s[ch.uuid!] || {}),
-                                            jobId: data.id,
+                                            jobId: data.uuid,
                                             state: s2 || s[ch.uuid!]?.state,
                                             progress: typeof p2 === "number" ? p2 : s[ch.uuid!]?.progress ?? 0,
                                         },
                                     }));
-
                                     if (s2 === "completed" || s2 === "failed") {
                                         const id = pollingRefs.current[ch.uuid!];
                                         if (id) {
