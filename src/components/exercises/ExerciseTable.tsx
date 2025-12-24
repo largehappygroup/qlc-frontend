@@ -13,8 +13,8 @@ const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
         const fetchData = async () => {
             try {
                 const response = await axios.get<Exercise[]>(
-                    `${import.meta.env.VITE_BACKEND_URL}/exercises`,
-                    { params: { assignmentId } }
+                    `${import.meta.env.VITE_BACKEND_URL}/exercises?assignmentId=${assignmentId}`,
+                    
                 );
                 setExercises(response.data);
             } catch (error) {
@@ -25,7 +25,7 @@ const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
         fetchData();
     }, [assignmentId]);
 
-    const rows = exercises[exercisesIndex].questions.map((question, index) => (
+    const rows = exercises[exercisesIndex].questions?.map((question, index) => (
         <Table.Tr key={index}>
             <Table.Td>{index + 1}</Table.Td>
             <Table.Td>{question.query}</Table.Td>
@@ -33,7 +33,7 @@ const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
             <Table.Td>{question.explanation}</Table.Td>
             <Table.Td>{question.hints}</Table.Td>
         </Table.Tr>
-    ));
+    )) || [];
 
     return (
         <>
