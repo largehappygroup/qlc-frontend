@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, Text } from "@mantine/core";
+import { Button, Flex, Text } from "@mantine/core";
 
 interface MultipleChoiceQuestionProps {
     submitted?: boolean;
@@ -24,28 +24,24 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
     return (
         <Flex direction="column" gap="xl">
             <Text ta="center">{query}</Text>
-            <Grid>
+            <Flex direction="column" gap="md">
                 {availableAnswers?.map((answer, index) => (
-                    <Grid.Col span={{ base: 12, lg: 6 }}>
-                        <Button
-                            fullWidth
-                            key={index}
-                            size="md"
-                            h="100%"
-                            variant={answer == value ? "filled" : "light"}
-                            radius="xl"
-                            py="sm"
-                            style={{ whiteSpace: "normal" }}
-                            onClick={() => selectAnswer(answer)}
-                            disabled={submitted}
-                        >
-                            <Text style={{ whiteSpace: "normal" }}>
-                                {answer}
-                            </Text>
-                        </Button>
-                    </Grid.Col>
+                    <Button
+                        fullWidth
+                        key={index}
+                        size="md"
+                        h="100%"
+                        variant={answer == value ? "filled" : "light"}
+                        radius="xl"
+                        py="sm"
+                        style={{ whiteSpace: "normal" }}
+                        onClick={() => selectAnswer(answer)}
+                        disabled={submitted}
+                    >
+                        <Text style={{ whiteSpace: "normal" }}>{answer}</Text>
+                    </Button>
                 ))}
-            </Grid>
+            </Flex>
         </Flex>
     );
 };

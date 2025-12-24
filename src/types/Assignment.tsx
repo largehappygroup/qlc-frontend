@@ -12,6 +12,10 @@ export interface WithAssignment {
     assignment?: Assignment;
 }
 
+export interface WithAssignmentId {
+    assignmentId?: string;
+}
+
 export const assignmentIdentifiers = [
     "PA01-W",
     "PA01-C",

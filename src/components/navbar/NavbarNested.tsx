@@ -25,15 +25,23 @@ const NavbarNested: React.FC = () => {
             icon: IconPresentationAnalytics,
             links: "/progress",
         },
-        ...(user && ["admin", "faculty", "ta"].includes(user?.role) && !viewAsStudent
+        ...(user &&
+        ["admin", "faculty", "ta"].includes(user?.role) &&
+        !viewAsStudent
             ? [
                   {
                       label: "Directory",
                       icon: IconUsersGroup,
                       links: "/directory",
                   },
+                  {
+                      label: "Exercises",
+                      icon: IconNotes,
+                      links: "/exercises",
+                  },
               ]
             : []),
+
         { label: "Settings", icon: IconAdjustments, links: "/settings" },
     ];
 
