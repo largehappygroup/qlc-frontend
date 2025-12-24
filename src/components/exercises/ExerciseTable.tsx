@@ -13,8 +13,9 @@ const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
         const fetchData = async () => {
             try {
                 const response = await axios.get<Exercise[]>(
-                    `${import.meta.env.VITE_BACKEND_URL}/exercises?assignmentId=${assignmentId}`,
-                    
+                    `${
+                        import.meta.env.VITE_BACKEND_URL
+                    }/exercises?assignmentId=${assignmentId}`
                 );
                 setExercises(response.data);
             } catch (error) {
@@ -25,15 +26,19 @@ const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
         fetchData();
     }, [assignmentId]);
 
-    const rows = exercises[exercisesIndex].questions?.map((question, index) => (
-        <Table.Tr key={index}>
-            <Table.Td>{index + 1}</Table.Td>
-            <Table.Td>{question.query}</Table.Td>
-            <Table.Td>{question.availableAnswers}</Table.Td>
-            <Table.Td>{question.explanation}</Table.Td>
-            <Table.Td>{question.hints}</Table.Td>
-        </Table.Tr>
-    )) || [];
+    if (!exercises || exercises.length === 0) {
+        return <Text>No exercises found for this assignment.</Text>;
+    }
+    const rows =
+        exercises[exercisesIndex].questions?.map((question, index) => (
+            <Table.Tr key={index}>
+                <Table.Td>{index + 1}</Table.Td>
+                <Table.Td>{question.query}</Table.Td>
+                <Table.Td>{question.availableAnswers}</Table.Td>
+                <Table.Td>{question.explanation}</Table.Td>
+                <Table.Td>{question.hints}</Table.Td>
+            </Table.Tr>
+        )) || [];
 
     return (
         <>
