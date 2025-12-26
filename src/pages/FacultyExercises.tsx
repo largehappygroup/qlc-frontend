@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { Assignment } from "../types/Assignment";
 import axios from "axios";
-import { Select } from "@mantine/core";
+import { Select, Space } from "@mantine/core";
 import ExerciseTable from "../components/exercises/ExerciseTable";
 
 const FacultyExercises: React.FC = () => {
@@ -39,6 +39,7 @@ const FacultyExercises: React.FC = () => {
                     setSelectedAssignmentId(option?.value)
                 }
             />
+            <Space h="md" />
             <ExerciseTable assignmentId={selectedAssignmentId} />
         </Layout>
     );
