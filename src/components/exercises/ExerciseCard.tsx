@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../hooks/AuthContext";
-import axios from "axios";
+import { useEffect} from "react";
 
 import { Badge, Divider, Flex, Text, Button } from "@mantine/core";
 
-import { Exercise } from "../../types/Exercise";
 import { Assignment } from "../../types/Assignment";
 
 import Quiz from "./Quiz";
 import Summary from "./Summary";
+import { useExercise } from "../../hooks/exercises";
 
 interface ExerciseCardProps {
     index: number;
@@ -19,31 +17,11 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     index,
     assignment,
 }: ExerciseCardProps) => {
-    const [exercise, setExercise] = useState<Exercise>();
-    const { user } = useAuth();
+    const { data: exercise, refetch, isLoading } = useExercise(assignment.uuid);
 
-    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        setIsLoading(true);
-        const fetchData = async () => {
-            try {
-                const response = await axios.post<{
-                    exercise: Exercise;
-                }>(
-                    `${import.meta.env.VITE_BACKEND_URL}/exercises?userId=${
-                        user?.vuNetId
-                    }&assignmentId=${assignment.uuid}`
-                );
-                setExercise(response.data.exercise);
-            } catch (error) {
-                console.error("Error fetching exercise:", error);
-            }
-            setIsLoading(false);
-        };
-        if (user) {
-            fetchData();
-        }
-    }, [assignment, index, user]);
+        refetch();
+    }, [assignment, index]);
 
     return (
         <>
@@ -88,7 +66,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
                                 </Button>
                             </Summary>
                         ) : (
-                            <Quiz exercise={exercise} setExercise={setExercise}>
+                            <Quiz exercise={exercise} refresh={refetch}>
                                 <Button
                                     radius="xl"
                                     size="sm"

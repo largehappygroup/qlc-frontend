@@ -16,17 +16,20 @@ import MultipleChoiceQuestion from "../questions/MultipleChoiceQuestion";
 import { useDisclosure } from "@mantine/hooks";
 import { PropsWithChildren, useEffect, useState } from "react";
 import axios from "axios";
-import { Exercise, WithExerciseAndSetExercise } from "../../types/Exercise";
+import { WithExercise } from "../../types/Exercise";
 import Explanation from "../questions/Explanation";
 import Ratings from "../questions/Ratings";
 import StartQuiz from "./StartQuiz";
 import CompleteQuiz from "./CompleteQuiz";
 
-const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
+interface QuizProps extends WithExercise {
+    refresh: () => void;
+}
+
+const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
     children,
     exercise,
-    setExercise,
-}: PropsWithChildren<WithExerciseAndSetExercise>) => {
+    refresh}: PropsWithChildren<QuizProps>) => {
     const [opened, { open, close }] = useDisclosure(false);
     const [showStart, setShowStart] = useState(true);
     const [showEnd, setShowEnd] = useState(false);
@@ -111,14 +114,9 @@ const Quiz: React.FC<PropsWithChildren<WithExerciseAndSetExercise>> = ({
                 setRatings({});
             }
 
-            if (setExercise) {
-                const refreshExercise = await axios.get<Exercise>(
-                    `${import.meta.env.VITE_BACKEND_URL}/exercises/${
-                        exercise?.uuid
-                    }`
-                );
-                setExercise(refreshExercise.data);
-            }
+
+
+            refresh();
         }
         setSubmitted(false);
         setSelectedAnswer("");

@@ -1,6 +1,18 @@
 import axios from "axios";
 import { Exercise } from "../types/Exercise";
 
+export const getExercise = async (exerciseId: string | undefined) => { 
+    try {
+        const response = await axios.get<Exercise>(
+            `${import.meta.env.VITE_BACKEND_URL}/exercises/${exerciseId}`
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching exercise:", error);
+        throw error;
+    }
+};
+
 export const getExercises = async (assignmentId: string | undefined) => {
     try {
         let response;
@@ -15,7 +27,7 @@ export const getExercises = async (assignmentId: string | undefined) => {
                 `${import.meta.env.VITE_BACKEND_URL}/exercises`
             );
         }
-        return response.data || [];
+        return response.data;
     } catch (error) {
         console.error("Error fetching exercises:", error);
         throw error;

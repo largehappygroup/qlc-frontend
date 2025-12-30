@@ -1,5 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { getExercises } from "../api/exercises";
+import { getExercise, getExercises } from "../api/exercises";
+
+export const useExercise = (exerciseId: string | undefined) => {
+    return useQuery({
+        queryKey: ["exercise", exerciseId],
+        queryFn: () => getExercise(exerciseId),
+    });
+}
 
 export const useExercises = (assignmentId: string | undefined) => {
     return useQuery({
@@ -7,3 +14,4 @@ export const useExercises = (assignmentId: string | undefined) => {
         queryFn: () => getExercises(assignmentId),
     });
 };
+
