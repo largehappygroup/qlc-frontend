@@ -53,7 +53,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                         {title && <Text size="lg">{title}</Text>}
                     </Group>
                     <Group gap="sm">
-                        {user && (["admin", "faculty"].includes(user.role) && !viewAsStudent) && (
+                        {user && ["admin", "faculty"].includes(user.role) && (
                             <Switch
                                 onLabel="On"
                                 offLabel="Off"
