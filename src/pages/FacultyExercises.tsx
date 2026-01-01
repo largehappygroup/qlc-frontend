@@ -1,29 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Layout from "../components/Layout";
-import { Assignment } from "../types/Assignment";
-import axios from "axios";
+
 import { Select, Space } from "@mantine/core";
 import ExerciseTable from "../components/exercises/ExerciseTable";
+import { useAssignments } from "../hooks/assignments";
 
 const FacultyExercises: React.FC = () => {
-    const [assignments, setAssignments] = useState<Assignment[]>();
-    const [selectedAssignmentId, setSelectedAssignmentId] = useState<string>();
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get<Assignment[]>(
-                    `${import.meta.env.VITE_BACKEND_URL}/assignments`
-                );
-                setAssignments(response.data);
-                setSelectedAssignmentId(response.data[0]?.uuid);
-            } catch (error) {
-                console.error("Error fetching assignments:", error);
-            }
-        };
-
-        fetchData();
-    }, []);
+    const { data: assignments } = useAssignments();
+    const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
     return (
         <Layout title="Exercises">
@@ -34,13 +18,17 @@ const FacultyExercises: React.FC = () => {
                         label: assignment.identifier,
                     })) || []
                 }
-                value={selectedAssignmentId}
+                value={assignments?.[selectedIndex]?.uuid || ""}
                 onChange={(_value, option) =>
-                    setSelectedAssignmentId(option?.value)
+                    setSelectedIndex(
+                        assignments?.findIndex(
+                            (assignment) => assignment.uuid === option?.value
+                        ) || 0
+                    )
                 }
             />
             <Space h="md" />
-            <ExerciseTable assignmentId={selectedAssignmentId} />
+            <ExerciseTable assignmentId={assignments?.[selectedIndex]?.uuid} />
         </Layout>
     );
 };

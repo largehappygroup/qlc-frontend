@@ -31,10 +31,5 @@ export interface WithExercise {
     exercise?: Exercise;
 }
 
-export interface WithSetExercise {
-    setExercise?: (exercise: Exercise) => void;
-}
-
-export type WithExerciseAndSetExercise = WithExercise & WithSetExercise;
 
 export type ExerciseStatus = "In Progress" | "Complete" | "Not Started";

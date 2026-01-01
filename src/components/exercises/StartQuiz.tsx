@@ -1,30 +1,13 @@
 import { Flex, Title, Text, Button, Alert } from "@mantine/core";
-import React, { useEffect, useState } from "react";
 import { WithExercise } from "../../types/Exercise";
-import { Assignment } from "../../types/Assignment";
-import axios from "axios";
+import { useAssignment } from "../../hooks/assignments";
 
 interface StartQuizProps extends WithExercise {
     startQuiz: () => void;
 }
 
 const StartQuiz: React.FC<StartQuizProps> = ({ startQuiz, exercise }) => {
-    const [assignment, setAssignment] = useState<Assignment>();
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get<Assignment>(
-                    `${import.meta.env.VITE_BACKEND_URL}/assignments/${
-                        exercise?.assignmentId
-                    }`
-                );
-                setAssignment(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchData();
-    }, [exercise?.assignmentId]);
+    const { data: assignment } = useAssignment(exercise?.assignmentId);
 
     return (
         <Flex
@@ -38,7 +21,8 @@ const StartQuiz: React.FC<StartQuizProps> = ({ startQuiz, exercise }) => {
             <Title order={1}>
                 {`${assignment?.identifier}: ${assignment?.title}`}
             </Title>
-            {assignment?.dueDate && new Date(assignment.dueDate) < new Date() ? (
+            {assignment?.dueDate &&
+            new Date(assignment.dueDate) < new Date() ? (
                 <Alert color="red">
                     This exercise was due on{" "}
                     {new Date(assignment.dueDate).toLocaleDateString()}. Though
@@ -53,7 +37,8 @@ const StartQuiz: React.FC<StartQuizProps> = ({ startQuiz, exercise }) => {
                     and you can leave and come back to complete the exercise.
                     However, keep in mind that the due date for this exercise is{" "}
                     <Text component="span" fw="bolder">
-                        {assignment?.dueDate && new Date(assignment.dueDate).toLocaleDateString()}
+                        {assignment?.dueDate &&
+                            new Date(assignment.dueDate).toLocaleDateString()}
                     </Text>
                     .
                 </Text>

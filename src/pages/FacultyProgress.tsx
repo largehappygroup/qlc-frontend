@@ -1,30 +1,18 @@
-import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { Flex, Text, Table, Space, Group } from "@mantine/core";
 
-import { User } from "../types/User";
-import axios from "axios";
 import EditStudentModal from "../components/progress/EditStudentModal";
 import Search from "../components/progress/Search";
 import DownloadModal from "../components/progress/DownloadModal";
 import UploadModal from "../components/progress/UploadModal";
+import { useUsers } from "../hooks/users";
+import { useState } from "react";
 
 const FacultyProgress: React.FC = () => {
-    const [students, setStudents] = useState<User[]>();
-    const fetchData = async () => {
-        try {
-            const response = await axios.get<User[]>(
-                `${import.meta.env.VITE_BACKEND_URL}/users?role=student`
-            );
-            setStudents(response.data);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-    useEffect(() => {
-        fetchData();
-    }, []);
-
+    const {data, refetch} = useUsers("student");
+    
+    const [students, setStudents] = useState(data);
+    
     const rows = students?.map((student) => (
         <Table.Tr key={student.vuNetId}>
             <Table.Td>
@@ -57,7 +45,7 @@ const FacultyProgress: React.FC = () => {
         <Layout title="Progress">
             <Flex justify="space-between" gap="md" align="center">
                 <Search
-                    retrieveItems={fetchData}
+                    retrieveItems={refetch}
                     items={
                         students?.map((student) => ({
                             field: `${student.firstName} ${student.lastName}`,

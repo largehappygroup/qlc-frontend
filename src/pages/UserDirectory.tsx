@@ -1,33 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Text, Table, Group, Flex, Skeleton, Space } from "@mantine/core";
 
 import Layout from "../components/Layout";
 import { User } from "../types/User";
 import Search from "../components/progress/Search";
-import axios from "axios";
+
 import DownloadModal from "../components/progress/DownloadModal";
 import UploadModal from "../components/progress/UploadModal";
+import { useUsers } from "../hooks/users";
 
 const UserDirectory: React.FC = () => {
-    const [users, setUsers] = useState<User[]>();
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    const fetchData = async () => {
-        setIsLoading(true);
-        try {
-            const response = await axios.get<User[]>(
-                `${import.meta.env.VITE_BACKEND_URL}/users`
-            );
-            setUsers(response.data);
-        } catch (err) {
-            console.error(err);
-        }
-        setIsLoading(false);
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const { data, isLoading, refetch } = useUsers();
+    const [users, setUsers] = useState<User[] | undefined>(data);
 
     const rows = isLoading
         ? Array(5).map((val) => (
@@ -63,7 +47,7 @@ const UserDirectory: React.FC = () => {
         <Layout title="User Directory">
             <Flex justify="space-between">
                 <Search
-                    retrieveItems={fetchData}
+                    retrieveItems={refetch}
                     items={
                         users?.map((user) => ({
                             field: `${user.firstName} ${user.lastName}`,

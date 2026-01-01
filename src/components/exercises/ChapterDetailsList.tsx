@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Assignment } from "../../types/Assignment";
 import { Flex, Text } from "@mantine/core";
 import ExerciseCard from "./ExerciseCard";
 import FeedbackCard from "./FeedbackCard";
 import { WithChapter } from "../../types/Chapter";
+import { useAssignments } from "../../hooks/assignments";
 
 interface ChapterDetailsListProps extends WithChapter {
     date?: Date;
@@ -14,35 +12,7 @@ const ChapterDetailsList: React.FC<ChapterDetailsListProps> = ({
     chapter,
     date,
 }: ChapterDetailsListProps) => {
-    const [chapterAssignments, setChapterAssignments] =
-        useState<Assignment[]>();
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setIsLoading(true);
-                let query = "";
-                if (chapter && date) {
-                    query += `?chapterId=${chapter.uuid}&date=${date}`;
-                } else if (chapter) {
-                    query += `?chapterId=${chapter.uuid}`;
-                } else if (date) {
-                    query += `?date=${date}`;
-                }
-                const response = await axios.get<Assignment[]>(
-                    `${import.meta.env.VITE_BACKEND_URL}/assignments${query}`
-                );
-                setChapterAssignments(response.data);
-            } catch (error) {
-                console.error("Error fetching chapter assignments:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [chapter, date]);
+    const {data: chapterAssignments, isLoading} = useAssignments(chapter?.uuid, date);
 
     const items = chapterAssignments?.map((assignment, index) => (
         <ExerciseCard index={index} assignment={assignment} />

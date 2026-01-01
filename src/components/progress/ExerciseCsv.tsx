@@ -1,7 +1,7 @@
 import { Group, Button, MultiSelect, Flex } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconDownload } from "@tabler/icons-react";
-import axios from "axios";
+import { handleDownload } from "../../api/exercises";
 
 interface ExerciseCsvProps {
     closeModal?: () => void;
@@ -30,34 +30,6 @@ const ExerciseCsv: React.FC<ExerciseCsvProps> = ({
                     : null,
         },
     });
-
-    const handleDownload = async () => {
-        try {
-            const response = await axios.get(
-                `${
-                    import.meta.env.VITE_BACKEND_URL
-                }/exercises/download?fields=${form
-                    .getValues()
-                    .fields.join(",")}`,
-                {
-                    responseType: "blob",
-                }
-            );
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", "exercises.csv"); // Set filename
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            if (closeModal) {
-                closeModal();
-            }
-        } catch (error) {
-            console.error("Download error:", error);
-        }
-    };
 
     return (
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
@@ -96,7 +68,10 @@ const ExerciseCsv: React.FC<ExerciseCsvProps> = ({
                 <Group justify="flex-end" mt="md">
                     <Button
                         type="submit"
-                        onClick={handleDownload}
+                        onClick={() => {
+                            handleDownload(form.getValues().fields.join(","));
+                            if (closeModal) closeModal();
+                        }}
                         rightSection={<IconDownload />}
                     >
                         Download

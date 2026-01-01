@@ -14,9 +14,10 @@ import { useForm } from "@mantine/form";
 import axios from "axios";
 import ChapterAssignments from "./ChapterAssignments";
 import { Assignment } from "../../types/Assignment";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useState } from "react";
 import GeneralInfo from "./GeneralInfo";
 import LearningObjectives from "./LearningObjectives";
+import { useAssignments } from "../../hooks/assignments";
 
 interface ChapterModalProps extends PropsWithChildren<WithChapter> {
     onUpdate: () => void;
@@ -28,40 +29,11 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
     onUpdate,
 }: ChapterModalProps) => {
     const [opened, { open, close }] = useDisclosure(false);
+    const { data: chapterAssignmentsData } = useAssignments(chapter?.uuid);
+
     const [chapterAssignments, setChapterAssignments] = useState<
-        Assignment[]
-    >([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                let assignmentDetails: Assignment[] = [];
-                for (const assignmentId of chapter?.assignmentIds || []) {
-                    const response = await axios.get<Assignment>(
-                        `${
-                            import.meta.env.VITE_BACKEND_URL
-                        }/assignments/${assignmentId}`
-                    );
-                    assignmentDetails = [
-                        ...assignmentDetails,
-                        {
-                            ...response.data,
-                            startDate: new Date(response.data.startDate),
-
-                            dueDate: new Date(response.data.dueDate),
-                        },
-                    ];
-                }
-
-                setChapterAssignments(assignmentDetails);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        if (chapter) {
-            fetchData();
-        }
-    }, [chapter]);
+        Assignment[] | undefined
+    >(chapterAssignmentsData);
 
     const form = useForm({
         initialValues: chapter
@@ -169,7 +141,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                     }
                 );
             } else {
-                if (chapterAssignments.length > 0) {
+                if (chapterAssignments && chapterAssignments.length > 0) {
                     await axios.post(
                         `${import.meta.env.VITE_BACKEND_URL}/chapters`,
                         {

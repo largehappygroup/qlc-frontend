@@ -1,35 +1,19 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import Layout from "../components/Layout";
 import ChapterDetailsList from "../components/exercises/ChapterDetailsList";
 
-import { Chapter } from "../types/Chapter";
 import { Anchor, Grid, Title, Text, Flex, Box } from "@mantine/core";
+import { useChapters } from "../hooks/chapters";
 
 const StudentChapters: React.FC = () => {
-    const [chapters, setChapters] = useState<Chapter[]>();
+    const {data: chapters} = useChapters(undefined, new Date());
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get<Chapter[]>(
-                    `${import.meta.env.VITE_BACKEND_URL}/chapters`
-                );
-                if (response.data.length === 0) {
-                    navigate("/not-found", { replace: true });
-                } else {
-                    setChapters(response.data);
-                }
-            } catch (err) {
-                console.error(err);
-            }
-        };
-
-        fetchData();
-    }, []);
+    if (!chapters || chapters.length === 0) {
+        navigate("/not-found", { replace: true });
+        return null;
+    }
 
     return (
         <Layout title="Chapters">
