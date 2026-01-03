@@ -6,13 +6,16 @@ import Search from "../components/progress/Search";
 import DownloadModal from "../components/progress/DownloadModal";
 import UploadModal from "../components/progress/UploadModal";
 import { useUsers } from "../hooks/users";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const FacultyProgress: React.FC = () => {
-    const {data, refetch} = useUsers("student");
-    
+    const { data, refetch } = useUsers("student");
+
     const [students, setStudents] = useState(data);
-    
+    useEffect(() => {
+        setStudents(data);
+    }, [data]);
+
     const rows = students?.map((student) => (
         <Table.Tr key={student.vuNetId}>
             <Table.Td>

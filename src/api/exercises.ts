@@ -61,7 +61,7 @@ export const getAverageScore = async (userId?: string) => {
 export const getAverageTimeSpent = async (userId?: string) => {
     try {
         const response = await axios.get<string>(
-            `${import.meta.env.VITE_BACKEND_URL}/exercises/averageTimeSpent${
+            `${import.meta.env.VITE_BACKEND_URL}/exercises/time-spent${
                 userId ? "?userId=" + userId : ""
             }`
         );
@@ -75,7 +75,7 @@ export const getAverageTimeSpent = async (userId?: string) => {
 export const getRecentActivity = async (userId?: string) => {
     try {
         const response = await axios.get<RecentActivity[]>(
-            `${import.meta.env.VITE_BACKEND_URL}/exercises/recentActivity${
+            `${import.meta.env.VITE_BACKEND_URL}/exercises/recent-activity${
                 userId ? "?userId=" + userId : ""
             }`
         );
