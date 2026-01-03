@@ -17,6 +17,7 @@ import {
     IconReload,
 } from "@tabler/icons-react";
 import { useExercises } from "../../hooks/exercises";
+import { regenerateExercise } from "../../api/exercises";
 
 const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
     const [exercisesIndex, setExercisesIndex] = useState<number>(0);
@@ -102,7 +103,16 @@ const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
                     >
                         <IconCode />
                     </ActionIcon>
-                    <Button size="sm" leftSection={<IconReload />}>
+                    <Button
+                        onClick={() =>
+                            regenerateExercise(
+                                exercises[exercisesIndex].userId,
+                                assignmentId
+                            )
+                        }
+                        size="sm"
+                        leftSection={<IconReload />}
+                    >
                         Regenerate
                     </Button>
                 </Flex>

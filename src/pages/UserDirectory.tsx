@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, Table, Group, Flex, Skeleton, Space } from "@mantine/core";
 
 import Layout from "../components/Layout";
@@ -12,6 +12,10 @@ import { useUsers } from "../hooks/users";
 const UserDirectory: React.FC = () => {
     const { data, isLoading, refetch } = useUsers();
     const [users, setUsers] = useState<User[] | undefined>(data);
+
+    useEffect(() => {
+        setUsers(data);
+    }, [data]);
 
     const rows = isLoading
         ? Array(5).map((val) => (

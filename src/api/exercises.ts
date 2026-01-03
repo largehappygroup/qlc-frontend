@@ -122,3 +122,17 @@ export const handleDownload = async (fields: string) => {
         console.error("Download error:", error);
     }
 };
+
+export const regenerateExercise = async (
+    userId?: string,
+    assignmentId?: string) => {
+    try {
+        const response = await axios.post<Exercise>(
+            `${
+                import.meta.env.VITE_BACKEND_URL}/exercises/regenerate?userId=${userId}&assignmentId=${assignmentId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error regenerating exercise:", error);
+        throw error;
+    }
+};
