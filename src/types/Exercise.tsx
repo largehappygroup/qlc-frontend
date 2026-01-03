@@ -33,3 +33,13 @@ export interface WithExercise {
 
 
 export type ExerciseStatus = "In Progress" | "Complete" | "Not Started";
+
+export interface RecentActivity {
+    userName: string;
+    assignment: {
+        identifier: string;
+        title: string;
+    };
+    completedTimestamp: string;
+    score: string;
+}

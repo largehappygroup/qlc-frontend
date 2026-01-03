@@ -1,27 +1,11 @@
 import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { WithUserId } from "../../types/User";
 import { IconClock } from "@tabler/icons-react";
+import { useAverageTimeSpent } from "../../hooks/exercises";
 
 const AverageTimeSpentCard: React.FC<WithUserId> = ({ userId }) => {
-    const [timeSpent, setTimeSpent] = useState("00:00:00");
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/exercises/time-spent${
-                    userId ? "?userId=" + userId : ""
-                }`
-            );
-            if (response.data) {
-                setTimeSpent(response.data);
-            } else {
-                setTimeSpent("00:00:00");
-            }
-        };
-        fetchData();
-    });
+    
+    const {data: timeSpent} = useAverageTimeSpent(userId);
 
     return (
         <Card withBorder shadow="sm">

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getExercise, getExercises } from "../api/exercises";
+import { getAverageScore, getAverageTimeSpent, getExercise, getExercises, getRecentActivity, getScoreDistribution } from "../api/exercises";
 import { useAuth } from "./AuthContext";
 
 const { user } = useAuth();
@@ -29,3 +29,35 @@ export const useExercises = (assignmentId: string | undefined) => {
         enabled: !!user,
     });
 };
+
+export const useAverageScore = (userId?: string) => {
+    return useQuery({
+        queryKey: ["averageScore", userId],
+        queryFn: () => getAverageScore(userId),
+        enabled: !!user,
+    });
+}
+
+export const useAverageTimeSpent = (userId?: string) => {
+    return useQuery({
+        queryKey: ["averageTimeSpent", userId],
+        queryFn: () => getAverageTimeSpent(userId),
+        enabled: !!user,
+    });
+}
+
+export const useRecentActivity = (userId?: string) => {
+    return useQuery({
+        queryKey: ["recentActivity", userId],
+        queryFn: () => getRecentActivity(userId),
+        enabled: !!user,
+    });
+}
+
+export const useScoreDistribution = (userId?: string) => {
+    return useQuery({
+        queryKey: ["scoreDistribution", userId],
+        queryFn: () => getScoreDistribution(userId),
+        enabled: !!user,
+    });
+}

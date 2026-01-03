@@ -1,12 +1,7 @@
 import { Card, Flex,  Title } from "@mantine/core";
 import ChapterDetailsList from "../exercises/ChapterDetailsList";
 
-interface UpcomingCardProps {
-    status?: string;
-    topics?: string[];
-}
-
-const UpcomingCard: React.FC<UpcomingCardProps> = ({}: UpcomingCardProps) => {
+const UpcomingCard: React.FC = () => {
     return (
         <Card shadow="sm" withBorder>
             <Flex justify="space-between" gap="sm">

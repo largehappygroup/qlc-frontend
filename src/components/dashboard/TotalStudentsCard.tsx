@@ -1,21 +1,9 @@
 import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
 import { IconUsers } from "@tabler/icons-react";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useTotalStudents } from "../../hooks/users";
 
 const TotalStudentsCard: React.FC = () => {
-    const [totalStudents, setTotalStudents] = useState(0);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await axios.get<number>(
-                `${import.meta.env.VITE_BACKEND_URL}/users/total-students`
-            );
-            setTotalStudents(response.data);
-        };
-        fetchData();
-    });
-
+    const { data: totalStudents } = useTotalStudents();
     return (
         <Card withBorder shadow="sm">
             <Flex direction="column" gap="sm">

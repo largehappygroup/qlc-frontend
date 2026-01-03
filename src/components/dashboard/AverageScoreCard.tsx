@@ -1,25 +1,13 @@
 import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { WithUserId } from "../../types/User";
 import { IconStars } from "@tabler/icons-react";
+import { useAverageScore } from "../../hooks/exercises";
 
 
 const AverageScoreCard: React.FC<WithUserId> = ({
     userId
 }) => {
-    const [average, setAverage] = useState(0);
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/exercises/average${
-                    userId ? "?userId=" + userId : ""
-                }`
-            );
-            setAverage(response.data);
-        };
-        fetchData();
-    });
+    const {data: average} = useAverageScore(userId);
 
     return (
         <Card withBorder shadow="sm">

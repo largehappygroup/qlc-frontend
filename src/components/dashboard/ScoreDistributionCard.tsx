@@ -1,36 +1,12 @@
 import { BarChart } from "@mantine/charts";
 import { Card, Title, Text, Flex } from "@mantine/core";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { WithUserId } from "../../types/User";
+import { useScoreDistribution } from "../../hooks/exercises";
 
 const ScoreDistributionCard: React.FC<WithUserId> = ({ userId }) => {
-    const [averageScoreDistribution, setAverageScoreDistribution] = useState(
-        []
-    );
+    const {data: averageScoreDistribution, isLoading} = useScoreDistribution(userId);
+    
 
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setIsLoading(true);
-                const response = await axios.get(
-                    `${
-                        import.meta.env.VITE_BACKEND_URL
-                    }/exercises/distribution${
-                        userId ? "?userId=" + userId : ""
-                    }`
-                );
-                setAverageScoreDistribution(response.data);
-            } catch (error) {
-                console.error("Error fetching score distribution:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
     return (
         <>
             <Card shadow="sm" withBorder>

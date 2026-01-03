@@ -10,51 +10,22 @@ import {
     Badge,
 } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { WithUserId } from "../../types/User";
-
-interface Response {
-    userName: string;
-    assignment: {
-        identifier: string;
-        title: string;
-    };
-    completedTimestamp: string;
-    score: string;
-}
+import { useRecentActivity } from "../../hooks/exercises";
 
 const RecentActivityCard: React.FC<WithUserId> = ({ userId }) => {
-    const [activities, setActivities] = useState<Response[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        fetchData();
-    }, [userId]);
-
-    const fetchData = async () => {
-        try {
-            setIsLoading(true);
-
-            const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/exercises/recent-activity${
-                    userId ? "?userId=" + userId : ""
-                }`
-            );
-            setActivities(response.data);
-        } catch (error) {
-            console.error("Error fetching recent activity:", error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const { data: activities, isLoading, refetch } = useRecentActivity(userId);
     return (
         <Card withBorder shadow="sm">
             <Flex justify="space-between" align="center">
                 <Title c="dimmed" size="xs" tt="uppercase" order={1}>
                     Recent Activity
                 </Title>
-                <ActionIcon onClick={fetchData} variant="filled" color="cyan">
+                <ActionIcon
+                    onClick={() => refetch()}
+                    variant="filled"
+                    color="cyan"
+                >
                     <IconRefresh size={20} stroke={2} />
                 </ActionIcon>
             </Flex>
@@ -64,8 +35,9 @@ const RecentActivityCard: React.FC<WithUserId> = ({ userId }) => {
             ) : (
                 <ScrollArea mah={400}>
                     <Flex direction="column" gap="xs">
-                        {activities.length === 0 && "No recent activity found."}
-                        {activities.map((activity, index) => (
+                        {activities?.length === 0 &&
+                            "No recent activity found."}
+                        {activities?.map((activity, index) => (
                             <>
                                 {index !== 0 && <Divider />}
                                 <Flex justify="space-between" align="center">

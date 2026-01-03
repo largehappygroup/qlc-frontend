@@ -1,14 +1,17 @@
 import { Group, Button, MultiSelect, Flex, Alert, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconDownload } from "@tabler/icons-react";
-import axios from "axios";
+import { handleDownload } from "../../api/users";
 
 interface UserCsvProps {
     student: boolean;
     closeModal?: () => void;
 }
 
-const UserCsv: React.FC<UserCsvProps> = ({ student, closeModal }: UserCsvProps) => {
+const UserCsv: React.FC<UserCsvProps> = ({
+    student,
+    closeModal,
+}: UserCsvProps) => {
     const form = useForm({
         mode: "uncontrolled",
         initialValues: {
@@ -26,30 +29,6 @@ const UserCsv: React.FC<UserCsvProps> = ({ student, closeModal }: UserCsvProps) 
                     : null,
         },
     });
-
-    const handleDownload = async () => {
-        try {
-            const response = await axios.get(
-                `${import.meta.env.VITE_BACKEND_URL}/users/download${
-                    student ? "?role=student&" : "?"
-                }fields=${form.getValues().fields.join(",")}`,
-                { responseType: "blob" }
-            );
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", "users.csv");
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            if (closeModal) {
-                closeModal();
-            }
-        } catch (error) {
-            console.error("Download error:", error);
-        }
-    };
 
     return (
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
@@ -97,7 +76,13 @@ const UserCsv: React.FC<UserCsvProps> = ({ student, closeModal }: UserCsvProps) 
                 <Group justify="flex-end" mt="md">
                     <Button
                         type="submit"
-                        onClick={handleDownload}
+                        onClick={() => {
+                            handleDownload(
+                                student,
+                                form.getValues().fields.join(",")
+                            );
+                            if (closeModal) closeModal();
+                        }}
                         rightSection={<IconDownload />}
                     >
                         Download
