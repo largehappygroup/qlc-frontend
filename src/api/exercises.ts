@@ -3,13 +3,13 @@ import { Exercise, RecentActivity } from "../types/Exercise";
 
 /**
  * Calls API to get exercise data by ID
- * @param exerciseId - uuid of the exercise
+ * @param assignmentId - uuid of the assignment
  * @returns - exercise data Exercise
  */
-export const getExercise = async (exerciseId: string | undefined) => {
+export const getExercise = async (assignmentId?: string) => {
     try {
         const response = await axios.get<Exercise>(
-            `${import.meta.env.VITE_BACKEND_URL}/exercises/${exerciseId}`
+            `${import.meta.env.VITE_BACKEND_URL}/exercises/${assignmentId}`
         );
         return response.data;
     } catch (error) {

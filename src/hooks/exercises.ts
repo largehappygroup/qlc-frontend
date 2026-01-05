@@ -3,14 +3,13 @@ import { getAverageScore, getAverageTimeSpent, getExercise, getExercises, getRec
 
 /**
  * get the exercise data for a specific exercise by ID
- * @param exerciseId - uuid of the exercise
+ * @param assignmentId - uuid of the assignment
  * @returns - exercise data Exercise
  */
-export const useExercise = (exerciseId?: string) => {
+export const useExercise = (assignmentId?: string) => {
     return useQuery({
-        queryKey: ["exercise", exerciseId],
-        queryFn: () => getExercise(exerciseId),
-        enabled: !!exerciseId,
+        queryKey: ["exercise", assignmentId],
+        queryFn: () => getExercise( assignmentId),
     });
 };
 
