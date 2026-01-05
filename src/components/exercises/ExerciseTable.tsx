@@ -22,7 +22,7 @@ import { regenerateExercise } from "../../api/exercises";
 const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
     const [exercisesIndex, setExercisesIndex] = useState<number>(0);
     const [showCode, setShowCode] = useState<boolean>(false);
-    const { data: exercises, isLoading } = useExercises(assignmentId);
+    const { data: exercises, isLoading, refetch } = useExercises(assignmentId);
 
     useEffect(() => {
         setShowCode(false);
@@ -104,13 +104,14 @@ const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
                         <IconCode />
                     </ActionIcon>
                     <Button
-                        onClick={() =>
+                        onClick={() => {
                             regenerateExercise(
                                 exercises[exercisesIndex].userId,
                                 assignmentId
-                            )
-                        }
-                        size="sm"
+                            );
+                            refetch();
+                        }}
+                        size="xs"
                         leftSection={<IconReload />}
                     >
                         Regenerate
@@ -120,7 +121,7 @@ const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
             {showCode && (
                 <ScrollArea h={300}>
                     <Code block mb="sm">
-                        {exercises[exercisesIndex].studentCode}
+                        {exercises[exercisesIndex].submission}
                     </Code>
                 </ScrollArea>
             )}

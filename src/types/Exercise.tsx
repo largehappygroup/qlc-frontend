@@ -3,7 +3,7 @@ export interface Exercise {
     assignmentId: string;
     userId: string;
     date: Date;
-    studentCode: string;
+    submission: string;
     completedQuestions: number;
     completedTimestamp?: Date;
     questions: {

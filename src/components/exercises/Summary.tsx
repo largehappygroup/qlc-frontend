@@ -49,7 +49,7 @@ const Summary: React.FC<SummaryProps> = ({
                                 <Text c="dimmed">
                                     You answered{" "}
                                     {exercise &&
-                                        `${exercise?.totalCorrect} out of ${exercise?.questions.length} questions correctly`}
+                                        `${exercise?.totalCorrect} out of ${exercise?.questions.length} questions correctly the first time.`}
                                 </Text>
                                 <RingProgress
                                     sections={[
@@ -113,17 +113,34 @@ const Summary: React.FC<SummaryProps> = ({
                                         {`Question ${index + 1}`}
                                     </Accordion.Control>
                                     <Accordion.Panel>
-                                        <Text>{question.query}</Text>
                                         <Text>
-                                            {
+                                            <Text span fw="bold">
+                                                Question:
+                                            </Text>
+                                            {` ${question.query}`}
+                                        </Text>
+                                        <Text>
+                                            <Text span fw="bold">
+                                                Your First Answer:
+                                            </Text>
+                                            {` ${question.userAnswers?.[0].selectedAnswer}`}
+                                        </Text>
+                                        <Text>
+                                            <Text span fw="bold">
+                                                Correct Answer:
+                                            </Text>
+                                            {` ${
                                                 question.userAnswers?.[
                                                     question.userAnswers
                                                         ?.length - 1
                                                 ].selectedAnswer
-                                            }
+                                            }`}
                                         </Text>
                                         <Text c="dimmed">
-                                            {question.explanation}
+                                            <Text span fw="bold">
+                                                Explanation:
+                                            </Text>
+                                            {` ${question.explanation}`}
                                         </Text>
                                     </Accordion.Panel>
                                 </Accordion.Item>

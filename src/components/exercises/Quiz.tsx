@@ -15,12 +15,12 @@ import MultipleChoiceQuestion from "../questions/MultipleChoiceQuestion";
 
 import { useDisclosure } from "@mantine/hooks";
 import { PropsWithChildren, useEffect, useState } from "react";
-import axios from "axios";
 import { WithExercise } from "../../types/Exercise";
 import Explanation from "../questions/Explanation";
 import Ratings from "../questions/Ratings";
 import StartQuiz from "./StartQuiz";
 import CompleteQuiz from "./CompleteQuiz";
+import { checkAnswer, submitRatings } from "../../api/exercises";
 
 interface QuizProps extends WithExercise {
     refresh: () => void;
@@ -29,7 +29,8 @@ interface QuizProps extends WithExercise {
 const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
     children,
     exercise,
-    refresh}: PropsWithChildren<QuizProps>) => {
+    refresh,
+}: PropsWithChildren<QuizProps>) => {
     const [opened, { open, close }] = useDisclosure(false);
     const [showStart, setShowStart] = useState(true);
     const [showEnd, setShowEnd] = useState(false);
@@ -64,38 +65,6 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
         }
     }, [timePaused, timeStopped]);
 
-    const submitRatings = async () => {
-        const questionId = exercise?.questions[questionIndex].uuid;
-        await axios.put(
-            `${import.meta.env.VITE_BACKEND_URL}/exercises/${
-                exercise?.uuid
-            }/ratings`,
-            { questionId, ratings }
-        );
-    };
-
-    /**
-     * Check the selected answer with the backend and get whether it is correct.
-     * If correct, stop the timer and show the explanation.
-     */
-    const checkAnswer = async () => {
-        if (selectedAnswer !== "") {
-            setTimePaused(true);
-            const questionId = exercise?.questions[questionIndex].uuid;
-            const response = await axios.post(
-                `${import.meta.env.VITE_BACKEND_URL}/exercises/${
-                    exercise?.uuid
-                }/check?questionId=${questionId}`,
-                { userAnswer: selectedAnswer, timeSpent }
-            );
-            if (response.data.result) {
-                setTimeStopped(true);
-                setCorrect(true);
-            }
-            setSubmitted(true);
-        }
-    };
-
     /**
      * If the answer is correct, move to the next question or close the modal if it is the last question.
      * If not correct, do nothing.
@@ -103,7 +72,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
      */
     const handleContinue = async () => {
         if (correct) {
-            await submitRatings();
+            await submitRatings(exercise, ratings, questionIndex);
 
             if (questionIndex + 1 === exercise?.questions.length) {
                 setShowEnd(true);
@@ -113,8 +82,6 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                 setTimeStopped(false);
                 setRatings({});
             }
-
-
 
             refresh();
         }
@@ -185,7 +152,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                                 <Grid.Col span={{ base: 12, sm: 6 }}>
                                     <Code block>
                                         <ScrollArea h={550}>
-                                            {exercise?.studentCode}
+                                            {exercise?.submission}
                                         </ScrollArea>
                                     </Code>
                                 </Grid.Col>
@@ -239,7 +206,24 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                                                 </Button>
                                             ) : (
                                                 <Button
-                                                    onClick={checkAnswer}
+                                                    onClick={async () => {
+                                                        setTimePaused(true);
+                                                        const result =
+                                                            await checkAnswer(
+                                                                selectedAnswer,
+                                                                exercise,
+                                                                questionIndex,
+                                                                timeSpent
+                                                            );
+
+                                                        if (result) {
+                                                            setTimeStopped(
+                                                                true
+                                                            );
+                                                            setCorrect(true);
+                                                        }
+                                                        setSubmitted(true);
+                                                    }}
                                                     radius="xl"
                                                     w={{
                                                         base: "100%",

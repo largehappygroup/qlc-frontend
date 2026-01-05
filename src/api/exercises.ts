@@ -88,7 +88,9 @@ export const getRecentActivity = async (userId?: string) => {
 
 export const getScoreDistribution = async (userId?: string) => {
     try {
-        const response = await axios.get<{ percentage: number; count: number }[]>(
+        const response = await axios.get<
+            { percentage: number; count: number }[]
+        >(
             `${import.meta.env.VITE_BACKEND_URL}/exercises/distribution${
                 userId ? "?userId=" + userId : ""
             }`
@@ -125,14 +127,59 @@ export const handleDownload = async (fields: string) => {
 
 export const regenerateExercise = async (
     userId?: string,
-    assignmentId?: string) => {
+    assignmentId?: string
+) => {
     try {
         const response = await axios.post<Exercise>(
             `${
-                import.meta.env.VITE_BACKEND_URL}/exercises/regenerate?userId=${userId}&assignmentId=${assignmentId}`);
+                import.meta.env.VITE_BACKEND_URL
+            }/exercises/regenerate?userId=${userId}&assignmentId=${assignmentId}`
+        );
         return response.data;
     } catch (error) {
         console.error("Error regenerating exercise:", error);
         throw error;
+    }
+};
+
+export const submitRatings = async (
+    exercise?: Exercise,
+    ratings?: { [key: string]: number },
+    questionIndex: number = 0
+) => {
+    const questionId = exercise?.questions[questionIndex].uuid;
+    await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/exercises/${
+            exercise?.uuid
+        }/ratings`,
+        { questionId, ratings }
+    );
+};
+
+/**
+ * Check the selected answer with the backend and get whether it is correct.
+ * If correct, stop the timer and show the explanation.
+ */
+export const checkAnswer = async (
+    selectedAnswer?: string,
+    exercise?: Exercise,
+    questionIndex: number = 0,
+    timeSpent?: number
+) => {
+    try {
+        if (selectedAnswer !== "") {
+            const questionId = exercise?.questions[questionIndex].uuid;
+            const response = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/exercises/${
+                    exercise?.uuid
+                }/check?questionId=${questionId}`,
+                { userAnswer: selectedAnswer, timeSpent }
+            );
+            return response.data.result;
+        }
+    } catch (error) {
+        console.error(
+            "Error with checking answer to exercise question: " + error
+        );
     }
 };
