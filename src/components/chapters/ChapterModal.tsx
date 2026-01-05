@@ -14,7 +14,7 @@ import { useForm } from "@mantine/form";
 import axios from "axios";
 import ChapterAssignments from "./ChapterAssignments";
 import { Assignment } from "../../types/Assignment";
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import GeneralInfo from "./GeneralInfo";
 import LearningObjectives from "./LearningObjectives";
 import { useAssignments } from "../../hooks/assignments";
@@ -34,6 +34,10 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
     const [chapterAssignments, setChapterAssignments] = useState<
         Assignment[] | undefined
     >(chapterAssignmentsData);
+
+    useEffect(() => {
+        setChapterAssignments(chapterAssignmentsData);
+    }, [chapterAssignmentsData]);
 
     const form = useForm({
         initialValues: chapter

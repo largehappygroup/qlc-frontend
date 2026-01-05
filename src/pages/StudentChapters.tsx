@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 
 import Layout from "../components/Layout";
 import ChapterDetailsList from "../components/exercises/ChapterDetailsList";
@@ -8,12 +7,6 @@ import { useChapters } from "../hooks/chapters";
 
 const StudentChapters: React.FC = () => {
     const {data: chapters} = useChapters(undefined, new Date());
-    const navigate = useNavigate();
-
-    if (!chapters || chapters.length === 0) {
-        navigate("/not-found", { replace: true });
-        return null;
-    }
 
     return (
         <Layout title="Chapters">
