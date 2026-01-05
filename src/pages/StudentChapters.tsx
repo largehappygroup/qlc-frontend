@@ -6,7 +6,9 @@ import { Anchor, Grid, Title, Text, Flex, Box } from "@mantine/core";
 import { useChapters } from "../hooks/chapters";
 
 const StudentChapters: React.FC = () => {
-    const {data: chapters} = useChapters(undefined, new Date());
+    const today = new Date();
+    today.setHours(0, 1, 0, 0);
+    const { data: chapters } = useChapters(undefined, today);
 
     return (
         <Layout title="Chapters">
