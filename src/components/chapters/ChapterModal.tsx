@@ -7,6 +7,7 @@ import {
     Container,
     Space,
     Text,
+    Loader,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Chapter, WithChapter } from "../../types/Chapter";
@@ -29,7 +30,9 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
     onUpdate,
 }: ChapterModalProps) => {
     const [opened, { open, close }] = useDisclosure(false);
-    const { data: chapterAssignmentsData } = useAssignments(chapter?.uuid);
+    const { data: chapterAssignmentsData, isLoading } = useAssignments(
+        chapter?.uuid
+    );
 
     const [chapterAssignments, setChapterAssignments] = useState<
         Assignment[] | undefined
@@ -207,35 +210,46 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                                     filled out the required fields.
                                 </Text>
                             )}
-                            <Tabs.Panel value="general">
-                                <GeneralInfo form={form} />
-                            </Tabs.Panel>
-
-                            <Tabs.Panel value="objectives">
-                                <LearningObjectives
-                                    form={form}
-                                    handleAddObjective={handleAddObjective}
-                                    handleDeleteObjective={
-                                        handleDeleteObjective
-                                    }
-                                    handleUpdateObjective={
-                                        handleUpdateObjective
-                                    }
-                                />
-                            </Tabs.Panel>
-
-                            <Tabs.Panel value="assignments">
-                                <ChapterAssignments
-                                    assignments={chapterAssignments || []}
-                                    handleAddAssignment={handleAddAssignment}
-                                    handleDeleteAssignment={
-                                        handleDeleteAssignment
-                                    }
-                                    handleUpdateAssignment={
-                                        handleUpdateAssignment
-                                    }
-                                />
-                            </Tabs.Panel>
+                            {isLoading ? (
+                                <Loader type="dots" size="xl" />
+                            ) : (
+                                <>
+                                    {" "}
+                                    <Tabs.Panel value="general">
+                                        <GeneralInfo form={form} />
+                                    </Tabs.Panel>
+                                    <Tabs.Panel value="objectives">
+                                        <LearningObjectives
+                                            form={form}
+                                            handleAddObjective={
+                                                handleAddObjective
+                                            }
+                                            handleDeleteObjective={
+                                                handleDeleteObjective
+                                            }
+                                            handleUpdateObjective={
+                                                handleUpdateObjective
+                                            }
+                                        />
+                                    </Tabs.Panel>
+                                    <Tabs.Panel value="assignments">
+                                        <ChapterAssignments
+                                            assignments={
+                                                chapterAssignments || []
+                                            }
+                                            handleAddAssignment={
+                                                handleAddAssignment
+                                            }
+                                            handleDeleteAssignment={
+                                                handleDeleteAssignment
+                                            }
+                                            handleUpdateAssignment={
+                                                handleUpdateAssignment
+                                            }
+                                        />
+                                    </Tabs.Panel>
+                                </>
+                            )}
                         </Tabs>
                         <Space h="lg" />
                         <Flex justify="end" gap="md">

@@ -1,9 +1,9 @@
-import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
+import { Card, Flex, Title, Text, ThemeIcon, Loader } from "@mantine/core";
 import { IconUsers } from "@tabler/icons-react";
 import { useTotalStudents } from "../../hooks/users";
 
 const TotalStudentsCard: React.FC = () => {
-    const { data: totalStudents } = useTotalStudents();
+    const { data: totalStudents, isLoading } = useTotalStudents();
     return (
         <Card withBorder shadow="sm">
             <Flex direction="column" gap="sm">
@@ -16,9 +16,14 @@ const TotalStudentsCard: React.FC = () => {
                     </ThemeIcon>
                 </Flex>
                 <Flex direction="column">
-                    <Title order={2} c="cyan">
-                        {totalStudents}
-                    </Title>
+                    {isLoading ? (
+                        <Loader type="dots" />
+                    ) : (
+                        <Title order={2} c="cyan">
+                            {totalStudents}
+                        </Title>
+                    )}
+
                     <Text size="sm" c="dimmed">
                         Enrolled
                     </Text>

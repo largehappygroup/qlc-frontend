@@ -1,5 +1,5 @@
 import Layout from "../components/Layout";
-import { Flex, Text, Table, Space, Group } from "@mantine/core";
+import { Flex, Text, Table, Space, Group, Loader } from "@mantine/core";
 
 import EditStudentModal from "../components/progress/EditStudentModal";
 import Search from "../components/progress/Search";
@@ -9,7 +9,7 @@ import { useUsers } from "../hooks/users";
 import { useEffect, useState } from "react";
 
 const FacultyProgress: React.FC = () => {
-    const { data, refetch } = useUsers("student");
+    const { data, refetch, isLoading } = useUsers("student");
 
     const [students, setStudents] = useState(data);
     useEffect(() => {
@@ -63,7 +63,9 @@ const FacultyProgress: React.FC = () => {
                 </Flex>
             </Flex>
             <Space h="md" />
-            {students && students.length > 0 ? (
+            {isLoading ? (
+                <Loader type="oval" />
+            ) : students && students.length > 0 ? (
                 <Table verticalSpacing="sm">
                     <Table.Tbody>{rows}</Table.Tbody>
                 </Table>

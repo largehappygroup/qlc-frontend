@@ -1,11 +1,11 @@
 import { BarChart } from "@mantine/charts";
-import { Card, Title, Text, Flex } from "@mantine/core";
+import { Card, Title, Text, Flex, Loader } from "@mantine/core";
 import { WithUserId } from "../../types/User";
 import { useScoreDistribution } from "../../hooks/exercises";
 
 const ScoreDistributionCard: React.FC<WithUserId> = ({ userId }) => {
-    const {data: averageScoreDistribution, isLoading} = useScoreDistribution(userId);
-    
+    const { data: averageScoreDistribution, isLoading } =
+        useScoreDistribution(userId);
 
     return (
         <>
@@ -41,7 +41,7 @@ const ScoreDistributionCard: React.FC<WithUserId> = ({ userId }) => {
                             />
                         </>
                     ) : isLoading ? (
-                        <Text>Loading...</Text>
+                        <Loader type="oval" size="lg" />
                     ) : (
                         <Text>No score distribution found.</Text>
                     )}

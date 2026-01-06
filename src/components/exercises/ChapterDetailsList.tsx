@@ -1,4 +1,4 @@
-import { Flex, Text } from "@mantine/core";
+import { Flex, Loader, Text } from "@mantine/core";
 import ExerciseCard from "./ExerciseCard";
 import FeedbackCard from "./FeedbackCard";
 import { WithChapter } from "../../types/Chapter";
@@ -12,7 +12,10 @@ const ChapterDetailsList: React.FC<ChapterDetailsListProps> = ({
     chapter,
     date,
 }: ChapterDetailsListProps) => {
-    const {data: chapterAssignments, isLoading} = useAssignments(chapter?.uuid, date);
+    const { data: chapterAssignments, isLoading } = useAssignments(
+        chapter?.uuid,
+        date
+    );
 
     const items = chapterAssignments?.map((assignment, index) => (
         <ExerciseCard index={index} assignment={assignment} />
@@ -21,7 +24,7 @@ const ChapterDetailsList: React.FC<ChapterDetailsListProps> = ({
     return (
         <Flex direction="column" gap="xs" pt="sm">
             {isLoading ? (
-                <Text>Loading...</Text>
+                <Loader type="dots" size="xl" />
             ) : !items || items?.length === 0 ? (
                 <Text>No exercises found.</Text>
             ) : (

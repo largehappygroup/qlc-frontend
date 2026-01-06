@@ -1,13 +1,17 @@
-import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
+import {
+    Card,
+    Flex,
+    Title,
+    Text,
+    ThemeIcon,
+    Loader,
+} from "@mantine/core";
 import { WithUserId } from "../../types/User";
 import { IconStars } from "@tabler/icons-react";
 import { useAverageScore } from "../../hooks/exercises";
 
-
-const AverageScoreCard: React.FC<WithUserId> = ({
-    userId
-}) => {
-    const {data: average} = useAverageScore(userId);
+const AverageScoreCard: React.FC<WithUserId> = ({ userId }) => {
+    const { data: average, isLoading } = useAverageScore(userId);
 
     return (
         <Card withBorder shadow="sm">
@@ -21,7 +25,14 @@ const AverageScoreCard: React.FC<WithUserId> = ({
                     </ThemeIcon>
                 </Flex>
                 <Flex direction="column">
-                    <Title order={2} c="cyan">{average}%</Title>
+                    {isLoading ? (
+                        <Loader type="dots" />
+                    ) : (
+                        <Title order={2} c="cyan">
+                            {average}%
+                        </Title>
+                    )}
+
                     <Text size="sm" c="dimmed">
                         Per Exercise
                     </Text>

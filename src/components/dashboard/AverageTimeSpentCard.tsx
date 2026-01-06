@@ -1,11 +1,10 @@
-import { Card, Flex, Title, Text, ThemeIcon } from "@mantine/core";
+import { Card, Flex, Title, Text, ThemeIcon, Loader } from "@mantine/core";
 import { WithUserId } from "../../types/User";
 import { IconClock } from "@tabler/icons-react";
 import { useAverageTimeSpent } from "../../hooks/exercises";
 
 const AverageTimeSpentCard: React.FC<WithUserId> = ({ userId }) => {
-    
-    const {data: timeSpent} = useAverageTimeSpent(userId);
+    const { data: timeSpent, isLoading } = useAverageTimeSpent(userId);
 
     return (
         <Card withBorder shadow="sm">
@@ -19,7 +18,13 @@ const AverageTimeSpentCard: React.FC<WithUserId> = ({ userId }) => {
                     </ThemeIcon>
                 </Flex>
                 <Flex direction="column">
-                    <Title order={2} c="cyan">{timeSpent}</Title>
+                    {isLoading ? (
+                        <Loader type="dots" />
+                    ) : (
+                        <Title order={2} c="cyan">
+                            {timeSpent}
+                        </Title>
+                    )}
                     <Text size="sm" c="dimmed">
                         Per Exercise
                     </Text>

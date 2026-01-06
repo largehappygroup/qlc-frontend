@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Layout from "../components/Layout";
 
-import { ActionIcon, Badge, Flex, Select, Space } from "@mantine/core";
+import { ActionIcon, Badge, Flex, Loader, Select, Space } from "@mantine/core";
 import ExerciseTable from "../components/exercises/ExerciseTable";
 import { useAssignments } from "../hooks/assignments";
 import { IconClock } from "@tabler/icons-react";
 
 const FacultyExercises: React.FC = () => {
-    const { data: assignments } = useAssignments();
+    const { data: assignments, isLoading } = useAssignments();
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [jobStatuses, setJobStatuses] = useState<
         Record<
@@ -31,11 +31,14 @@ const FacultyExercises: React.FC = () => {
         const fetchJob = async () => {
             try {
                 const r = await axios.get(
-                    `${import.meta.env.VITE_BACKEND_URL}/jobs/by-assignment/${assignment.uuid}`
+                    `${import.meta.env.VITE_BACKEND_URL}/jobs/by-assignment/${
+                        assignment.uuid
+                    }`
                 );
                 const data = r.data;
                 const state = data.state || data.status;
-                const progress = typeof data.progress === "number" ? data.progress : 0;
+                const progress =
+                    typeof data.progress === "number" ? data.progress : 0;
                 if (!cancelled) {
                     setJobStatuses((s) => ({
                         ...s,
@@ -43,16 +46,23 @@ const FacultyExercises: React.FC = () => {
                             jobId: data.uuid,
                             state,
                             progress,
-                            statusUrl: `${import.meta.env.VITE_BACKEND_URL}/jobs/${data.uuid}`,
+                            statusUrl: `${
+                                import.meta.env.VITE_BACKEND_URL
+                            }/jobs/${data.uuid}`,
                         },
                     }));
                 }
                 // start polling for this job so UI shows live progress
-                if ((state === "pending" || state === "in-progress") && !cancelled) {
+                if (
+                    (state === "pending" || state === "in-progress") &&
+                    !cancelled
+                ) {
                     const poll = async () => {
                         try {
                             const r2 = await axios.get(
-                                `${import.meta.env.VITE_BACKEND_URL}/jobs/${data.uuid}`
+                                `${import.meta.env.VITE_BACKEND_URL}/jobs/${
+                                    data.uuid
+                                }`
                             );
                             const { state: s2, progress: p2 } = r2.data;
                             setJobStatuses((s) => ({
@@ -60,18 +70,26 @@ const FacultyExercises: React.FC = () => {
                                 [assignment.uuid as string]: {
                                     ...(s[assignment.uuid as string] || {}),
                                     jobId: data.uuid,
-                                    state: s2 || s[assignment.uuid as string]?.state,
+                                    state:
+                                        s2 ||
+                                        s[assignment.uuid as string]?.state,
                                     progress:
                                         typeof p2 === "number"
                                             ? p2
-                                            : s[assignment.uuid as string]?.progress ?? 0,
+                                            : s[assignment.uuid as string]
+                                                  ?.progress ?? 0,
                                 },
                             }));
                             if (s2 === "completed" || s2 === "failed") {
-                                const id = pollingRefs.current[assignment.uuid as string];
+                                const id =
+                                    pollingRefs.current[
+                                        assignment.uuid as string
+                                    ];
                                 if (id) {
                                     window.clearInterval(id);
-                                    delete pollingRefs.current[assignment.uuid as string];
+                                    delete pollingRefs.current[
+                                        assignment.uuid as string
+                                    ];
                                 }
                             }
                         } catch (err) {
@@ -117,7 +135,9 @@ const FacultyExercises: React.FC = () => {
 
         try {
             const resp = await axios.post(
-                `${import.meta.env.VITE_BACKEND_URL}/exercises/batch?assignmentId=${assignmentId}`
+                `${
+                    import.meta.env.VITE_BACKEND_URL
+                }/exercises/batch?assignmentId=${assignmentId}`
             );
 
             const { jobId, statusUrl } = resp.data;
@@ -181,26 +201,14 @@ const FacultyExercises: React.FC = () => {
     };
 
     const assignment = assignments?.[selectedIndex];
-    const status = assignment ? jobStatuses[assignment.uuid as string] : undefined;
+    const status = assignment
+        ? jobStatuses[assignment.uuid as string]
+        : undefined;
 
     return (
         <Layout title="Exercises">
-            <Flex justify="flex-end" gap="md" align="center"></Flex>
-            <Flex align="center" gap="xs">
-                <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    onClick={() => generateExercises(assignment?.uuid)}
-                    disabled={
-                        status &&
-                        status.state !== "completed" &&
-                        status.state !== "failed"
-                    }
-                >
-                    <IconClock size={16} stroke={1.5} />
-                </ActionIcon>
-
-                {status && (
+            <Flex align="center" gap="sm" justify="end">
+                {status ? (
                     <Badge variant="outline">
                         {status.state === "completed"
                             ? "Done"
@@ -208,26 +216,48 @@ const FacultyExercises: React.FC = () => {
                             ? "Failed"
                             : `${status.progress ?? 0}%`}
                     </Badge>
+                ) : (
+                    <ActionIcon
+                        variant="subtle"
+                        color="gray"
+                        onClick={() => generateExercises(assignment?.uuid)}
+                    >
+                        <IconClock size={16} stroke={1.5} />
+                    </ActionIcon>
                 )}
+                <Select
+                    data={
+                        assignments?.map((assignment) => ({
+                            value: assignment.uuid || "",
+                            label: assignment.identifier,
+                        })) || []
+                    }
+                    value={assignment?.uuid || ""}
+                    onChange={(_value, option) =>
+                        setSelectedIndex(
+                            assignments?.findIndex(
+                                (a) => a.uuid === option?.value
+                            ) || 0
+                        )
+                    }
+                />
             </Flex>
-            <Select
-                data={
-                    assignments?.map((assignment) => ({
-                        value: assignment.uuid || "",
-                        label: assignment.identifier,
-                    })) || []
-                }
-                value={assignment?.uuid || ""}
-                onChange={(_value, option) =>
-                    setSelectedIndex(
-                        assignments?.findIndex(
-                            (a) => a.uuid === option?.value
-                        ) || 0
-                    )
-                }
-            />
+
             <Space h="md" />
-            <ExerciseTable assignmentId={assignment?.uuid} />
+            {isLoading ? (
+                <Flex
+                    gap="lg"
+                    direction="column"
+                    w="100%"
+                    h="100%"
+                    align="center"
+                    ta="center"
+                >
+                    <Loader type="oval" size="xl" />
+                </Flex>
+            ) : (
+                <ExerciseTable assignmentId={assignment?.uuid} />
+            )}
         </Layout>
     );
 };
