@@ -6,10 +6,10 @@ import { getAverageScore, getAverageTimeSpent, getExercise, getExercises, getRec
  * @param assignmentId - uuid of the assignment
  * @returns - exercise data Exercise
  */
-export const useExercise = (assignmentId?: string) => {
+export const useExercise = (userId?:string, assignmentId?: string) => {
     return useQuery({
-        queryKey: ["exercise", assignmentId],
-        queryFn: () => getExercise( assignmentId),
+        queryKey: ["exercise", userId, assignmentId],
+        queryFn: () => getExercise(userId, assignmentId),
     });
 };
 

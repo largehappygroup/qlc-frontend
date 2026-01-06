@@ -7,6 +7,7 @@ import { Assignment } from "../../types/Assignment";
 import Quiz from "./Quiz";
 import Summary from "./Summary";
 import { useExercise } from "../../hooks/exercises";
+import { useAuth } from "../../hooks/AuthContext";
 
 interface ExerciseCardProps {
     index: number;
@@ -17,7 +18,8 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     index,
     assignment,
 }: ExerciseCardProps) => {
-    const { data: exercise, refetch, isLoading } = useExercise(assignment.uuid);
+    const {user} = useAuth();
+    const { data: exercise, refetch, isLoading } = useExercise(user?.vuNetId,assignment.uuid);
 
     useEffect(() => {
         refetch();

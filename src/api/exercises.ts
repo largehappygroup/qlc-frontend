@@ -6,10 +6,10 @@ import { Exercise, RecentActivity } from "../types/Exercise";
  * @param assignmentId - uuid of the assignment
  * @returns - exercise data Exercise
  */
-export const getExercise = async (assignmentId?: string) => {
+export const getExercise = async (userId?: string, assignmentId?: string) => {
     try {
         const response = await axios.get<Exercise>(
-            `${import.meta.env.VITE_BACKEND_URL}/exercises/${assignmentId}`
+            `${import.meta.env.VITE_BACKEND_URL}/exercises/most-recent?assignmentId=${assignmentId}&userId=${userId}`
         );
         return response.data;
     } catch (error) {
