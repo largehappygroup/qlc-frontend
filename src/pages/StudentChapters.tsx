@@ -45,6 +45,7 @@ const StudentChapters: React.FC = () => {
                                     <ChapterDetailsList
                                         key={chapter.uuid}
                                         chapter={chapter}
+                                        
                                     />
                                 </>
                             ))}

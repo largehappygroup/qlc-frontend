@@ -1,7 +1,6 @@
 import {
     Button,
     CloseButton,
-    Container,
     Divider,
     Flex,
     Progress,
@@ -109,6 +108,11 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
         setTimeStopped(false);
     };
 
+    const requiredRatings = ["clarity", "helpfulness", "ai-usage"];
+    const canContinue = requiredRatings.every(
+        (key) => ratings[key] !== undefined && ratings[key] !== null
+    );
+
     return (
         <>
             <Box w={{ base: "100%", lg: "auto" }} onClick={showModal}>
@@ -122,124 +126,116 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                 centered
                 fullScreen
             >
-                <Container>
-                    <Flex direction="column" gap="xl">
-                        <Flex align="center" gap="md">
-                            <Progress
-                                flex="1"
-                                radius="xl"
-                                size="lg"
-                                value={
-                                    100 *
-                                    (questionIndex /
-                                        (exercise?.questions.length || 1))
-                                }
-                                striped
-                                animated
-                            />
+                <Flex direction="column" gap="xl" p="xl">
+                    <Flex align="center" gap="md">
+                        <Progress
+                            flex="1"
+                            radius="xl"
+                            size="lg"
+                            value={
+                                100 *
+                                (questionIndex /
+                                    (exercise?.questions.length || 1))
+                            }
+                            striped
+                            animated
+                        />
 
-                            <CloseButton onClick={hideModal} />
-                        </Flex>
-                        {showStart ? (
-                            <StartQuiz
-                                exercise={exercise}
-                                startQuiz={startQuiz}
-                            />
-                        ) : showEnd ? (
-                            <CompleteQuiz endQuiz={hideModal} />
-                        ) : (
-                            <Grid>
-                                <Grid.Col span={{ base: 12, sm: 6 }}>
-                                    <Code block>
-                                        <ScrollArea h={550}>
-                                            {exercise?.submission}
-                                        </ScrollArea>
-                                    </Code>
-                                </Grid.Col>
-                                <Grid.Col span={{ base: 12, sm: 6 }}>
-                                    <Flex direction="column" gap="md" mb="md">
-                                        <MultipleChoiceQuestion
-                                            submitted={submitted}
-                                            value={selectedAnswer}
-                                            onChange={setSelectedAnswer}
-                                            query={
-                                                exercise?.questions[
-                                                    questionIndex
-                                                ].query
-                                            }
-                                            availableAnswers={
-                                                exercise?.questions[
-                                                    questionIndex
-                                                ].availableAnswers
-                                            }
-                                        />
-                                        <Divider />
-                                        {submitted && (
-                                            <>
-                                                <Explanation
-                                                    correct={correct}
-                                                    explanation={
-                                                        exercise?.questions[
-                                                            questionIndex
-                                                        ].explanation
-                                                    }
-                                                />
-                                                {correct && (
-                                                    <Ratings
-                                                        value={ratings}
-                                                        onChange={setRatings}
-                                                    />
-                                                )}
-                                            </>
-                                        )}
-                                        <Flex justify="end">
-                                            {submitted ? (
-                                                <Button
-                                                    onClick={handleContinue}
-                                                    radius="xl"
-                                                    w={{
-                                                        base: "100%",
-                                                        md: "auto",
-                                                    }}
-                                                >
-                                                    Continue
-                                                </Button>
-                                            ) : (
-                                                <Button
-                                                    onClick={async () => {
-                                                        setTimePaused(true);
-                                                        const result =
-                                                            await checkAnswer(
-                                                                selectedAnswer,
-                                                                exercise,
-                                                                questionIndex,
-                                                                timeSpent
-                                                            );
-
-                                                        if (result) {
-                                                            setTimeStopped(
-                                                                true
-                                                            );
-                                                            setCorrect(true);
-                                                        }
-                                                        setSubmitted(true);
-                                                    }}
-                                                    radius="xl"
-                                                    w={{
-                                                        base: "100%",
-                                                        md: "auto",
-                                                    }}
-                                                >
-                                                    Submit
-                                                </Button>
-                                            )}
-                                        </Flex>
-                                    </Flex>
-                                </Grid.Col>
-                            </Grid>
-                        )}
+                        <CloseButton onClick={hideModal} />
                     </Flex>
-                </Container>
+                    {showStart ? (
+                        <StartQuiz exercise={exercise} startQuiz={startQuiz} />
+                    ) : showEnd ? (
+                        <CompleteQuiz endQuiz={hideModal} />
+                    ) : (
+                        <Grid>
+                            <Grid.Col span={{ base: 12, sm: 6 }}>
+                                <Code block>
+                                    <ScrollArea h={550}>
+                                        {exercise?.submission}
+                                    </ScrollArea>
+                                </Code>
+                            </Grid.Col>
+                            <Grid.Col span={{ base: 12, sm: 6 }}>
+                                <Flex direction="column" gap="md" mb="md">
+                                    <MultipleChoiceQuestion
+                                        submitted={submitted}
+                                        value={selectedAnswer}
+                                        onChange={setSelectedAnswer}
+                                        query={
+                                            exercise?.questions[questionIndex]
+                                                .query
+                                        }
+                                        availableAnswers={
+                                            exercise?.questions[questionIndex]
+                                                .availableAnswers
+                                        }
+                                    />
+                                    <Divider />
+                                    {submitted && (
+                                        <>
+                                            <Explanation
+                                                correct={correct}
+                                                reason={
+                                                    exercise?.questions[
+                                                        questionIndex
+                                                    ].explanation
+                                                }
+                                            />
+                                            {correct && (
+                                                <Ratings
+                                                    value={ratings}
+                                                    onChange={setRatings}
+                                                />
+                                            )}
+                                        </>
+                                    )}
+                                    <Flex justify="end">
+                                        {submitted ? (
+                                            <Button
+                                                onClick={handleContinue}
+                                                disabled={!canContinue}
+                                                radius="xl"
+                                                w={{
+                                                    base: "100%",
+                                                    md: "auto",
+                                                }}
+                                            >
+                                                Continue
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                onClick={async () => {
+                                                    setTimePaused(true);
+                                                    const result =
+                                                        await checkAnswer(
+                                                            selectedAnswer,
+                                                            exercise,
+                                                            questionIndex,
+                                                            timeSpent
+                                                        );
+
+                                                    if (result) {
+                                                        setTimeStopped(true);
+                                                        setCorrect(true);
+                                                    }
+                                                    setSubmitted(true);
+                                                }}
+                                                radius="xl"
+                                                w={{
+                                                    base: "100%",
+                                                    md: "auto",
+                                                }}
+                                            >
+                                                Submit
+                                            </Button>
+                                        )}
+                                    </Flex>
+                                </Flex>
+                            </Grid.Col>
+                        </Grid>
+                    )}
+                </Flex>
             </Modal>
         </>
     );

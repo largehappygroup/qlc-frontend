@@ -101,7 +101,7 @@ const FeedbackSliders: React.FC<FeedbackSlidersProps> = ({
                                     value={question.value}
                                     onChange={question.onChange}
                                     showLabelOnHover={false}
-                                    defaultValue={3}
+                                    defaultValue={undefined}
                                     marks={[
                                         {
                                             value: 1,
