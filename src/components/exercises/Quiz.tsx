@@ -80,9 +80,8 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                 setCorrect(false);
                 setTimeStopped(false);
                 setRatings({});
+                refresh();
             }
-
-            refresh();
         }
         setSubmitted(false);
         setSelectedAnswer("");
@@ -100,6 +99,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
         setTimeStopped(false);
         setTimePaused(true);
         close();
+        refresh();
     };
 
     const startQuiz = () => {

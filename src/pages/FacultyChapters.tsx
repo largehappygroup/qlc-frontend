@@ -7,7 +7,6 @@ import cx from "clsx";
 import {
     ActionIcon,
     Affix,
-    Badge,
     Button,
     Card,
     Flex,
@@ -35,7 +34,6 @@ const FacultyChapters: React.FC = () => {
     const [state, handlers] = useListState<Chapter>([]);
     const [reorderMode, setReorderMode] = useState<boolean>(false);
     const [savedChapter, setSavedChapter] = useState<boolean>(false);
-  
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,7 +46,6 @@ const FacultyChapters: React.FC = () => {
                         a.order && b.order ? a.order - b.order : -1
                     )
                 );
-               
             } catch (err) {
                 console.error(err);
             }
@@ -56,9 +53,6 @@ const FacultyChapters: React.FC = () => {
         fetchData();
     }, [savedChapter]);
 
-
-
-   
     /**
      * deletes a chapter by id
      * @param id - the uuid of the chapter to delete
@@ -175,19 +169,6 @@ const FacultyChapters: React.FC = () => {
                                         >
                                             Chapter {item.order}: {item.title}
                                         </Title>
-
-                                        <Badge>
-                                            {item.assignmentIds
-                                                ? `${
-                                                      item.assignmentIds.length
-                                                  } Assignment${
-                                                      item.assignmentIds
-                                                          .length === 1
-                                                          ? ""
-                                                          : "s"
-                                                  }`
-                                                : "0 Assignments"}
-                                        </Badge>
                                     </Flex>
                                     <Flex
                                         justify="end"
@@ -195,7 +176,6 @@ const FacultyChapters: React.FC = () => {
                                         gap="xs"
                                         py="xs"
                                     >
-                                    
                                         <ChapterModal
                                             onUpdate={() =>
                                                 setSavedChapter(!savedChapter)
