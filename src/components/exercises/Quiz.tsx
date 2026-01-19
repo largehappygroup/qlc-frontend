@@ -76,13 +76,13 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
         const missing = requiredRatings.filter(
             (key) => ratings[key] === undefined || ratings[key] === null,
         );
-        if (missing.length > 0) {
+        if (correct && missing.length > 0) {
             setRatingsError(
                 "Please fill out all required ratings before continuing.",
             );
             return;
         }
-        setRatingsError("");
+
         if (correct) {
             await submitRatings(exercise, ratings, questionIndex);
             if (questionIndex + 1 === exercise?.questions.length) {
@@ -95,6 +95,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                 refresh();
             }
         }
+        setRatingsError("");
         setSubmitted(false);
         setSelectedAnswer("");
         setTimePaused(false);
@@ -122,7 +123,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
     };
 
     const hideModal = () => {
-        setTimeStopped(false);
+        setTimeStopped(true);
         setTimePaused(true);
         close();
         refresh();
