@@ -8,9 +8,12 @@ import {
     Grid,
     Card,
     RingProgress,
+    ActionIcon,
+    ScrollArea,
+    Code,
 } from "@mantine/core";
-import { IconCheck, IconX } from "@tabler/icons-react";
-import React, { PropsWithChildren } from "react";
+import { IconCheck, IconCode, IconX } from "@tabler/icons-react";
+import React, { PropsWithChildren, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { WithExercise } from "../../types/Exercise";
 
@@ -24,6 +27,7 @@ const Summary: React.FC<SummaryProps> = ({
     date,
 }: SummaryProps) => {
     const [opened, { open, close }] = useDisclosure(false);
+    const [showCode, setShowCode] = useState<boolean>(false);
     return (
         <>
             <Box w={{ base: "100%", lg: "auto" }} onClick={open}>
@@ -87,6 +91,21 @@ const Summary: React.FC<SummaryProps> = ({
                         </Card>
                     </Grid.Col>
                     <Grid.Col span={{ base: 12, md: 8 }}>
+                        <Flex justify="end" mb="md">
+                            <ActionIcon
+                                size="sm"
+                                onClick={() => setShowCode(!showCode)}
+                            >
+                                <IconCode />
+                            </ActionIcon>
+                        </Flex>
+                        {showCode && (
+                            <ScrollArea h={300}>
+                                <Code block mb="sm">
+                                    {exercise?.submission}
+                                </Code>
+                            </ScrollArea>
+                        )}
                         <Accordion>
                             {exercise?.questions.map((question, index) => (
                                 <Accordion.Item

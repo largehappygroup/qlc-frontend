@@ -43,6 +43,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
     const [ratings, setRatings] = useState<{ [key: string]: number }>(
         exercise ? exercise?.questions[questionIndex].ratings : {}
     );
+    const [ratingsError, setRatingsError] = useState("");
 
     const [timePaused, setTimePaused] = useState(true);
     const [timeStopped, setTimeStopped] = useState(true);
@@ -70,9 +71,18 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
      * Fetch the updated exercise from the backend to get the latest progress.
      */
     const handleContinue = async () => {
+        // Check if all required ratings are filled
+        const requiredRatings = ["clarity", "helpfulness", "ai-usage"];
+        const missing = requiredRatings.filter(
+            (key) => ratings[key] === undefined || ratings[key] === null
+        );
+        if (missing.length > 0) {
+            setRatingsError("Please fill out all required ratings before continuing.");
+            return;
+        }
+        setRatingsError("");
         if (correct) {
             await submitRatings(exercise, ratings, questionIndex);
-
             if (questionIndex + 1 === exercise?.questions.length) {
                 setShowEnd(true);
             } else {
@@ -89,7 +99,21 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
     };
 
     const showModal = () => {
-        setShowStart(true);
+        // If the current question has already been submitted, show the submitted screen with ratings
+        const q = exercise?.questions[questionIndex];
+        if (q && q.ratings && Object.keys(q.ratings).length > 0) {
+            setSubmitted(true);
+            setRatings(q.ratings);
+            setCorrect(true); // Assume correct if ratings exist (can adjust if needed)
+            setShowStart(false);
+            setShowEnd(false);
+        } else {
+            setShowStart(true);
+            setShowEnd(false);
+            setSubmitted(false);
+            setRatings({});
+            setCorrect(false);
+        }
         setTimePaused(true);
         setTimeStopped(true);
         open();
@@ -107,6 +131,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
         setTimePaused(false);
         setTimeStopped(false);
     };
+
 
     const requiredRatings = ["clarity", "helpfulness", "ai-usage"];
     const canContinue = requiredRatings.every(
@@ -190,7 +215,12 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                                             )}
                                         </>
                                     )}
-                                    <Flex justify="end">
+                                    <Flex direction="column" gap="xs" align="end">
+                                        {ratingsError && submitted && (
+                                            <Box style={{ color: 'red', fontWeight: 500 }}>
+                                                {ratingsError}
+                                            </Box>
+                                        )}
                                         {submitted ? (
                                             <Button
                                                 onClick={handleContinue}
@@ -220,6 +250,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                                                         setCorrect(true);
                                                     }
                                                     setSubmitted(true);
+                                                    setRatingsError("");
                                                 }}
                                                 radius="xl"
                                                 w={{

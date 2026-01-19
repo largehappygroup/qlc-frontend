@@ -31,7 +31,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
 }: ChapterModalProps) => {
     const [opened, { open, close }] = useDisclosure(false);
     const { data: chapterAssignmentsData, isLoading } = useAssignments(
-        chapter?.uuid
+        chapter ? chapter?.uuid : undefined
     );
 
     const [chapterAssignments, setChapterAssignments] = useState<
@@ -39,8 +39,13 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
     >(chapterAssignmentsData);
 
     useEffect(() => {
-        setChapterAssignments(chapterAssignmentsData);
-    }, [chapterAssignmentsData]);
+        // If editing an existing chapter, set assignments from backend; if creating new, reset to empty
+        if (chapter) {
+            setChapterAssignments(chapterAssignmentsData);
+        } else {
+            setChapterAssignments([]);
+        }
+    }, [chapter, chapterAssignmentsData]);
 
     const form = useForm({
         initialValues: chapter
@@ -72,11 +77,16 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
     const hideModal = () => {
         if (!chapter) {
             form.reset();
+            setChapterAssignments([]); // Reset assignments when closing modal for new chapter
         }
         close();
     };
 
     const showModal = () => {
+        if (!chapter) {
+            form.reset();
+            setChapterAssignments([]); // Ensure assignments are empty when creating new chapter
+        }
         open();
     };
 
@@ -139,21 +149,23 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
         try {
             if (chapter) {
                 await axios.put(
-                    `${import.meta.env.VITE_BACKEND_URL}/chapters/${
-                        chapter.uuid
-                    }`,
+                    `${import.meta.env.VITE_BACKEND_URL}/chapters/${chapter.uuid}`,
                     {
                         ...values,
                         assignments: chapterAssignments,
                     }
                 );
             } else {
-                if (chapterAssignments && chapterAssignments.length > 0) {
+                // Only send assignments that have at least a title or identifier (avoid empty objects)
+                const filteredAssignments = (chapterAssignments || []).filter(
+                    (a) => a && (a.title || a.identifier)
+                );
+                if (filteredAssignments.length > 0) {
                     await axios.post(
                         `${import.meta.env.VITE_BACKEND_URL}/chapters`,
                         {
                             ...values,
-                            assignments: chapterAssignments,
+                            assignments: filteredAssignments,
                         }
                     );
                 } else {
@@ -162,8 +174,8 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                         values
                     );
                 }
-
                 form.reset();
+                setChapterAssignments([]);
             }
             onUpdate();
             close();
