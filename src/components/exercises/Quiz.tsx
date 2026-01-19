@@ -134,8 +134,8 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
 
 
     const requiredRatings = ["clarity", "helpfulness", "ai-usage"];
-    const canContinue = requiredRatings.every(
-        (key) => ratings[key] !== undefined && ratings[key] !== null
+    const canContinue = !!ratings && requiredRatings.every(
+        (key) => ratings && ratings[key] !== undefined && ratings[key] !== null
     );
 
     return (
