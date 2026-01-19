@@ -34,14 +34,14 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
     const [showStart, setShowStart] = useState(true);
     const [showEnd, setShowEnd] = useState(false);
     const [questionIndex, setQuestionIndex] = useState(
-        exercise ? exercise.completedQuestions : 0
+        exercise ? exercise.completedQuestions : 0,
     );
     const [selectedAnswer, setSelectedAnswer] = useState<string>("");
     const [submitted, setSubmitted] = useState(false);
     const [correct, setCorrect] = useState(false);
 
     const [ratings, setRatings] = useState<{ [key: string]: number }>(
-        exercise ? exercise?.questions[questionIndex].ratings : {}
+        exercise ? exercise?.questions[questionIndex].ratings : {},
     );
     const [ratingsError, setRatingsError] = useState("");
 
@@ -52,7 +52,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
     useEffect(() => {
         if (timeStopped) {
             setTimeSpent(
-                exercise ? exercise?.questions[questionIndex].timeSpent : 0
+                exercise ? exercise?.questions[questionIndex].timeSpent : 0,
             );
         }
 
@@ -72,12 +72,14 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
      */
     const handleContinue = async () => {
         // Check if all required ratings are filled
-        const requiredRatings = ["clarity", "helpfulness", "ai-usage"];
+        const requiredRatings = ["clarity", "helpfulness"];
         const missing = requiredRatings.filter(
-            (key) => ratings[key] === undefined || ratings[key] === null
+            (key) => ratings[key] === undefined || ratings[key] === null,
         );
         if (missing.length > 0) {
-            setRatingsError("Please fill out all required ratings before continuing.");
+            setRatingsError(
+                "Please fill out all required ratings before continuing.",
+            );
             return;
         }
         setRatingsError("");
@@ -132,11 +134,16 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
         setTimeStopped(false);
     };
 
-
-    const requiredRatings = ["clarity", "helpfulness", "ai-usage"];
-    const canContinue = !!ratings && requiredRatings.every(
-        (key) => ratings && ratings[key] !== undefined && ratings[key] !== null
-    );
+    const requiredRatings = ["clarity", "helpfulness"];
+    const canContinue =
+        !correct ||
+        (!!ratings &&
+            requiredRatings.every(
+                (key) =>
+                    ratings &&
+                    ratings[key] !== undefined &&
+                    ratings[key] !== null,
+            ));
 
     return (
         <>
@@ -215,9 +222,18 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                                             )}
                                         </>
                                     )}
-                                    <Flex direction="column" gap="xs" align="end">
+                                    <Flex
+                                        direction="column"
+                                        gap="xs"
+                                        align="end"
+                                    >
                                         {ratingsError && submitted && (
-                                            <Box style={{ color: 'red', fontWeight: 500 }}>
+                                            <Box
+                                                style={{
+                                                    color: "red",
+                                                    fontWeight: 500,
+                                                }}
+                                            >
                                                 {ratingsError}
                                             </Box>
                                         )}
@@ -242,7 +258,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                                                             selectedAnswer,
                                                             exercise,
                                                             questionIndex,
-                                                            timeSpent
+                                                            timeSpent,
                                                         );
 
                                                     if (result) {

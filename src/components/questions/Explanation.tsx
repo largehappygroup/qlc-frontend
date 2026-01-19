@@ -29,12 +29,12 @@ const Explanation: React.FC<ExplanationProps> = ({
             </Flex>
             <Text>{reason}</Text>
             <Text c="dimmed" size="sm">
-                If you believe the question itself is incorrect, please click
+                If you believe the question itself is incorrect, please click{" "}
                 <a
                     href={`mailto:helen.wu@vanderbilt.edu?subject=${encodeURI(
-                        "CS1101 QLC Study Exercise Issue"
+                        "CS1101 QLC Study Exercise Issue",
                     )}&body=${encodeURI(
-                        `Hi Helen!\n\nFor the exercises this week, I believe that question [INSERT QUESTION] for assigment [INSERT ASSIGNMENT (ex. PA06-A)] is incorrect because [INSERT REASON HERE]. Please take a look and let me know what you think.\nThank you!\n\n-- ${user?.firstName} ${user?.lastName} (${user?.email})`
+                        `Hi Helen!\n\nFor the exercises this week, I believe that question [INSERT QUESTION] for assigment [INSERT ASSIGNMENT (ex. PA06-A)] is incorrect because [INSERT REASON HERE]. Please take a look and let me know what you think.\nThank you!\n\n-- ${user?.firstName} ${user?.lastName} (${user?.email})`,
                     )}`}
                 >
                     here
