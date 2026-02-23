@@ -9,7 +9,7 @@ const UpcomingCard: React.FC = () => {
                     To Do This Week
                 </Title>
             </Flex>
-            <ChapterDetailsList date={new Date()} />
+            <ChapterDetailsList />
         </Card>
     );
 };
