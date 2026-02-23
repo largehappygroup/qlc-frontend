@@ -19,6 +19,7 @@ export interface Exercise {
             timeStamp: Date;
             selectedAnswer: string;
         }[];
+        status: QuestionStatus;
         correct?: boolean;
         timeSpent: number;
     }[];
@@ -31,6 +32,7 @@ export interface WithExercise {
     exercise?: Exercise;
 }
 
+export type QuestionStatus = "not-attempted" | "incorrect-attempted" | "correct-attempted" | "completed";
 
 export type ExerciseStatus = "In Progress" | "Complete" | "Not Started";
 

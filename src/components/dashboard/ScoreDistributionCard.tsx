@@ -1,7 +1,7 @@
 import { BarChart } from "@mantine/charts";
 import { Card, Title, Text, Flex, Loader } from "@mantine/core";
 import { WithUserId } from "../../types/User";
-import { useScoreDistribution } from "../../hooks/exercises";
+import { useScoreDistribution } from "../../hooks/useExercises";
 
 const ScoreDistributionCard: React.FC<WithUserId> = ({ userId }) => {
     const { data: averageScoreDistribution, isLoading } =

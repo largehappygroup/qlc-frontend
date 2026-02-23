@@ -1,7 +1,7 @@
 import { Card, Flex, Title, Text, ThemeIcon, Loader } from "@mantine/core";
 import { WithUserId } from "../../types/User";
 import { IconClock } from "@tabler/icons-react";
-import { useAverageTimeSpent } from "../../hooks/exercises";
+import { useAverageTimeSpent } from "../../hooks/useExercises";
 
 const AverageTimeSpentCard: React.FC<WithUserId> = ({ userId }) => {
     const { data: timeSpent, isLoading } = useAverageTimeSpent(userId);

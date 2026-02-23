@@ -7,7 +7,7 @@ import Search from "../components/progress/Search";
 
 import DownloadModal from "../components/progress/DownloadModal";
 import UploadModal from "../components/progress/UploadModal";
-import { useUsers } from "../hooks/users";
+import { useUsers } from "../hooks/useUsers";
 
 const UserDirectory: React.FC = () => {
     const { data, isLoading, refetch } = useUsers();

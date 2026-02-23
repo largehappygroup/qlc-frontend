@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import { WithUserId } from "../../types/User";
-import { useRecentActivity } from "../../hooks/exercises";
+import { useRecentActivity } from "../../hooks/useExercises";
 
 const RecentActivityCard: React.FC<WithUserId> = ({ userId }) => {
     const { data: activities, isLoading, refetch } = useRecentActivity(userId);

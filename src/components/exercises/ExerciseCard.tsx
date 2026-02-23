@@ -1,13 +1,12 @@
-import { useEffect} from "react";
-
-import { Badge, Divider, Flex, Text, Button } from "@mantine/core";
+import { Badge, Divider, Flex, Text, Button, Modal } from "@mantine/core";
 
 import { Assignment } from "../../types/Assignment";
 
 import Quiz from "./Quiz";
 import Summary from "./Summary";
-import { useExercise } from "../../hooks/exercises";
+import { useExercise } from "../../hooks/useExercises";
 import { useAuth } from "../../hooks/AuthContext";
+import { useDisclosure } from "@mantine/hooks";
 
 interface ExerciseCardProps {
     index: number;
@@ -18,12 +17,13 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     index,
     assignment,
 }: ExerciseCardProps) => {
-    const {user} = useAuth();
-    const { data: exercise, refetch, isLoading } = useExercise(user?.vuNetId,assignment.uuid);
+    const { user } = useAuth();
+    const [opened, { open, close }] = useDisclosure(false);
 
-    useEffect(() => {
-        refetch();
-    }, [assignment, index]);
+    const { data: exercise, isLoading } = useExercise(
+        user?.vuNetId,
+        assignment.uuid,
+    );
 
     return (
         <>
@@ -57,18 +57,27 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
                     {exercise ? (
                         exercise.status === "Complete" ? (
-                            <Summary exercise={exercise}>
+                            <>
                                 <Button
                                     radius="xl"
                                     size="sm"
                                     w={{ base: "100%", lg: "auto" }}
                                     loading={isLoading}
+                                    onClick={open}
                                 >
                                     View Results
                                 </Button>
-                            </Summary>
+                                <Modal
+                                    opened={opened}
+                                    fullScreen
+                                    onClose={close}
+                                    centered
+                                >
+                                    <Summary exercise={exercise} />
+                                </Modal>
+                            </>
                         ) : (
-                            <Quiz exercise={exercise} refresh={refetch}>
+                            <Quiz exercise={exercise}>
                                 <Button
                                     radius="xl"
                                     size="sm"

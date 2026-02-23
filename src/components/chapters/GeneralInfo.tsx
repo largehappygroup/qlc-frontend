@@ -11,10 +11,12 @@ import {
 } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { Chapter } from "../../types/Chapter";
-import { DateInput } from "@mantine/dates";
+import { Assignment } from "../../types/Assignment";
 
 interface GeneralInfoProps {
-    form: UseFormReturnType<Chapter>;
+    form: UseFormReturnType<
+        Partial<Chapter> & { assignments: Partial<Assignment>[] }
+    >;
 }
 
 const GeneralInfo: React.FC<GeneralInfoProps> = ({
@@ -37,15 +39,17 @@ const GeneralInfo: React.FC<GeneralInfoProps> = ({
                     key={form.key("title")}
                     {...form.getInputProps("title")}
                 />
-                <DateInput
-                    withAsterisk
-                    flex="1"
-                    label="Release Date"
-                    key={form.key("releaseDate")}
-                    {...form.getInputProps("releaseDate")}
-                />
+                <Flex direction="column" gap="md" align="center">
+                    <Input.Label>Released</Input.Label>
+                    <Checkbox
+                        key={form.key("released")}
+                        {...form.getInputProps("released", {
+                            type: "checkbox",
+                        })}
+                    />
+                </Flex>
 
-                <Flex direction="column" gap="md">
+                <Flex direction="column" gap="md" align="center">
                     <Input.Label>Request Feedback</Input.Label>
                     <Checkbox
                         key={form.key("requestFeedback")}

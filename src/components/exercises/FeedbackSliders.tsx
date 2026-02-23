@@ -85,7 +85,6 @@ const FeedbackSliders: React.FC<FeedbackSlidersProps> = ({
                 fullScreen
                 opened={opened}
                 onClose={close}
-                title="Exercise Feedback"
             >
                 <Container>
                     <Flex direction="column" gap="xl">

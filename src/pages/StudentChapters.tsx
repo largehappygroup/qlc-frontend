@@ -2,12 +2,12 @@ import Layout from "../components/Layout";
 import ChapterDetailsList from "../components/exercises/ChapterDetailsList";
 
 import { Anchor, Grid, Title, Text, Flex, Box, Loader } from "@mantine/core";
-import { useChapters } from "../hooks/chapters";
+import { useAllChapters } from "../hooks/useChapters";
 
 const StudentChapters: React.FC = () => {
     const today = new Date();
     today.setHours(0, 1, 0, 0);
-    const { data: chapters, isLoading } = useChapters(undefined, today);
+    const { data: chapters, isLoading } = useAllChapters(undefined, true);
 
     return (
         <Layout title="Chapters">
@@ -19,6 +19,7 @@ const StudentChapters: React.FC = () => {
                         <Flex direction="column" gap="sm" align="start">
                             {chapters?.map((chapter) => (
                                 <Anchor
+                                    style={{ wordBreak: "break-word" }}
                                     key={chapter.uuid}
                                     href={`#chapter-${chapter.order}`}
                                 >

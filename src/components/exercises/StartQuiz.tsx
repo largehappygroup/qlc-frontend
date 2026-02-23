@@ -1,13 +1,13 @@
 import { Flex, Title, Text, Button, Alert, Loader } from "@mantine/core";
 import { WithExercise } from "../../types/Exercise";
-import { useAssignment } from "../../hooks/assignments";
+import { useAssignmentById } from "../../hooks/useAssignments";
 
 interface StartQuizProps extends WithExercise {
     startQuiz: () => void;
 }
 
 const StartQuiz: React.FC<StartQuizProps> = ({ startQuiz, exercise }) => {
-    const { data: assignment, isLoading } = useAssignment(
+    const { data: assignment, isLoading } = useAssignmentById(
         exercise?.assignmentId
     );
 

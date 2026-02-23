@@ -5,7 +5,7 @@ import EditStudentModal from "../components/progress/EditStudentModal";
 import Search from "../components/progress/Search";
 import DownloadModal from "../components/progress/DownloadModal";
 import UploadModal from "../components/progress/UploadModal";
-import { useUsers } from "../hooks/users";
+import { useUsers } from "../hooks/useUsers";
 import { useEffect, useState } from "react";
 
 const FacultyProgress: React.FC = () => {

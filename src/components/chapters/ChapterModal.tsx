@@ -12,27 +12,24 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { Chapter, WithChapter } from "../../types/Chapter";
 import { useForm } from "@mantine/form";
-import axios from "axios";
 import ChapterAssignments from "./ChapterAssignments";
 import { Assignment } from "../../types/Assignment";
 import { PropsWithChildren, useEffect, useState } from "react";
 import GeneralInfo from "./GeneralInfo";
-import LearningObjectives from "./LearningObjectives";
-import { useAssignments } from "../../hooks/assignments";
+import { useAllAssignments } from "../../hooks/useAssignments";
+import { useCreateChapter, useEditChapterById } from "../../hooks/useChapters";
 
-interface ChapterModalProps extends PropsWithChildren<WithChapter> {
-    onUpdate: () => void;
-}
-
-const ChapterModal: React.FC<ChapterModalProps> = ({
+const ChapterModal: React.FC<PropsWithChildren<WithChapter>> = ({
     chapter,
     children,
-    onUpdate,
-}: ChapterModalProps) => {
+}) => {
     const [opened, { open, close }] = useDisclosure(false);
-    const { data: chapterAssignmentsData, isLoading } = useAssignments(
-        chapter ? chapter?.uuid : undefined
+    const { data: chapterAssignmentsData, isLoading } = useAllAssignments(
+        chapter ? chapter?.uuid : undefined,
     );
+
+    const { mutateAsync: createChapter } = useCreateChapter();
+    const { mutateAsync: editChapterById } = useEditChapterById();
 
     const [chapterAssignments, setChapterAssignments] = useState<
         Assignment[] | undefined
@@ -47,30 +44,28 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
         }
     }, [chapter, chapterAssignmentsData]);
 
-    const form = useForm({
+    const form = useForm<
+        Partial<Chapter> & { assignments: Partial<Assignment>[] }
+    >({
         initialValues: chapter
-            ? chapter
+            ? { ...chapter, assignments: [] as Partial<Assignment>[] }
             : {
-                  learningObjectives: [],
+                  uuid: "",
                   title: "",
-                  assignments: [] as string[],
+                  assignments: [] as Partial<Assignment>[],
                   description: "",
-                  releaseDate: new Date(),
+                  released: false,
                   requestFeedback: false,
               },
         validate: {
-            learningObjectives: (value) =>
-                value.length == 0
-                    ? "At least one learning objective is required."
-                    : null,
             title: (value) =>
                 !value || value.length == 0 ? "A title is required." : null,
             description: (value) =>
                 !value || value.length == 0
                     ? "A description is required."
                     : null,
-            releaseDate: (value) =>
-                !value ? "A release date is required." : null,
+            released: (value) =>
+                value === undefined ? "A released status is required." : null,
         },
     });
 
@@ -97,8 +92,6 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                 uuid: "",
                 title: "",
                 identifier: "",
-                instructions: "",
-                startDate: new Date(),
                 dueDate: new Date(),
             },
         ]);
@@ -106,7 +99,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
 
     const handleDeleteAssignment = (index: number) => {
         const updatedAssignments = chapterAssignments?.filter(
-            (_, i) => i !== index
+            (_, i) => i !== index,
         );
         setChapterAssignments(updatedAssignments);
     };
@@ -114,74 +107,37 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
     const handleUpdateAssignment = (
         index: number,
         field: string,
-        value: any
+        value: any,
     ) => {
         const updatedAssignments = chapterAssignments?.map((obj, i) =>
-            i === index ? { ...obj, [field]: value } : obj
+            i === index ? { ...obj, [field]: value } : obj,
         );
         setChapterAssignments(updatedAssignments);
     };
 
-    const handleAddObjective = () => {
-        form.setFieldValue("learningObjectives", [
-            ...form.values.learningObjectives,
-            "",
-        ]); // Add empty string as a new objective
-    };
+    const handleSubmit = async (values: Partial<Chapter>) => {
+        if (chapter) {
+            await editChapterById({
+                chapterId: chapter.uuid,
+                updatedChapter: values,
+                assignments: chapterAssignments,
+            });
+        } else {
+            // Only send assignments that have at least a title or identifier (avoid empty objects)
+            const filteredAssignments = (chapterAssignments || []).filter(
+                (a) => a && (a.title || a.identifier),
+            );
 
-    // Handle deleting an objective
-    const handleDeleteObjective = (index: number) => {
-        const updatedObjectives = form.values.learningObjectives.filter(
-            (_, i) => i !== index
-        );
-        form.setFieldValue("learningObjectives", updatedObjectives);
-    };
+            await createChapter({
+                newChapter: values,
+                assignments:
+                    filteredAssignments.length > 0 ? filteredAssignments : [],
+            });
 
-    // Handle updating an objective
-    const handleUpdateObjective = (index: number, value: string) => {
-        const updatedObjectives = form.values.learningObjectives.map((obj, i) =>
-            i === index ? value : obj
-        );
-        form.setFieldValue("learningObjectives", updatedObjectives);
-    };
-
-    const handleSubmit = async (values: Chapter) => {
-        try {
-            if (chapter) {
-                await axios.put(
-                    `${import.meta.env.VITE_BACKEND_URL}/chapters/${chapter.uuid}`,
-                    {
-                        ...values,
-                        assignments: chapterAssignments,
-                    }
-                );
-            } else {
-                // Only send assignments that have at least a title or identifier (avoid empty objects)
-                const filteredAssignments = (chapterAssignments || []).filter(
-                    (a) => a && (a.title || a.identifier)
-                );
-                if (filteredAssignments.length > 0) {
-                    await axios.post(
-                        `${import.meta.env.VITE_BACKEND_URL}/chapters`,
-                        {
-                            ...values,
-                            assignments: filteredAssignments,
-                        }
-                    );
-                } else {
-                    await axios.post(
-                        `${import.meta.env.VITE_BACKEND_URL}/chapters`,
-                        values
-                    );
-                }
-                form.reset();
-                setChapterAssignments([]);
-            }
-            onUpdate();
-            close();
-        } catch (err) {
-            console.error(err);
+            form.reset();
+            setChapterAssignments([]);
         }
+        close();
     };
 
     return (
@@ -206,9 +162,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                                 <Tabs.Tab value="general">
                                     General Information
                                 </Tabs.Tab>
-                                <Tabs.Tab value="objectives">
-                                    Learning Objectives
-                                </Tabs.Tab>
+
                                 <Tabs.Tab value="assignments">
                                     Assignments
                                 </Tabs.Tab>
@@ -216,7 +170,7 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                             <Space h="lg" />
                             {(form.errors.title ||
                                 form.errors.description ||
-                                form.errors.releaseDate) && (
+                                form.errors.released) && (
                                 <Text c="red" ta="center" size="sm">
                                     Please check all tabs to make sure you have
                                     filled out the required fields.
@@ -226,24 +180,10 @@ const ChapterModal: React.FC<ChapterModalProps> = ({
                                 <Loader type="dots" size="xl" />
                             ) : (
                                 <>
-                                    {" "}
                                     <Tabs.Panel value="general">
                                         <GeneralInfo form={form} />
                                     </Tabs.Panel>
-                                    <Tabs.Panel value="objectives">
-                                        <LearningObjectives
-                                            form={form}
-                                            handleAddObjective={
-                                                handleAddObjective
-                                            }
-                                            handleDeleteObjective={
-                                                handleDeleteObjective
-                                            }
-                                            handleUpdateObjective={
-                                                handleUpdateObjective
-                                            }
-                                        />
-                                    </Tabs.Panel>
+
                                     <Tabs.Panel value="assignments">
                                         <ChapterAssignments
                                             assignments={

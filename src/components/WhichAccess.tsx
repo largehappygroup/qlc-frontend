@@ -15,7 +15,7 @@ const WhichAccess: React.FC<WhichAccessProps> = ({
     return (
         <>
             {user && roles.includes(user?.role)
-                ? { includesRoleElement }
+                ? includesRoleElement
                 : excludesRoleElement
                 ? excludesRoleElement
                 : null}

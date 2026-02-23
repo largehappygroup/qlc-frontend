@@ -16,13 +16,13 @@ import {
     IconCode,
     IconReload,
 } from "@tabler/icons-react";
-import { useExercises } from "../../hooks/exercises";
-import { regenerateExercise } from "../../api/exercises";
+import { useExercises, useRegenerateExercise } from "../../hooks/useExercises";
 
 const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
     const [exercisesIndex, setExercisesIndex] = useState<number>(0);
     const [showCode, setShowCode] = useState<boolean>(false);
-    const { data: exercises, isLoading, refetch } = useExercises(assignmentId);
+    const { data: exercises, isLoading } = useExercises(assignmentId);
+    const { mutateAsync: regenerateExercise } = useRegenerateExercise();
 
     useEffect(() => {
         setShowCode(false);
@@ -105,11 +105,10 @@ const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
                     </ActionIcon>
                     <Button
                         onClick={() => {
-                            regenerateExercise(
-                                exercises[exercisesIndex].userId,
-                                assignmentId
-                            );
-                            refetch();
+                            regenerateExercise({
+                                userId: exercises[exercisesIndex].userId,
+                                assignmentId: assignmentId,
+                            });
                         }}
                         size="xs"
                         leftSection={<IconReload />}

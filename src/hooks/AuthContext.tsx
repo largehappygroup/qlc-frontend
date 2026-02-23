@@ -42,6 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
             const response = await axios.post<User>(
                 `${import.meta.env.VITE_BACKEND_URL}/users`,
+                {},
                 { withCredentials: true }
             );
             setUser(response.data);

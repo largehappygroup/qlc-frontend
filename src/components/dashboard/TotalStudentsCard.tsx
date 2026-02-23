@@ -1,6 +1,6 @@
 import { Card, Flex, Title, Text, ThemeIcon, Loader } from "@mantine/core";
 import { IconUsers } from "@tabler/icons-react";
-import { useTotalStudents } from "../../hooks/users";
+import { useTotalStudents } from "../../hooks/useUsers";
 
 const TotalStudentsCard: React.FC = () => {
     const { data: totalStudents, isLoading } = useTotalStudents();

@@ -7,7 +7,6 @@ import {
     Select,
     Space,
     Text,
-    Textarea,
     TextInput,
     Title,
 } from "@mantine/core";
@@ -39,7 +38,7 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
             <Flex direction="column" gap="md">
                 {assignments.map((assignment, index) => (
                     <Fieldset key={index} legend={`Assignment ${index + 1}`}>
-                        <Flex gap="md" flex="1" align="end">
+                        <Flex gap="md" flex="1" align="center">
                             <TextInput
                                 flex="1"
                                 withAsterisk
@@ -48,7 +47,7 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
                                     handleUpdateAssignment(
                                         index,
                                         "title",
-                                        e.target.value
+                                        e.target.value,
                                     )
                                 }
                                 value={assignment.title}
@@ -62,47 +61,12 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
                                     handleUpdateAssignment(
                                         index,
                                         "identifier",
-                                        val
+                                        val,
                                     )
                                 }
                                 data={assignmentIdentifiers}
                             />
-                            <ActionIcon
-                                color="red"
-                                variant="subtle"
-                                onClick={() => handleDeleteAssignment(index)}
-                            >
-                                <IconTrash stroke={1.5} size={20} />
-                            </ActionIcon>
-                        </Flex>
 
-                        <Textarea
-                            withAsterisk
-                            label="Instructions"
-                            onChange={(e) =>
-                                handleUpdateAssignment(
-                                    index,
-                                    "instructions",
-                                    e.target.value
-                                )
-                            }
-                            rows={6}
-                            value={assignment.instructions}
-                        />
-                        <Flex gap="md" flex="1">
-                            <DateInput
-                                withAsterisk
-                                flex="1"
-                                onChange={(e) =>
-                                    handleUpdateAssignment(
-                                        index,
-                                        "startDate",
-                                        e
-                                    )
-                                }
-                                label="Exercise Start Date"
-                                value={assignment.startDate}
-                            />
                             <DateInput
                                 flex="1"
                                 withAsterisk
@@ -112,6 +76,13 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
                                 label="Exercise Due Date"
                                 value={assignment.dueDate}
                             />
+                            <ActionIcon
+                                color="red"
+                                variant="subtle"
+                                onClick={() => handleDeleteAssignment(index)}
+                            >
+                                <IconTrash stroke={1.5} size={20} />
+                            </ActionIcon>
                         </Flex>
                     </Fieldset>
                 ))}

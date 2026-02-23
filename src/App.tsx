@@ -7,13 +7,13 @@ import FacultyDashboard from "./pages/FacultyDashboard";
 import FacultyChapters from "./pages/FacultyChapters";
 import FacultyProgress from "./pages/FacultyProgress";
 import Login from "./pages/Login";
-import StudentProgress from "./pages/StudentProgress";
 
 import Settings from "./pages/Settings";
 import StudentDashboard from "./pages/StudentDashboard";
 import UserDirectory from "./pages/UserDirectory";
 import StudentChapters from "./pages/StudentChapters";
 import FacultyExercises from "./pages/FacultyExercises";
+import WhichAccess from "./components/WhichAccess";
 
 function App() {
     const { user, viewAsStudent } = useAuth();
@@ -34,11 +34,10 @@ function App() {
                 <Route
                     path="/progress"
                     element={
-                        user?.role === "student" || viewAsStudent ? (
-                            <StudentProgress />
-                        ) : (
-                            <FacultyProgress />
-                        )
+                        <WhichAccess
+                            includesRoleElement={<FacultyProgress />}
+                            roles={["admin", "faculty"]}
+                        />
                     }
                 />
                 <Route
@@ -51,9 +50,25 @@ function App() {
                         )
                     }
                 />
-                <Route path="/exercises" element={<FacultyExercises />} />
+                <Route
+                    path="/exercises"
+                    element={
+                        <WhichAccess
+                            includesRoleElement={<FacultyExercises />}
+                            roles={["admin", "faculty"]}
+                        />
+                    }
+                />
                 <Route path="/settings" element={<Settings />} />
-                <Route path="/directory" element={<UserDirectory />} />
+                <Route
+                    path="/directory"
+                    element={
+                        <WhichAccess
+                            includesRoleElement={<UserDirectory />}
+                            roles={["admin", "faculty"]}
+                        />
+                    }
+                />
             </Routes>
         </BrowserRouter>
     );

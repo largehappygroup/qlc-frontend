@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import cx from "clsx";
@@ -29,47 +28,26 @@ import ChapterModal from "../components/chapters/ChapterModal";
 
 import { Chapter } from "../types/Chapter";
 import classes from "../styles/DndList.module.css";
+import {
+    useAllChapters,
+    useDeleteChapterById,
+    useEditChapterById,
+} from "../hooks/useChapters";
 
 const FacultyChapters: React.FC = () => {
     const [state, handlers] = useListState<Chapter>([]);
     const [reorderMode, setReorderMode] = useState<boolean>(false);
-    const [savedChapter, setSavedChapter] = useState<boolean>(false);
+    const { data: chaptersData } = useAllChapters();
+    const { mutateAsync: deleteChapterById } = useDeleteChapterById();
+    const { mutateAsync: editChapterById } = useEditChapterById();
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get<Chapter[]>(
-                    `${import.meta.env.VITE_BACKEND_URL}/chapters`
-                );
-                handlers.setState(
-                    response.data.sort((a, b) =>
-                        a.order && b.order ? a.order - b.order : -1
-                    )
-                );
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        fetchData();
-    }, [savedChapter]);
-
-    /**
-     * deletes a chapter by id
-     * @param id - the uuid of the chapter to delete
-     */
-    const deleteChapter = async (id: string | undefined) => {
-        if (id) {
-            try {
-                await axios.delete(
-                    `${import.meta.env.VITE_BACKEND_URL}/chapters/${id}`
-                );
-                window.location.reload();
-            } catch (err) {
-                console.error(err);
-            }
-        }
-    };
-
+        handlers.setState(
+            chaptersData?.sort((a, b) =>
+                a.order && b.order ? a.order - b.order : -1,
+            ) || [],
+        );
+    }, [chaptersData]);
     /**
      * Handles the end of a drag event to reorder chapters
      * @param param0 - contains source and destination information
@@ -96,17 +74,14 @@ const FacultyChapters: React.FC = () => {
      * Saves the new order of chapters to the backend
      */
     const handleSaveOrder = async () => {
-        try {
-            await axios.put(`${import.meta.env.VITE_BACKEND_URL}/chapters`, {
-                chapters: state.map((chapter, index) => ({
-                    ...chapter,
-                    order: index + 1,
-                })),
+        for (let index = 0; index < state.length; index++) {
+            await editChapterById({
+                chapterId: state[index].uuid,
+                updatedChapter: { ...state[index], order: index + 1 },
             });
-            setReorderMode(false);
-        } catch (err) {
-            console.error(err);
         }
+
+        setReorderMode(false);
     };
 
     const items = state.map((item, index) => {
@@ -176,12 +151,7 @@ const FacultyChapters: React.FC = () => {
                                         gap="xs"
                                         py="xs"
                                     >
-                                        <ChapterModal
-                                            onUpdate={() =>
-                                                setSavedChapter(!savedChapter)
-                                            }
-                                            chapter={item}
-                                        >
+                                        <ChapterModal chapter={item}>
                                             <ActionIcon
                                                 variant="subtle"
                                                 color="gray"
@@ -194,7 +164,9 @@ const FacultyChapters: React.FC = () => {
                                         </ChapterModal>
                                         <ConfirmPopup
                                             action={() =>
-                                                deleteChapter(item.uuid)
+                                                deleteChapterById({
+                                                    chapterId: item.uuid,
+                                                })
                                             }
                                             prompt="Are you sure you want to delete this chapter?"
                                         >
@@ -260,7 +232,7 @@ const FacultyChapters: React.FC = () => {
                 </DragDropContext>
             </Flex>
             <Affix position={{ bottom: 50, right: 25 }}>
-                <ChapterModal onUpdate={() => window.location.reload()}>
+                <ChapterModal>
                     <Tooltip label="Add a new chapter" position="right">
                         <ActionIcon size="xl" radius="xl" variant="filled">
                             <IconPlus size={20} stroke={2} />

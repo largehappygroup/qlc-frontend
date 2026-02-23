@@ -3,8 +3,6 @@ export interface Assignment {
     chapterId?: string;
     title: string;
     identifier: string;
-    instructions: string;
-    startDate: Date;
     dueDate: Date;
 }
 

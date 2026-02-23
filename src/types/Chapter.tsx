@@ -1,10 +1,9 @@
 export interface Chapter {
-    uuid?: string;
+    uuid: string;
     order?: number;
-    learningObjectives: string[];
     title: string;
     description: string;
-    releaseDate: Date;
+    released: boolean;
     requestFeedback: boolean;
 }
 

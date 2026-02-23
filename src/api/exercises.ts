@@ -9,7 +9,7 @@ import { Exercise, RecentActivity } from "../types/Exercise";
 export const getExercise = async (userId?: string, assignmentId?: string) => {
     try {
         const response = await axios.get<Exercise>(
-            `${import.meta.env.VITE_BACKEND_URL}/exercises/most-recent?assignmentId=${assignmentId}&userId=${userId}`
+            `${import.meta.env.VITE_BACKEND_URL}/exercises/most-recent?assignmentId=${assignmentId}&userId=${userId}`,
         );
         return response.data;
     } catch (error) {
@@ -30,11 +30,11 @@ export const getExercises = async (assignmentId: string | undefined) => {
             response = await axios.get<Exercise[]>(
                 `${
                     import.meta.env.VITE_BACKEND_URL
-                }/exercises?assignmentId=${assignmentId}`
+                }/exercises?assignmentId=${assignmentId}`,
             );
         } else {
             response = await axios.get<Exercise[]>(
-                `${import.meta.env.VITE_BACKEND_URL}/exercises`
+                `${import.meta.env.VITE_BACKEND_URL}/exercises`,
             );
         }
         return response.data;
@@ -49,7 +49,7 @@ export const getAverageScore = async (userId?: string) => {
         const response = await axios.get<number>(
             `${import.meta.env.VITE_BACKEND_URL}/exercises/average${
                 userId ? "?userId=" + userId : ""
-            }`
+            }`,
         );
         return response.data;
     } catch (error) {
@@ -63,7 +63,7 @@ export const getAverageTimeSpent = async (userId?: string) => {
         const response = await axios.get<string>(
             `${import.meta.env.VITE_BACKEND_URL}/exercises/time-spent${
                 userId ? "?userId=" + userId : ""
-            }`
+            }`,
         );
         return response.data;
     } catch (error) {
@@ -77,7 +77,7 @@ export const getRecentActivity = async (userId?: string) => {
         const response = await axios.get<RecentActivity[]>(
             `${import.meta.env.VITE_BACKEND_URL}/exercises/recent-activity${
                 userId ? "?userId=" + userId : ""
-            }`
+            }`,
         );
         return response.data;
     } catch (error) {
@@ -93,7 +93,7 @@ export const getScoreDistribution = async (userId?: string) => {
         >(
             `${import.meta.env.VITE_BACKEND_URL}/exercises/distribution${
                 userId ? "?userId=" + userId : ""
-            }`
+            }`,
         );
         return response.data;
     } catch (error) {
@@ -110,7 +110,7 @@ export const handleDownload = async (fields: string) => {
             }/exercises/download?fields=${fields}`,
             {
                 responseType: "blob",
-            }
+            },
         );
 
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -127,13 +127,13 @@ export const handleDownload = async (fields: string) => {
 
 export const regenerateExercise = async (
     userId?: string,
-    assignmentId?: string
+    assignmentId?: string,
 ) => {
     try {
         const response = await axios.post<Exercise>(
             `${
                 import.meta.env.VITE_BACKEND_URL
-            }/exercises/regenerate?userId=${userId}&assignmentId=${assignmentId}`
+            }/exercises/regenerate?userId=${userId}&assignmentId=${assignmentId}`,
         );
         return response.data;
     } catch (error) {
@@ -145,15 +145,23 @@ export const regenerateExercise = async (
 export const submitRatings = async (
     exercise?: Exercise,
     ratings?: { [key: string]: number },
-    questionIndex: number = 0
+    questionIndex: number = 0,
 ) => {
-    const questionId = exercise?.questions[questionIndex].uuid;
-    await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/exercises/${
-            exercise?.uuid
-        }/ratings`,
-        { questionId, ratings }
-    );
+    try {
+        const questionId = exercise?.questions[questionIndex].uuid;
+        const response = await axios.put(
+            `${import.meta.env.VITE_BACKEND_URL}/exercises/${
+                exercise?.uuid
+            }/ratings`,
+            { questionId, ratings },
+        );
+        return response.data;
+    } catch (error) {
+        console.error(
+            "Error submitting ratings for exercise question: " + error,
+        );
+        throw error;
+    }
 };
 
 /**
@@ -164,7 +172,7 @@ export const checkAnswer = async (
     selectedAnswer?: string,
     exercise?: Exercise,
     questionIndex: number = 0,
-    timeSpent?: number
+    timeSpent?: number,
 ) => {
     try {
         if (selectedAnswer !== "") {
@@ -173,13 +181,29 @@ export const checkAnswer = async (
                 `${import.meta.env.VITE_BACKEND_URL}/exercises/${
                     exercise?.uuid
                 }/check?questionId=${questionId}`,
-                { userAnswer: selectedAnswer, timeSpent }
+                { userAnswer: selectedAnswer, timeSpent },
             );
             return response.data.result;
         }
     } catch (error) {
         console.error(
-            "Error with checking answer to exercise question: " + error
+            "Error with checking answer to exercise question: " + error,
         );
+    }
+};
+
+export const editExerciseById = async (
+    exerciseId?: string,
+    updatedExercise?: Partial<Exercise>,
+) => {
+    try {
+        const response = await axios.put<Exercise>(
+            `${import.meta.env.VITE_BACKEND_URL}/exercises/${exerciseId}`,
+            updatedExercise,
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error editing exercise:", error);
+        throw error;
     }
 };

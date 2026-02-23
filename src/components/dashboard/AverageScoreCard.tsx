@@ -8,7 +8,7 @@ import {
 } from "@mantine/core";
 import { WithUserId } from "../../types/User";
 import { IconStars } from "@tabler/icons-react";
-import { useAverageScore } from "../../hooks/exercises";
+import { useAverageScore } from "../../hooks/useExercises";
 
 const AverageScoreCard: React.FC<WithUserId> = ({ userId }) => {
     const { data: average, isLoading } = useAverageScore(userId);

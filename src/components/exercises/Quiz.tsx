@@ -14,27 +14,41 @@ import MultipleChoiceQuestion from "../questions/MultipleChoiceQuestion";
 
 import { useDisclosure } from "@mantine/hooks";
 import { PropsWithChildren, useEffect, useState } from "react";
-import { WithExercise } from "../../types/Exercise";
+import { Exercise, WithExercise } from "../../types/Exercise";
 import Explanation from "../questions/Explanation";
 import Ratings from "../questions/Ratings";
 import StartQuiz from "./StartQuiz";
 import CompleteQuiz from "./CompleteQuiz";
-import { checkAnswer, submitRatings } from "../../api/exercises";
+import { useCheckAnswer, useSubmitRatings } from "../../hooks/useExercises";
+import { getExercise } from "../../api/exercises";
 
-interface QuizProps extends WithExercise {
-    refresh: () => void;
-}
-
-const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
+const Quiz: React.FC<PropsWithChildren<WithExercise>> = ({
     children,
     exercise,
-    refresh,
-}: PropsWithChildren<QuizProps>) => {
+}: PropsWithChildren<WithExercise>) => {
+    const { mutateAsync: submitRatings } = useSubmitRatings();
+    const { mutateAsync: checkAnswer } = useCheckAnswer();
     const [opened, { open, close }] = useDisclosure(false);
     const [showStart, setShowStart] = useState(true);
     const [showEnd, setShowEnd] = useState(false);
-    const [questionIndex, setQuestionIndex] = useState(
-        exercise ? exercise.completedQuestions : 0,
+
+    const computeInitialIndex = (ex?: Exercise) => {
+        if (!ex || !Array.isArray(ex.questions) || ex.questions.length === 0)
+            return 0;
+        // prefer the first question that is not completed (server `status: 'completed'`)
+        const firstIncomplete = ex.questions.findIndex((q) => {
+            return q.status !== "completed";
+        });
+
+        if (firstIncomplete !== -1) return firstIncomplete;
+        // otherwise fall back to completedQuestions (safe guard)
+        return typeof ex.completedQuestions === "number"
+            ? Math.min(ex.completedQuestions, ex.questions.length - 1)
+            : 0;
+    };
+
+    const [questionIndex, setQuestionIndex] = useState(() =>
+        computeInitialIndex(exercise),
     );
     const [selectedAnswer, setSelectedAnswer] = useState<string>("");
     const [submitted, setSubmitted] = useState(false);
@@ -49,6 +63,15 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
     const [timeStopped, setTimeStopped] = useState(true);
     const [timeSpent, setTimeSpent] = useState(0);
 
+    // sync questionIndex only when exercise data changes
+    useEffect(() => {
+        if (exercise) {
+            const idx = computeInitialIndex(exercise);
+            setQuestionIndex((prev) => Math.max(prev, idx));
+        }
+    }, [exercise]);
+
+    // manage timers and timeSpent; depend on timePaused/timeStopped and questionIndex
     useEffect(() => {
         if (timeStopped) {
             setTimeSpent(
@@ -63,7 +86,8 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
 
             return () => clearInterval(timer);
         }
-    }, [timePaused, timeStopped]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [timePaused, timeStopped, questionIndex]);
 
     /**
      * If the answer is correct, move to the next question or close the modal if it is the last question.
@@ -71,7 +95,13 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
      * Fetch the updated exercise from the backend to get the latest progress.
      */
     const handleContinue = async () => {
-        // Check if all required ratings are filled
+        if (!correct) {
+            setSubmitted(false);
+            setSelectedAnswer("");
+            setTimePaused(false);
+            setRatingsError("");
+            return;
+        }
         const requiredRatings = ["clarity", "helpfulness"];
         const missing = requiredRatings.filter(
             (key) => ratings[key] === undefined || ratings[key] === null,
@@ -83,16 +113,32 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
             return;
         }
 
-        if (correct) {
-            await submitRatings(exercise, ratings, questionIndex);
-            if (questionIndex + 1 === exercise?.questions.length) {
-                setShowEnd(true);
-            } else {
+        if (correct && exercise) {
+            await submitRatings({ exercise, ratings, questionIndex });
+            // re-fetch the exercise from the server to get authoritative state
+            try {
+                const updated = await getExercise(
+                    exercise.userId,
+                    exercise.assignmentId,
+                );
+                // if server marks exercise complete, show end; otherwise advance
+                const completed =
+                    updated?.completedQuestions >=
+                    (updated?.questions?.length || 0);
+                if (completed) {
+                    setShowEnd(true);
+                } else {
+                    setQuestionIndex(questionIndex + 1);
+                    setCorrect(false);
+                    setTimeStopped(false);
+                    setRatings({});
+                }
+            } catch (e) {
+                // fallback: advance locally
                 setQuestionIndex(questionIndex + 1);
                 setCorrect(false);
                 setTimeStopped(false);
                 setRatings({});
-                refresh();
             }
         }
         setRatingsError("");
@@ -103,19 +149,39 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
 
     const showModal = () => {
         // If the current question has already been submitted, show the submitted screen with ratings
-        const q = exercise?.questions[questionIndex];
-        if (q && q.ratings && Object.keys(q.ratings).length > 0) {
-            setSubmitted(true);
-            setRatings(q.ratings);
-            setCorrect(true); // Assume correct if ratings exist (can adjust if needed)
-            setShowStart(false);
-            setShowEnd(false);
-        } else {
-            setShowStart(true);
-            setShowEnd(false);
-            setSubmitted(false);
-            setRatings({});
-            setCorrect(false);
+        const question = exercise?.questions[questionIndex];
+        if (question) {
+            const hasUserAnswer =
+                Array.isArray(question.userAnswers) &&
+                question.userAnswers.length > 0;
+            const lastAnswer = hasUserAnswer
+                ? question.userAnswers?.[question.userAnswers.length - 1]
+                : "";
+            // consider a question "submitted" if there's a user answer, ratings, or status indicates an attempt
+            const wasSubmitted = question.status !== "not-attempted";
+
+            if (wasSubmitted) {
+                setSubmitted(true);
+                setRatings(question.ratings);
+                // userAnswers items may be strings or objects { selectedAnswer }
+                setSelectedAnswer(lastAnswer ? lastAnswer?.selectedAnswer : "");
+
+                setCorrect(
+                    Boolean(
+                        question.status === "correct-attempted" ||
+                        question.status === "completed",
+                    ),
+                );
+                setShowStart(false);
+                setShowEnd(false);
+                setTimeSpent(question.timeSpent || 0);
+            } else {
+                setShowStart(true);
+                setShowEnd(false);
+                setSubmitted(false);
+                setRatings({});
+                setCorrect(false);
+            }
         }
         setTimePaused(true);
         setTimeStopped(true);
@@ -126,7 +192,6 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
         setTimeStopped(true);
         setTimePaused(true);
         close();
-        refresh();
     };
 
     const startQuiz = () => {
@@ -140,10 +205,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
         !correct ||
         (!!ratings &&
             requiredRatings.every(
-                (key) =>
-                    ratings &&
-                    ratings[key] !== undefined &&
-                    ratings[key] !== null,
+                (key) => ratings[key] !== undefined && ratings[key] !== null,
             ));
 
     return (
@@ -166,9 +228,8 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                             radius="xl"
                             size="lg"
                             value={
-                                100 *
-                                (questionIndex /
-                                    (exercise?.questions.length || 1))
+                                (100 * (exercise?.completedQuestions || 0)) /
+                                (exercise?.questions.length || 1)
                             }
                             striped
                             animated
@@ -179,7 +240,7 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                     {showStart ? (
                         <StartQuiz exercise={exercise} startQuiz={startQuiz} />
                     ) : showEnd ? (
-                        <CompleteQuiz endQuiz={hideModal} />
+                        <CompleteQuiz onEnd={hideModal} exercise={exercise} />
                     ) : (
                         <Grid>
                             <Grid.Col span={{ base: 12, sm: 6 }}>
@@ -192,6 +253,11 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                             <Grid.Col span={{ base: 12, sm: 6 }}>
                                 <Flex direction="column" gap="md" mb="md">
                                     <MultipleChoiceQuestion
+                                        userSelectedAnswers={exercise?.questions[
+                                            questionIndex
+                                        ]?.userAnswers?.map(
+                                            (answer) => answer.selectedAnswer,
+                                        )}
                                         submitted={submitted}
                                         value={selectedAnswer}
                                         onChange={setSelectedAnswer}
@@ -253,14 +319,15 @@ const Quiz: React.FC<PropsWithChildren<QuizProps>> = ({
                                         ) : (
                                             <Button
                                                 onClick={async () => {
+                                                    if (!exercise) return;
                                                     setTimePaused(true);
                                                     const result =
-                                                        await checkAnswer(
+                                                        await checkAnswer({
                                                             selectedAnswer,
                                                             exercise,
                                                             questionIndex,
                                                             timeSpent,
-                                                        );
+                                                        });
 
                                                     if (result) {
                                                         setTimeStopped(true);

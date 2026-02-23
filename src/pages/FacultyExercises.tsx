@@ -4,11 +4,11 @@ import Layout from "../components/Layout";
 
 import { ActionIcon, Badge, Flex, Loader, Select, Space } from "@mantine/core";
 import ExerciseTable from "../components/exercises/ExerciseTable";
-import { useAssignments } from "../hooks/assignments";
+import { useAllAssignments } from "../hooks/useAssignments";
 import { IconClock } from "@tabler/icons-react";
 
 const FacultyExercises: React.FC = () => {
-    const { data: assignments, isLoading } = useAssignments();
+    const { data: assignments, isLoading } = useAllAssignments();
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [jobStatuses, setJobStatuses] = useState<
         Record<

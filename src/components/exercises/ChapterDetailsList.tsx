@@ -2,19 +2,15 @@ import { Flex, Loader, Text } from "@mantine/core";
 import ExerciseCard from "./ExerciseCard";
 import FeedbackCard from "./FeedbackCard";
 import { WithChapter } from "../../types/Chapter";
-import { useAssignments } from "../../hooks/assignments";
+import { useAllAssignments } from "../../hooks/useAssignments";
 
-interface ChapterDetailsListProps extends WithChapter {
-    date?: Date;
-}
 
-const ChapterDetailsList: React.FC<ChapterDetailsListProps> = ({
+
+const ChapterDetailsList: React.FC<WithChapter> = ({
     chapter,
-    date,
-}: ChapterDetailsListProps) => {
-    const { data: chapterAssignments, isLoading } = useAssignments(
+}: WithChapter) => {
+    const { data: chapterAssignments, isLoading } = useAllAssignments(
         chapter?.uuid,
-        date
     );
 
     const items = chapterAssignments?.map((assignment, index) => (
@@ -26,7 +22,7 @@ const ChapterDetailsList: React.FC<ChapterDetailsListProps> = ({
             {isLoading ? (
                 <Loader type="dots" size="xl" />
             ) : !items || items?.length === 0 ? (
-                <Text>No exercises found.</Text>
+                <Text style={{marginBottom: "10px"}}>No exercises found.</Text>
             ) : (
                 chapter?.requestFeedback && (
                     <FeedbackCard chapterId={chapter?.uuid} />
