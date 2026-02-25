@@ -6,7 +6,6 @@ import UpcomingCard from "../components/dashboard/UpcomingCard";
 import RecentActivityCard from "../components/dashboard/RecentActivityCard";
 import AverageScoreCard from "../components/dashboard/AverageScoreCard";
 import AverageTimeSpentCard from "../components/dashboard/AverageTimeSpentCard";
-import ScoreDistributionCard from "../components/dashboard/ScoreDistributionCard";
 
 const StudentDashboard: React.FC = () => {
     const { user } = useAuth();
@@ -34,9 +33,6 @@ const StudentDashboard: React.FC = () => {
                         </Grid.Col>
                         <Grid.Col span={6}>
                             <AverageTimeSpentCard userId={user?.vuNetId} />
-                        </Grid.Col>
-                        <Grid.Col>
-                            <ScoreDistributionCard userId={user?.vuNetId} />
                         </Grid.Col>
                     </Grid>
                 </Grid.Col>

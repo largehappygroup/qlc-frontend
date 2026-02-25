@@ -10,6 +10,7 @@ import {
     Modal,
     Slider,
     Textarea,
+    Text,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import axios from "axios";
@@ -24,16 +25,41 @@ type FeedbackSlidersProps = PropsWithChildren<
 const FeedbackSliders: React.FC<FeedbackSlidersProps> = ({
     children,
     chapterId,
-    setExists
+    setExists,
 }) => {
     const [opened, { open, close }] = useDisclosure(false);
-    const [easeOfUnderstanding, setEaseOfUnderstanding] = useState(3);
-    const [reasonableQuestions, setReasonableQuestions] = useState(3);
-    const [helpsUnderstandCode, setHelpsUnderstandCode] = useState(3);
-    const [helpsUnderstandJava, setHelpsUnderstandJava] = useState(3);
+    const [easeOfUnderstanding, setEaseOfUnderstanding] = useState<
+        number | null
+    >(null);
+    const [reasonableQuestions, setReasonableQuestions] = useState<
+        number | null
+    >(null);
+    const [helpsUnderstandCode, setHelpsUnderstandCode] = useState<
+        number | null
+    >(null);
+    const [helpsUnderstandJava, setHelpsUnderstandJava] = useState<
+        number | null
+    >(null);
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [comments, setComments] = useState("");
     const { user } = useAuth();
     const handleSubmit = async () => {
+        // validate required sliders
+        const newErrors: { [key: string]: string } = {};
+        if (easeOfUnderstanding == null)
+            newErrors.easeOfUnderstanding = "Please select a value.";
+        if (reasonableQuestions == null)
+            newErrors.reasonableQuestions = "Please select a value.";
+        if (helpsUnderstandCode == null)
+            newErrors.helpsUnderstandCode = "Please select a value.";
+        if (helpsUnderstandJava == null)
+            newErrors.helpsUnderstandJava = "Please select a value.";
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
         try {
             await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/feedback?userId=${
@@ -45,12 +71,13 @@ const FeedbackSliders: React.FC<FeedbackSlidersProps> = ({
                     helpsUnderstandCode,
                     helpsUnderstandJava,
                     comments,
-                }
+                },
             );
             setExists(true);
         } catch (error) {
             console.error("Error submitting feedback:", error);
         }
+        setErrors({});
         close();
     };
     const questions = [
@@ -81,26 +108,31 @@ const FeedbackSliders: React.FC<FeedbackSlidersProps> = ({
     ];
     return (
         <>
-            <Modal
-                fullScreen
-                opened={opened}
-                onClose={close}
-            >
+            <Modal fullScreen opened={opened} onClose={close}>
                 <Container>
-                    <Flex direction="column" gap="xl">
+                    <Flex direction="column" gap="sm">
                         {questions.map((question) => (
                             <Flex direction="column" gap="lg" key={question.id}>
-                                <InputLabel required>
-                                    {question.text}
-                                </InputLabel>
+                                <Flex align="center" justify="space-between">
+                                    <InputLabel required>
+                                        {question.text}
+                                    </InputLabel>
+                                    {errors[question.id] && (
+                                        <Text size="xs" c="red" fw={700} mt={6}>
+                                            {errors[question.id]}
+                                        </Text>
+                                    )}
+                                </Flex>
                                 <Slider
                                     min={1}
                                     max={5}
                                     step={1}
-                                    value={question.value}
-                                    onChange={question.onChange}
+                                    value={question.value ?? undefined}
+                                    onChange={(val: number) =>
+                                        question.onChange(val)
+                                    }
+                                    label={null}
                                     showLabelOnHover={false}
-                                    defaultValue={undefined}
                                     marks={[
                                         {
                                             value: 1,
@@ -112,7 +144,8 @@ const FeedbackSliders: React.FC<FeedbackSlidersProps> = ({
                                         { value: 5, label: "Strongly Agree" },
                                     ]}
                                 />
-                                <Divider size="sm" my="md" />
+
+                                <Divider size="sm" my="sm" />
                             </Flex>
                         ))}
                         <Flex direction="column" gap="sm">

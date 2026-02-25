@@ -13,7 +13,7 @@ const StudentChapters: React.FC = () => {
         <Layout title="Chapters">
             {isLoading ? (
                 <Loader size="lg" type="dots" />
-            ) : chapters ? (
+            ) : chapters && chapters.length > 0 ? (
                 <Grid>
                     <Grid.Col span={2}>
                         <Flex direction="column" gap="sm" align="start">

@@ -6,7 +6,7 @@ const UpcomingCard: React.FC = () => {
         <Card shadow="sm" withBorder>
             <Flex justify="space-between" gap="sm">
                 <Title c="dimmed" size="xs" tt="uppercase" order={1}>
-                    To Do This Week
+                    Exercises To Do
                 </Title>
             </Flex>
             <ChapterDetailsList />

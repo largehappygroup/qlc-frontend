@@ -9,6 +9,11 @@ import { useAllAssignments } from "../../hooks/useAssignments";
 const ChapterDetailsList: React.FC<WithChapter> = ({
     chapter,
 }: WithChapter) => {
+
+    if (chapter && !chapter?.released) {
+        return <Text>No exercises available.</Text>;
+    }
+
     const { data: chapterAssignments, isLoading } = useAllAssignments(
         chapter?.uuid,
     );
