@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, ScrollArea, Text } from "@mantine/core";
+import { Button, Flex, Grid, Text } from "@mantine/core";
 
 interface MultipleChoiceQuestionProps {
     userSelectedAnswers?: string[];
@@ -32,28 +32,23 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
                         <Button
                             fullWidth
                             key={index}
-                            size="md"
-                            h={100}
+                            size="xs"
                             variant={answer == value ? "filled" : "light"}
                             radius="xl"
                             py="sm"
+                            h="100%"
                             style={{
                                 whiteSpace: "preserve",
-                                overflow: "hidden",
                             }}
                             onClick={() => selectAnswer(answer)}
-                            disabled={submitted || userSelectedAnswers?.includes(answer)}
+                            disabled={
+                                submitted ||
+                                userSelectedAnswers?.includes(answer)
+                            }
                         >
-                            <ScrollArea
-                                h="100%"
-                                w="100%"
-                                scrollbarSize={6}
-                                offsetScrollbars="y"
-                            >
-                                <Text style={{ whiteSpace: "preserve" }}>
-                                    {answer}
-                                </Text>
-                            </ScrollArea>
+                            <Text size="sm" style={{ whiteSpace: "preserve" }}>
+                                {answer}
+                            </Text>
                         </Button>
                     </Grid.Col>
                 ))}

@@ -27,7 +27,8 @@ const StartQuiz: React.FC<StartQuizProps> = ({ startQuiz, exercise }) => {
             gap="lg"
             direction="column"
             w="100%"
-            h="100%"
+            h="70vh"
+            justify="center"
             align="center"
             ta="center"
         >
@@ -44,7 +45,7 @@ const StartQuiz: React.FC<StartQuizProps> = ({ startQuiz, exercise }) => {
                     extra credit opportunity.
                 </Alert>
             ) : (
-                <Text>
+                <Text w="50vw">
                     You have unlimited time to answer each question in this
                     exercise. Your answers will be saved after each question,
                     and you can leave and come back to complete the exercise.

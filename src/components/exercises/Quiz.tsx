@@ -50,6 +50,8 @@ const Quiz: React.FC<PropsWithChildren<WithExercise>> = ({
     const [questionIndex, setQuestionIndex] = useState(() =>
         computeInitialIndex(exercise),
     );
+
+    const [reason, setReason] = useState("");
     const [selectedAnswer, setSelectedAnswer] = useState<string>("");
     const [submitted, setSubmitted] = useState(false);
     const [correct, setCorrect] = useState(false);
@@ -275,11 +277,7 @@ const Quiz: React.FC<PropsWithChildren<WithExercise>> = ({
                                         <>
                                             <Explanation
                                                 correct={correct}
-                                                reason={
-                                                    exercise?.questions[
-                                                        questionIndex
-                                                    ].explanation
-                                                }
+                                                reason={reason}
                                             />
                                             {correct && (
                                                 <Ratings
@@ -321,7 +319,7 @@ const Quiz: React.FC<PropsWithChildren<WithExercise>> = ({
                                                 onClick={async () => {
                                                     if (!exercise) return;
                                                     setTimePaused(true);
-                                                    const result =
+                                                    const { result, reason } =
                                                         await checkAnswer({
                                                             selectedAnswer,
                                                             exercise,
@@ -333,6 +331,7 @@ const Quiz: React.FC<PropsWithChildren<WithExercise>> = ({
                                                         setTimeStopped(true);
                                                         setCorrect(true);
                                                     }
+                                                    setReason(reason);
                                                     setSubmitted(true);
                                                     setRatingsError("");
                                                 }}

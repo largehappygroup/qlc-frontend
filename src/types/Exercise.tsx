@@ -11,10 +11,8 @@ export interface Exercise {
         query: string;
         ratings: { [key: string]: number };
         type: string;
-        hints?: string[];
         difficulty: string;
         availableAnswers: string[];
-        explanation: string;
         userAnswers?: {
             timeStamp: Date;
             selectedAnswer: string;

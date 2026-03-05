@@ -183,7 +183,7 @@ export const checkAnswer = async (
                 }/check?questionId=${questionId}`,
                 { userAnswer: selectedAnswer, timeSpent },
             );
-            return response.data.result;
+            return response.data;
         }
     } catch (error) {
         console.error(
