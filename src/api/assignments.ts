@@ -24,13 +24,14 @@ export const getAssignmentById = async (assignmentId: string | undefined) => {
  * @param date - date object of assignment
  * @returns - assignments array
  */
-export const getAllAssignments = async (chapterId?: string) => {
+export const getAllAssignments = async (chapterId?: string, dueDate?: Date) => {
     try {
         const response = await axios.get<Assignment[]>(
             `${import.meta.env.VITE_BACKEND_URL}/assignments`,
             {
                 params: {
                     chapterId,
+                    dueDate,
                 },
             },
         );

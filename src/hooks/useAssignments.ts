@@ -14,10 +14,10 @@ import { Assignment } from "../types/Assignment";
  * @param date - date object of assignment
  * @returns - assignments array
  */
-export const useAllAssignments = (chapterId?: string) => {
+export const useAllAssignments = (chapterId?: string, dueDate?: Date) => {
     return useQuery({
-        queryKey: ["assignments", chapterId],
-        queryFn: async () => getAllAssignments(chapterId),
+        queryKey: ["assignments", chapterId, dueDate],
+        queryFn: async () => getAllAssignments(chapterId, dueDate),
     });
 };
 

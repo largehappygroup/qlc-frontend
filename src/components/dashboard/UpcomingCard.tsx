@@ -9,7 +9,7 @@ const UpcomingCard: React.FC = () => {
                     Exercises To Do
                 </Title>
             </Flex>
-            <ChapterDetailsList />
+            <ChapterDetailsList dueDate={new Date()} />
         </Card>
     );
 };
