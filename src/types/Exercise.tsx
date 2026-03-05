@@ -13,6 +13,8 @@ export interface Exercise {
         type: string;
         difficulty: string;
         hints?: string[];
+        correctAnswer?: string;
+        otherAnswers: string[];
         explanation?: string;
         availableAnswers: string[];
         userAnswers?: {

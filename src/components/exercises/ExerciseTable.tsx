@@ -43,7 +43,10 @@ const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
                 <Table.Td>
                     <ScrollArea h={100}>
                         <List size="xs">
-                            {question.availableAnswers.map((answer) => (
+                            <List.Item>
+                                <Text fw={700} size="xs">{question.correctAnswer}</Text>
+                            </List.Item>
+                            {question.otherAnswers.map((answer) => (
                                 <List.Item>
                                     <Text size="xs">{answer}</Text>
                                 </List.Item>
