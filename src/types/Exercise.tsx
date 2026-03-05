@@ -12,6 +12,8 @@ export interface Exercise {
         ratings: { [key: string]: number };
         type: string;
         difficulty: string;
+        hints?: string[];
+        explanation?: string;
         availableAnswers: string[];
         userAnswers?: {
             timeStamp: Date;
