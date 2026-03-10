@@ -46,11 +46,18 @@ const ExerciseTable: React.FC<WithAssignmentId> = ({ assignmentId }) => {
                             <List.Item>
                                 <Text fw={700} size="xs">{question.correctAnswer}</Text>
                             </List.Item>
-                            {question.otherAnswers.map((answer) => (
-                                <List.Item>
-                                    <Text size="xs">{answer}</Text>
-                                </List.Item>
-                            ))}
+                            {question.otherAnswers.map((answer, idx) => {
+                                const isDuplicate =
+                                    answer === question.correctAnswer ||
+                                    question.otherAnswers.indexOf(answer) !== idx;
+                                return (
+                                    <List.Item key={idx}>
+                                        <Text size="xs" c={isDuplicate ? "red" : "black"}>
+                                            {answer}
+                                        </Text>
+                                    </List.Item>
+                                );
+                            })}
                         </List>
                     </ScrollArea>
                 </Table.Td>

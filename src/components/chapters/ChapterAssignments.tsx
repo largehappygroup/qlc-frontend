@@ -14,6 +14,12 @@ import { DateInput } from "@mantine/dates";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import React from "react";
 import { Assignment, assignmentIdentifiers } from "../../types/Assignment";
+import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface ChapterAssignmentsProps {
     assignments: Assignment[];
@@ -70,9 +76,10 @@ const ChapterAssignments: React.FC<ChapterAssignmentsProps> = ({
                             <DateInput
                                 flex="1"
                                 withAsterisk
-                                onChange={(e) =>
-                                    handleUpdateAssignment(index, "dueDate", e)
-                                }
+                                onChange={(e) => {
+                                    const dateOnly = dayjs(e).format("YYYY-MM-DD");
+                                    handleUpdateAssignment(index, "dueDate", dateOnly);
+                                }}
                                 label="Exercise Due Date"
                                 value={assignment.dueDate}
                             />
