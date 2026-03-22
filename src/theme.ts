@@ -37,7 +37,7 @@ const theme = createTheme({
     },
 
     headings: {
-        fontFamily: "Mulish, sans-serif",
+        fontFamily: "IBMPlexSans, monospace",
         sizes: {
             h1: { fontSize: rem(28) },
             h2: { fontSize: rem(25) },
