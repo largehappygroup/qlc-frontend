@@ -25,6 +25,18 @@ const StudentDashboard: React.FC = () => {
                                 within the website application.
                             </Alert>
                         </Grid.Col>
+                        <Grid.Col span={12}>
+                            <Alert color="yellow" title="Bug Notice">
+                                There's currently a persistent bug where dates
+                                are being calculated and displayed sometimes
+                                with a different timezone. If you see any notice
+                                about a deadline being passed when it shouldn't
+                                be, please ignore it and continue to finish the
+                                exercise. We will count it as on time as long as
+                                the completion is close enough to the saved
+                                timestamp.
+                            </Alert>
+                        </Grid.Col>
                         <Grid.Col>
                             <Title order={3}>Hello, {user?.firstName}!</Title>
                         </Grid.Col>
